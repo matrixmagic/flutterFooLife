@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:foolife/Screens/Welcome/Welcome_Screen.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  //SharedPreferences.getInstance().then((prefs) {
-  //runApp(MyApp(prefs: prefs));
-  runApp(MyApp());
+void main() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  runApp(MyApp(prefs: prefs));
+  //runApp(MyApp());
 }
 
+
 class MyApp extends StatelessWidget {
-  // final SharedPreferences prefs;
-  //MyApp({this.prefs});
-  MyApp();
+   final SharedPreferences prefs;
+  MyApp({this.prefs});
+  //MyApp();
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +37,14 @@ class MyApp extends StatelessWidget {
   }
 
   Widget _handleCurrentScreen() {
-    //bool seen = (prefs.getBool('seen') ?? false);
+    bool seen = (prefs.getBool('seen') ?? false);
     /*if (seen) {
       return new RootScreen();
     } else {
       return new WalkthroughScreen(prefs: prefs);
     }*/
 
-    // return WelcomeScreen(prefs: prefs);
-    return WelcomeScreen();
+     return WelcomeScreen(prefs: prefs);
+    //return WelcomeScreen();
   }
 }

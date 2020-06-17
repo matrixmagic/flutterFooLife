@@ -3,10 +3,10 @@ import "package:flutter_swiper/flutter_swiper.dart";
 import 'package:foolife/AppTheme.dart';
 import 'package:foolife/Models/walkthrough.dart';
 import 'package:foolife/Widget/custom_flat_button.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  //final SharedPreferences prefs;
+  final SharedPreferences prefs;
   final List<Walkthrough> pages = [
     Walkthrough(
       icon: Icons.developer_mode,
@@ -25,8 +25,8 @@ class WelcomeScreen extends StatefulWidget {
     ),
   ];
 
-  //WelcomeScreen({this.prefs});
-  WelcomeScreen();
+  WelcomeScreen({this.prefs});
+  //WelcomeScreen();
 
   @override
   _WelcomeScreen createState() => _WelcomeScreen();
@@ -116,7 +116,7 @@ class _WelcomeScreen extends State<WelcomeScreen> {
     }
     widgets.add(
       new Container(
-        color: Color.fromRGBO(212, 20, 15, 1.0),
+        color: AppTheme.primaryColor,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -152,13 +152,13 @@ class _WelcomeScreen extends State<WelcomeScreen> {
                   fontWeight: FontWeight.w700,
                   textColor: Colors.white,
                   onPressed: () {
-                    // widget.prefs.setBool('seen', true);
+                     widget.prefs.setBool('seen', true);
                     Navigator.of(context).pushNamed("/root");
                   },
                   splashColor: Colors.black12,
                   borderColor: Colors.white,
                   borderWidth: 2,
-                  color: Color.fromRGBO(212, 20, 15, 1.0),
+                  color: AppTheme.primaryColor,
                 ),
               ),
             ],
