@@ -3,16 +3,15 @@ import 'package:foolife/Screens/Welcome/Welcome_Screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
 
   runApp(MyApp(prefs: prefs));
   //runApp(MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
-   final SharedPreferences prefs;
+  final SharedPreferences prefs;
   MyApp({this.prefs});
   //MyApp();
 
@@ -44,7 +43,7 @@ class MyApp extends StatelessWidget {
       return new WalkthroughScreen(prefs: prefs);
     }*/
 
-     return WelcomeScreen(prefs: prefs);
+    return WelcomeScreen(prefs: prefs);
     //return WelcomeScreen();
   }
 }
