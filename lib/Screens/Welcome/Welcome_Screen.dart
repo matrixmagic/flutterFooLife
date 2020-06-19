@@ -10,8 +10,8 @@ class WelcomeScreen extends StatefulWidget {
   final List<Walkthrough> pages = [
     Walkthrough(
       icon: Icons.developer_mode,
-      title: "Flutter Onboarding",
-      description: "Build your onboarding flow in seconds.",
+      title: "Foolife",
+      description: "The first app in this idea.",
     ),
     Walkthrough(
       icon: Icons.layers,
@@ -152,8 +152,8 @@ class _WelcomeScreen extends State<WelcomeScreen> {
                   fontWeight: FontWeight.w700,
                   textColor: Colors.white,
                   onPressed: () {
-                     widget.prefs.setBool('seen', true);
-                    Navigator.of(context).pushNamed("/root");
+                    widget.prefs.setBool('seen', true);
+                    Navigator.of(context).pushNamed('/signin');
                   },
                   splashColor: Colors.black12,
                   borderColor: Colors.white,
