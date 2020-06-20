@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foolife/Bloc/AuthBloc.dart';
 import 'package:foolife/Bloc/provider.dart';
 
+import '../../AppLocalizations.dart';
 import '../../AppTheme.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -126,7 +127,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           color: Colors.white,
                           textColor: Colors.grey[500],
                           child: Text(
-                            "Login".toUpperCase(),
+                             AppLocalizations.of(context).translate('login').toUpperCase(),
                             style: TextStyle(fontSize: 22),
                           ),
                         ),
