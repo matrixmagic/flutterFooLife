@@ -14,7 +14,7 @@ description: A new Flutter application.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -32,6 +32,7 @@ dependencies:
   image_picker: ^0.6.7+2
   camera: ^0.5.8+2
   path_provider: ^1.6.11
+  lite_rolling_switch: ^0.1.1
   path: ^1.6.4
   flutter_localizations:
     sdk: flutter

@@ -2,12 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:foolife/Bloc/AuthBloc.dart';
+import 'package:foolife/Bloc/auth/RegisterBloc.dart';
 import 'package:foolife/Bloc/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 
 import '../../AppLocalizations.dart';
 import '../../AppTheme.dart';
 
+
+ 
 class UserSignup extends StatefulWidget {
   @override
   _UserSignupState createState() => _UserSignupState();
@@ -17,8 +21,8 @@ class _UserSignupState extends State<UserSignup> {
   File imageFile;
   @override
   Widget build(BuildContext context) {
-    final AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
-
+    final RegisterBloc registerBloc = BlocProvider.of<RegisterBloc>(context);
+ final AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.grey[100],
@@ -30,7 +34,8 @@ class _UserSignupState extends State<UserSignup> {
                   padding: EdgeInsets.fromLTRB(0, 5, 0, 24),
                   child: Stack(
                     children: <Widget>[
-                   imageFile==null ? Image.asset('assets/images/Avatar.png' ,height: 250,fit: BoxFit.cover, ):Image.file(imageFile,height: 250,fit: BoxFit.cover,),
+
+                   imageFile==null ? Image.asset('assets/images/Avatar.png' , height:275  ,width:MediaQuery.of(context).size.width ,fit: BoxFit.fill, ):Image.file(imageFile,height: 250,fit: BoxFit.cover,),
                       Positioned(
                         child: GestureDetector(onTap: ()=>  _showSelectionDialog(context) ,
                                                 child: Container(
@@ -50,7 +55,7 @@ class _UserSignupState extends State<UserSignup> {
                   )),
              
               StreamBuilder(
-                stream: authBloc.loginstream,
+            
                 builder: (context, snapshot2) {
                   if (snapshot2.hasData) {
                     if (snapshot2.data == true) {
@@ -59,7 +64,7 @@ class _UserSignupState extends State<UserSignup> {
                       return Text('invalid username or password',
                           style: AppTheme.error);
                     }
-                    print("server say  " + snapshot2.data.toString());
+                  
                   }
                   return Container();
                 },
@@ -67,12 +72,34 @@ class _UserSignupState extends State<UserSignup> {
               email(authBloc),
               password(authBloc),
               confrimPassword(authBloc),
+               Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text("    Register As",style: AppTheme.body1,),SizedBox(width: 35,),
+                  LiteRollingSwitch(
+                    value: true,
+                    textOn: 'Restaurant',
+                    textOff: 'Customer',
+                    colorOn: AppTheme.primaryColor,
+                    colorOff: AppTheme.primaryColor,
+                    iconOn: Icons.restaurant_menu,
+                    iconOff: Icons.person_outline,
+                    onChanged: (bool state) {
+                      print('turned ${(state) ? 'on' : 'off'}');
+                    },
+                  ),
+                ],
+              ),),
               SizedBox(
                 height: 20,
               ),
-              loginButton(authBloc),
-              register(context),
-              forgotPassword(context)
+              registerButton(registerBloc),
+             
+             SizedBox(
+                height: 30,
+              ),
+            
             ],
           ),
         ),
@@ -106,10 +133,10 @@ class _UserSignupState extends State<UserSignup> {
 
   void _openGallery(BuildContext context) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
+ final RegisterBloc registerBloc = BlocProvider.of<RegisterBloc>(context);
 
-    this.setState(() {
-      imageFile = picture;
-    });
+  registerBloc.changeFile(picture);
+
 
     Navigator.of(context).pop();
   }
@@ -117,16 +144,15 @@ class _UserSignupState extends State<UserSignup> {
   void _openCamera(BuildContext context) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
 
-    this.setState(() {
-      imageFile = picture;
-    });
+   final RegisterBloc registerBloc = BlocProvider.of<RegisterBloc>(context);
 
+  registerBloc.changeFile(picture);
     Navigator.of(context).pop();
   }
 
   Widget _setImageView() {
     if (imageFile != null) {
-      return Image.file(imageFile, width: 500, height: 500);
+      return Image.file(imageFile);
     } else {
       return Text("Please select an image");
     }
@@ -182,41 +208,35 @@ class _UserSignupState extends State<UserSignup> {
     );
   }
 
-  Center loginButton(AuthBloc authBloc) {
+  Center registerButton(RegisterBloc registerBloc) {
     return Center(
       child: SizedBox(
         width: 300,
         height: 50,
-        child: StreamBuilder(
-            stream: authBloc.submitValid,
-            builder: (context, snapshot) {
-              return IgnorePointer(
-                ignoring: !snapshot.hasData,
-                child: RaisedButton(
-                  shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(50.0),
-                      side: BorderSide(color: AppTheme.primaryColor)),
-                  onPressed: () {
-                    authBloc.loginpress(true);
-                  },
-                  color: Colors.white,
-                  textColor: Colors.grey[500],
-                  child: Text(
-                    AppLocalizations.of(context)
-                        .translate('login')
-                        .toUpperCase(),
-                    style: TextStyle(fontSize: 22),
-                  ),
+        child: 
+               RaisedButton(
+                shape: new RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(50.0),
+                    side: BorderSide(color: AppTheme.primaryColor)),
+                onPressed: () {
+                  registerBloc.registerPressed(true);
+                },
+                color: Colors.white,
+                textColor: Colors.grey[500],
+                child: Text(
+                  AppLocalizations.of(context)
+                      .translate('login')
+                      .toUpperCase(),
+                  style: TextStyle(fontSize: 22),
                 ),
-              );
-            }),
+              ),
       ),
     );
   }
 
   Padding email(AuthBloc authBloc) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(10.0, 30, 30, 24),
+      padding: EdgeInsets.fromLTRB(10.0, 30, 30, 0),
       child: StreamBuilder(
           stream: authBloc.Emailstream,
           builder: (context, snapshot) {
@@ -253,7 +273,7 @@ class _UserSignupState extends State<UserSignup> {
 
   Padding password(AuthBloc authBloc) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(10.0, 22, 30, 24),
+      padding: EdgeInsets.fromLTRB(10.0, 22, 30, 0),
       child: StreamBuilder(
           stream: authBloc.passstream,
           builder: (context, snapshot) {
@@ -300,7 +320,7 @@ Padding confrimPassword(AuthBloc authBloc) {
               decoration: InputDecoration(
                 hintText: 'Confrim Password',
                 icon: Icon(
-                  Icons.vpn_key,
+                  Icons.repeat,
                   color: snapshot.hasError
                       ? AppTheme.redText
                       : AppTheme.primaryColor,

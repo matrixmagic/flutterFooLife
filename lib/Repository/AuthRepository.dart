@@ -14,7 +14,7 @@ class AuthRepository {
     log.password = password;
     var res = await api.post('auth/login', log.toJson());
     var d = ApiResponse.fromJson(json.decode(res.body));
-    print(d);
+  
     if (d.success == true) {
       final storage = new FlutterSecureStorage();
       var data = SuccessfulLogin.fromJson(d.data) ;
