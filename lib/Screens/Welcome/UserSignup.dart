@@ -1,105 +1,167 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:foolife/Bloc/AuthBloc.dart';
-import 'package:foolife/Bloc/auth/RegisterBloc.dart';
+import 'package:foolife/Bloc/auth/Register/RegisterBloc.dart';
 import 'package:foolife/Bloc/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
-
-import '../../AppLocalizations.dart';
 import '../../AppTheme.dart';
 
-
- 
 class UserSignup extends StatefulWidget {
   @override
   _UserSignupState createState() => _UserSignupState();
 }
 
 class _UserSignupState extends State<UserSignup> {
-  File imageFile;
+ 
   @override
   Widget build(BuildContext context) {
     final RegisterBloc registerBloc = BlocProvider.of<RegisterBloc>(context);
- final AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
+
+    registerBloc.changeRole(1);
+  
+
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.grey[100],
       body: SafeArea(
-              child: SingleChildScrollView(
+        child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               Padding(
                   padding: EdgeInsets.fromLTRB(0, 5, 0, 24),
                   child: Stack(
                     children: <Widget>[
+                        StreamBuilder<Object>(
+                          stream: registerBloc.fileStream,
+                          builder: (context, snapshot) {
 
-                   imageFile==null ? Image.asset('assets/images/Avatar.png' , height:275  ,width:MediaQuery.of(context).size.width ,fit: BoxFit.fill, ):Image.file(imageFile,height: 250,fit: BoxFit.cover,),
+                            if(snapshot.hasData){
+                            return Image.file(
+                              snapshot.data,
+                             height: 275,
+                              width: MediaQuery.of(context).size.width,
+                              fit: BoxFit.fill,
+                            );
+                            }
+                            return  Image.asset("assets/images/Avatar.png" ,
+                             height: 275,
+                              width: MediaQuery.of(context).size.width,
+                              fit: BoxFit.fill,);
+                          }
+                        ),
+
+                    
                       Positioned(
-                        child: GestureDetector(onTap: ()=>  _showSelectionDialog(context) ,
-                                                child: Container(
-                            width: 60,
-                            height: 60,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(60.0)),color: Colors.black),
+                        child: GestureDetector(
+                          onTap: () => _showSelectionDialog(context),
+                          child: Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(60.0)),
+                                  color: Colors.black),
                               child: Icon(
-                            Icons.camera_alt,
-                            color: AppTheme.nearlyWhite,
-                            size: 30,
-                          )),
+                                Icons.camera_alt,
+                                color: AppTheme.nearlyWhite,
+                                size: 30,
+                              )),
                         ),
                         bottom: 5,
                         right: 5,
-                      )
+                      ),
+
+                      StreamBuilder<Object>(
+                          stream: registerBloc.fileStream,
+                          builder: (context, snapshot) {
+
+                            if(snapshot.hasData){
+                            return  Positioned(
+                        child: GestureDetector(
+                          onTap: ()  {
+                            
+                              registerBloc.changeFile(null);
+                          },
+                          child: Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30.0)),
+                                  color: Colors.black),
+                              child: Icon(
+                                Icons.close,
+                                color: AppTheme.nearlyWhite,
+                                size: 30,
+                              )),
+                        ),
+                        top: 5,
+                        right: 5,
+                      );
+                            }
+                            return Container();
+                          }
+                        ),
+
+                   
                     ],
                   )),
-             
               StreamBuilder(
-            
+                stream: registerBloc.submitRegisterStream,
                 builder: (context, snapshot2) {
                   if (snapshot2.hasData) {
                     if (snapshot2.data == true) {
-                      Navigator.pushNamed(context, '/usersignup');
+              
+                      Navigator.of(context).pushReplacementNamed('/mainscreen');
                     } else {
-                      return Text('invalid username or password',
-                          style: AppTheme.error);
+                      return Text(snapshot2.error, style: AppTheme.error);
                     }
-                  
                   }
                   return Container();
                 },
               ),
-              email(authBloc),
-              password(authBloc),
-              confrimPassword(authBloc),
-               Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Text("    Register As",style: AppTheme.body1,),SizedBox(width: 35,),
-                  LiteRollingSwitch(
-                    value: true,
-                    textOn: 'Restaurant',
-                    textOff: 'Customer',
-                    colorOn: AppTheme.primaryColor,
-                    colorOff: AppTheme.primaryColor,
-                    iconOn: Icons.restaurant_menu,
-                    iconOff: Icons.person_outline,
-                    onChanged: (bool state) {
-                      print('turned ${(state) ? 'on' : 'off'}');
-                    },
-                  ),
-                ],
-              ),),
+              email(registerBloc),
+              password(registerBloc),
+              confrimPassword(registerBloc),
+              Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Text(
+                      "    Register As",
+                      style: AppTheme.body1,
+                    ),
+                    SizedBox(
+                      width: 35,
+                    ),
+                    StreamBuilder(
+                        stream: registerBloc.roleStream,
+                        builder: (context, snapshot) {
+                          return LiteRollingSwitch(
+                            value: true,
+                            textOn: 'Customer',
+                            textOff: 'Restaurant',
+                            colorOn: AppTheme.primaryColor,
+                            colorOff: AppTheme.primaryColor,
+                            iconOn: Icons.person_outline,
+                            iconOff: Icons.restaurant_menu,
+                            onChanged: (bool state) {
+                              registerBloc.changeRole(state ? 1 : 2);
+                            },
+                          );
+                        }),
+                  ],
+                ),
+              ),
               SizedBox(
                 height: 20,
               ),
               registerButton(registerBloc),
-             
-             SizedBox(
+              SizedBox(
                 height: 30,
               ),
-            
             ],
           ),
         ),
@@ -112,31 +174,43 @@ class _UserSignupState extends State<UserSignup> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-             
               content: SingleChildScrollView(
-                child: ListBody(
-                  children: <Widget>[
-
-                    ListTile(leading: Icon(Icons.image,color: AppTheme.primaryColor,),title: Text("Gallery"),onTap: () {
-                        _openGallery(context);
-                      },),
-                      Divider(height: 1.0,),
-                       ListTile(leading: Icon(Icons.camera_alt,color: AppTheme.primaryColor,),title: Text("Camera"),onTap: () {
-                        _openCamera(context);
-                      },)
-                  
-                  ],
+            child: ListBody(
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(
+                    Icons.image,
+                    color: AppTheme.primaryColor,
+                  ),
+                  title: Text("Gallery"),
+                  onTap: () {
+                    _openGallery(context);
+                  },
                 ),
-              ));
+                Divider(
+                  height: 1.0,
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.camera_alt,
+                    color: AppTheme.primaryColor,
+                  ),
+                  title: Text("Camera"),
+                  onTap: () {
+                    _openCamera(context);
+                  },
+                )
+              ],
+            ),
+          ));
         });
   }
 
   void _openGallery(BuildContext context) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
- final RegisterBloc registerBloc = BlocProvider.of<RegisterBloc>(context);
+    final RegisterBloc registerBloc = BlocProvider.of<RegisterBloc>(context);
 
-  registerBloc.changeFile(picture);
-
+    registerBloc.changeFile(picture);
 
     Navigator.of(context).pop();
   }
@@ -144,104 +218,52 @@ class _UserSignupState extends State<UserSignup> {
   void _openCamera(BuildContext context) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
 
-   final RegisterBloc registerBloc = BlocProvider.of<RegisterBloc>(context);
-
-  registerBloc.changeFile(picture);
+    final RegisterBloc registerBloc = BlocProvider.of<RegisterBloc>(context);
+      
+    registerBloc.changeFile(picture);
     Navigator.of(context).pop();
   }
 
-  Widget _setImageView() {
-    if (imageFile != null) {
-      return Image.file(imageFile);
-    } else {
-      return Text("Please select an image");
-    }
-  }
-
-  GestureDetector forgotPassword(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '/usersignup');
-      },
-      child: Text(
-        "Forgot your password?",
-        style: TextStyle(
-          color: AppTheme.primaryColor,
-          fontWeight: FontWeight.w400,
-          fontSize: 20,
-          letterSpacing: 0.2,
-        ),
-      ),
-    );
-  }
-
-  Row register(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          "Don't have an account",
-          style: AppTheme.body1,
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, '/restsignup');
-          },
-          child: Text(
-            'Register Now!',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: AppTheme.primaryColor,
-              fontWeight: FontWeight.w400,
-              fontSize: 20,
-              letterSpacing: 0.2,
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 60,
-        )
-      ],
-    );
-  }
 
   Center registerButton(RegisterBloc registerBloc) {
     return Center(
       child: SizedBox(
         width: 300,
         height: 50,
-        child: 
-               RaisedButton(
-                shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(50.0),
-                    side: BorderSide(color: AppTheme.primaryColor)),
-                onPressed: () {
-                  registerBloc.registerPressed(true);
-                },
-                color: Colors.white,
-                textColor: Colors.grey[500],
-                child: Text(
-                  AppLocalizations.of(context)
-                      .translate('login')
-                      .toUpperCase(),
-                  style: TextStyle(fontSize: 22),
+        child: StreamBuilder(
+            stream: registerBloc.registerValid,
+            builder: (context, snapshot) {
+              print("valid sayyy " + snapshot.hasData.toString());
+              return IgnorePointer(
+                ignoring: !snapshot.hasData,
+                child: RaisedButton(
+                  shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(50.0),
+                      side: BorderSide(color: AppTheme.primaryColor)),
+                  onPressed: () {
+                    registerBloc.submitRegister(true);
+                  },
+                  color: Colors.white,
+                  textColor: Colors.grey[500],
+                  child: Text(
+                    'SignUp'.toUpperCase(),
+                    style: TextStyle(fontSize: 22),
+                  ),
                 ),
-              ),
+              );
+            }),
       ),
     );
   }
 
-  Padding email(AuthBloc authBloc) {
+  Padding email(RegisterBloc registerBloc) {
     return Padding(
       padding: EdgeInsets.fromLTRB(10.0, 30, 30, 0),
       child: StreamBuilder(
-          stream: authBloc.Emailstream,
+          stream: registerBloc.emailStream,
           builder: (context, snapshot) {
             return TextField(
-              onChanged: authBloc.changeEmail,
+              onChanged: registerBloc.changeEmail,
               autocorrect: true,
               decoration: InputDecoration(
                 icon: Icon(Icons.verified_user,
@@ -271,16 +293,16 @@ class _UserSignupState extends State<UserSignup> {
     );
   }
 
-  Padding password(AuthBloc authBloc) {
+  Padding password(RegisterBloc registerBloc) {
     return Padding(
       padding: EdgeInsets.fromLTRB(10.0, 22, 30, 0),
       child: StreamBuilder(
-          stream: authBloc.passstream,
+          stream: registerBloc.passwordStream,
           builder: (context, snapshot) {
             return TextField(
               obscureText: true,
               autocorrect: true,
-              onChanged: authBloc.changepass,
+              onChanged: registerBloc.changePassword,
               decoration: InputDecoration(
                 hintText: 'password',
                 icon: Icon(
@@ -307,16 +329,17 @@ class _UserSignupState extends State<UserSignup> {
           }),
     );
   }
-Padding confrimPassword(AuthBloc authBloc) {
+
+  Padding confrimPassword(RegisterBloc registerBloc) {
     return Padding(
       padding: EdgeInsets.fromLTRB(10.0, 22, 30, 24),
       child: StreamBuilder(
-          stream: authBloc.passstream,
+          stream: registerBloc.conforimPasswordStream,
           builder: (context, snapshot) {
             return TextField(
               obscureText: true,
               autocorrect: true,
-              onChanged: authBloc.changepass,
+              onChanged: registerBloc.changeConfirmPassword,
               decoration: InputDecoration(
                 hintText: 'Confrim Password',
                 icon: Icon(
@@ -343,5 +366,4 @@ Padding confrimPassword(AuthBloc authBloc) {
           }),
     );
   }
-  
 }

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:foolife/Bloc/auth/RegisterBloc.dart';
+
 import 'package:foolife/Bloc/provider.dart';
+import 'package:foolife/Screens/Main/MainScreen.dart';
 import 'package:foolife/Screens/Welcome/Welcome_Screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'AppLocalizations.dart';
 import 'Bloc/AuthBloc.dart';
+import 'Bloc/auth/Register/RegisterBloc.dart';
 import 'Screens/Welcome/EntreyScreen.dart';
 import 'Screens/Welcome/RsetSignup.dart';
 import 'Screens/Welcome/SignInScreen.dart';
@@ -40,6 +42,7 @@ class MyApp extends StatelessWidget {
             '/entreyScreen': (BuildContext context) => new EntreyScreen(),
             '/usersignup': (BuildContext context) => new UserSignup(),
             '/restsignup': (BuildContext context) => new RestSignup(),
+            '/mainscreen': (BuildContext context) => new MainScreen(),
             /* '/root': (BuildContext context) => new RootScreen(),
             '/signin': (BuildContext context) => new SignInScreen(),
             '/signup': (BuildContext context) => new SignUpScreen(),
