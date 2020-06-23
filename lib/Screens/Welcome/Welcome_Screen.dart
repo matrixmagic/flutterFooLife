@@ -153,7 +153,7 @@ class _WelcomeScreen extends State<WelcomeScreen> {
                   textColor: Colors.white,
                   onPressed: () {
                     widget.prefs.setBool('seen', true);
-                    Navigator.of(context).pushNamed('/signin');
+                    Navigator.of(context).pushReplacementNamed('/signin');
                   },
                   splashColor: Colors.black12,
                   borderColor: Colors.white,

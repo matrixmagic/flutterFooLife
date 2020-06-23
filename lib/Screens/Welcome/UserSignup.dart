@@ -1,166 +1,204 @@
-import 'dart:io';
+
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:foolife/Bloc/auth/Register/RegisterBloc.dart';
 import 'package:foolife/Bloc/provider.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import '../../AppTheme.dart';
 
-class UserSignup extends StatefulWidget {
-  @override
-  _UserSignupState createState() => _UserSignupState();
-}
+class UserSignup extends StatelessWidget {
+  bool firstTime = false;
+  bool isLooding = false;
 
-class _UserSignupState extends State<UserSignup> {
- 
+  ScrollController _scrollController = new ScrollController(
+    initialScrollOffset: 0.0,
+    keepScrollOffset: true,
+  );
+  final spinkit = SpinKitWave(
+    color: AppTheme.primaryColor,
+    size: 90.0,
+  );
+
   @override
   Widget build(BuildContext context) {
     final RegisterBloc registerBloc = BlocProvider.of<RegisterBloc>(context);
 
     registerBloc.changeRole(1);
-  
+    registerBloc.changeFile(null);
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.grey[100],
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
+          controller: _scrollController,
+          child: Stack(
             children: <Widget>[
-              Padding(
-                  padding: EdgeInsets.fromLTRB(0, 5, 0, 24),
-                  child: Stack(
-                    children: <Widget>[
-                        StreamBuilder<Object>(
-                          stream: registerBloc.fileStream,
-                          builder: (context, snapshot) {
-
-                            if(snapshot.hasData){
-                            return Image.file(
-                              snapshot.data,
-                             height: 275,
-                              width: MediaQuery.of(context).size.width,
-                              fit: BoxFit.fill,
-                            );
-                            }
-                            return  Image.asset("assets/images/Avatar.png" ,
-                             height: 275,
-                              width: MediaQuery.of(context).size.width,
-                              fit: BoxFit.fill,);
-                          }
-                        ),
-
+              Column(
+                children: <Widget>[
+                  Padding(
+                      padding: EdgeInsets.fromLTRB(0, 5, 0, 24),
+                      child: Stack(
+                        children: <Widget>[
+                          StreamBuilder<Object>(
+                              stream: registerBloc.fileStream,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Image.file(
+                                    snapshot.data,
+                                    height: 275,
+                                    width: MediaQuery.of(context).size.width,
+                                    fit: BoxFit.fill,
+                                  );
+                                }
+                                return Image.asset(
+                                  "assets/images/Avatar.png",
+                                  height: 275,
+                                  width: MediaQuery.of(context).size.width,
+                                  fit: BoxFit.fill,
+                                );
+                              }),
+                          Positioned(
+                            child: GestureDetector(
+                              onTap: () => _showSelectionDialog(context),
+                              child: Container(
+                                  width: 60,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(60.0)),
+                                      color: Colors.black),
+                                  child: Icon(
+                                    Icons.camera_alt,
+                                    color: AppTheme.nearlyWhite,
+                                    size: 30,
+                                  )),
+                            ),
+                            bottom: 5,
+                            right: 5,
+                          ),
+                          StreamBuilder<Object>(
+                              stream: registerBloc.fileStream,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Positioned(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        registerBloc.changeFile(null);
+                                      },
+                                      child: Container(
+                                          width: 30,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(30.0)),
+                                              color: Colors.black),
+                                          child: Icon(
+                                            Icons.close,
+                                            color: AppTheme.nearlyWhite,
+                                            size: 30,
+                                          )),
+                                    ),
+                                    top: 5,
+                                    right: 5,
+                                  );
+                                }
+                                return Container();
+                              }),
+                        ],
+                      )),
+                  StreamBuilder(
+                    stream: registerBloc.submitRegisterStream,
+                    builder: (context, snapshot2) {
+                      if (snapshot2.hasData) {
+                        if (snapshot2.data == true) {
                     
-                      Positioned(
-                        child: GestureDetector(
-                          onTap: () => _showSelectionDialog(context),
-                          child: Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(60.0)),
-                                  color: Colors.black),
-                              child: Icon(
-                                Icons.camera_alt,
-                                color: AppTheme.nearlyWhite,
-                                size: 30,
-                              )),
-                        ),
-                        bottom: 5,
-                        right: 5,
-                      ),
-
-                      StreamBuilder<Object>(
-                          stream: registerBloc.fileStream,
-                          builder: (context, snapshot) {
-
-                            if(snapshot.hasData){
-                            return  Positioned(
-                        child: GestureDetector(
-                          onTap: ()  {
-                            
-                              registerBloc.changeFile(null);
-                          },
-                          child: Container(
-                              width: 30,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(30.0)),
-                                  color: Colors.black),
-                              child: Icon(
-                                Icons.close,
-                                color: AppTheme.nearlyWhite,
-                                size: 30,
-                              )),
-                        ),
-                        top: 5,
-                        right: 5,
-                      );
-                            }
-                            return Container();
+                          if (!firstTime) {
+                            firstTime = true;
+                            isLooding=false;
+                        
+                            SchedulerBinding.instance.addPostFrameCallback((_) {
+                              Navigator.of(context)
+                                  .pushReplacementNamed('/mainscreen');
+                            });
                           }
+                        } else {
+                          isLooding = false;
+                          return Text(snapshot2.error, style: AppTheme.error);
+                        }
+                      }
+                      return Container();
+                    },
+                  ),
+                  email(registerBloc),
+                  password(registerBloc),
+                  confrimPassword(registerBloc),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text(
+                          "    Register As",
+                          style: AppTheme.body1,
                         ),
-
-                   
-                    ],
-                  )),
+                        SizedBox(
+                          width: 35,
+                        ),
+                        StreamBuilder(
+                            stream: registerBloc.roleStream,
+                            builder: (context, snapshot) {
+                              return LiteRollingSwitch(
+                                value: true,
+                                textOn: 'Customer',
+                                textOff: 'Restaurant',
+                                colorOn: AppTheme.primaryColor,
+                                colorOff: AppTheme.primaryColor,
+                                iconOn: Icons.person_outline,
+                                iconOff: Icons.restaurant_menu,
+                                onChanged: (bool state) {
+                                  registerBloc.changeRole(state ? 1 : 2);
+                                },
+                              );
+                            }),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  registerButton(registerBloc),
+                  SizedBox(
+                    height: 30,
+                  ),
+                ],
+              ),
               StreamBuilder(
                 stream: registerBloc.submitRegisterStream,
                 builder: (context, snapshot2) {
-                  if (snapshot2.hasData) {
-                    if (snapshot2.data == true) {
-              
-                      Navigator.of(context).pushReplacementNamed('/mainscreen');
-                    } else {
-                      return Text(snapshot2.error, style: AppTheme.error);
-                    }
-                  }
-                  return Container();
+                  if (isLooding) {
+                    return Stack(
+                      children: <Widget>[
+                        Container(
+                          height: MediaQuery.of(context).size.height,
+                          width: MediaQuery.of(context).size.width,
+                          color: Colors.grey.withAlpha(100),
+                        ),
+                        Positioned(
+                          top: MediaQuery.of(context).size.height / 2,
+                          left: MediaQuery.of(context).size.width / 2 -
+                              spinkit.size / 2,
+                          child: spinkit,
+                        )
+                      ],
+                    );
+                  } else
+                    return Container();
                 },
-              ),
-              email(registerBloc),
-              password(registerBloc),
-              confrimPassword(registerBloc),
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Text(
-                      "    Register As",
-                      style: AppTheme.body1,
-                    ),
-                    SizedBox(
-                      width: 35,
-                    ),
-                    StreamBuilder(
-                        stream: registerBloc.roleStream,
-                        builder: (context, snapshot) {
-                          return LiteRollingSwitch(
-                            value: true,
-                            textOn: 'Customer',
-                            textOff: 'Restaurant',
-                            colorOn: AppTheme.primaryColor,
-                            colorOff: AppTheme.primaryColor,
-                            iconOn: Icons.person_outline,
-                            iconOff: Icons.restaurant_menu,
-                            onChanged: (bool state) {
-                              registerBloc.changeRole(state ? 1 : 2);
-                            },
-                          );
-                        }),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              registerButton(registerBloc),
-              SizedBox(
-                height: 30,
               ),
             ],
           ),
@@ -219,11 +257,10 @@ class _UserSignupState extends State<UserSignup> {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
 
     final RegisterBloc registerBloc = BlocProvider.of<RegisterBloc>(context);
-      
+
     registerBloc.changeFile(picture);
     Navigator.of(context).pop();
   }
-
 
   Center registerButton(RegisterBloc registerBloc) {
     return Center(
@@ -241,6 +278,8 @@ class _UserSignupState extends State<UserSignup> {
                       borderRadius: new BorderRadius.circular(50.0),
                       side: BorderSide(color: AppTheme.primaryColor)),
                   onPressed: () {
+                    isLooding = true;
+                    _scrollController.position.jumpTo(0.0);
                     registerBloc.submitRegister(true);
                   },
                   color: Colors.white,

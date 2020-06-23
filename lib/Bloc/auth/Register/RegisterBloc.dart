@@ -62,7 +62,8 @@ Stream<bool> get submitRegisterStream => _registerPressed.stream.transform(Strea
             int lastRole = await   roleStream.first;
             String lastConfirmPassword= await conforimPasswordStream.first;
             File file = await fileStream.first;
-
+            print("passs file await ");
+            print("role id : "+lastRole.toString());
          var user =await  AuthRepository().register(lastEmail, lastpassword, lastConfirmPassword, lastRole);
           token=user.token;
           userid=user.id;

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:foolife/Bloc/AuthBloc.dart';
+import 'package:foolife/Bloc/auth/Register/RegisterBloc.dart';
 import 'package:foolife/Bloc/provider.dart';
 
 import '../../AppLocalizations.dart';
@@ -12,6 +14,8 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   @override
+
+  bool firstTime=false;
   Widget build(BuildContext context) {
     final AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
     return Scaffold(
@@ -33,7 +37,15 @@ class _SignInScreenState extends State<SignInScreen> {
               builder: (context, snapshot2) {
                 if (snapshot2.hasData) {
                   if (snapshot2.data == true) {
-                    Navigator.pushNamed(context, '/usersignup');
+              if(!firstTime){
+                firstTime=true;
+                
+               SchedulerBinding.instance.addPostFrameCallback((_) {
+       Navigator.of(context).pushReplacementNamed('/mainscreen');
+               
+        });
+              }
+                     
                   } else {
                     return Text(
                       'invalid username or password',
@@ -62,7 +74,8 @@ class _SignInScreenState extends State<SignInScreen> {
   GestureDetector forgotPassword(BuildContext context) {
     return GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, '/usersignup');
+             Navigator.of(context).pushNamed('/usersignup');
+            
             },
             child: Text(
               "Forgot your password?",
@@ -89,7 +102,7 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/usersignup');
+                    Navigator.of(context).pushReplacementNamed('/usersignup');
                 },
                 child: Text(
                   'Register Now!',
