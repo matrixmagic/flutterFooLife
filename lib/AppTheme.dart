@@ -67,7 +67,7 @@ class AppTheme {
     color: darkText,
   );
   static const TextStyle error = TextStyle(
-    // error 
+    // error
     fontFamily: fontName,
     fontWeight: FontWeight.w400,
     fontSize: 16,
@@ -91,6 +91,14 @@ class AppTheme {
     fontSize: 16,
     letterSpacing: -0.05,
     color: darkText,
+  );
+  static const TextStyle Mainmenue = TextStyle(
+    // body2 -> body1
+    fontFamily: fontName,
+    fontWeight: FontWeight.w400,
+    fontSize: 16,
+    letterSpacing: -0.05,
+    color: notWhite,
   );
 
   static const TextStyle caption = TextStyle(
