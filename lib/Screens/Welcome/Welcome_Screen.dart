@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import "package:flutter_swiper/flutter_swiper.dart";
 import 'package:foolife/AppTheme.dart';
 import 'package:foolife/Models/walkthrough.dart';
 import 'package:foolife/Widget/custom_flat_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:video_player/video_player.dart';
 
 class WelcomeScreen extends StatefulWidget {
   final SharedPreferences prefs;
@@ -12,16 +15,6 @@ class WelcomeScreen extends StatefulWidget {
       icon: Icons.developer_mode,
       title: "Foolife",
       description: "The first app in this idea.",
-    ),
-    Walkthrough(
-      icon: Icons.layers,
-      title: "Firebase Auth",
-      description: "Use Firebase for user management.",
-    ),
-    Walkthrough(
-      icon: Icons.account_circle,
-      title: "Facebook Login",
-      description: "Leverage Facebook to log in user easily.",
     ),
   ];
 
@@ -59,6 +52,20 @@ class _WelcomeScreen extends State<WelcomeScreen> {
 
   List<Widget> _getPages(BuildContext context) {
     List<Widget> widgets = [];
+    var _controller = VideoPlayerController.asset("assets/videos/intro.mp4");
+    _controller.initialize().then((_) {
+      _controller.setLooping(true);
+      Timer(Duration(milliseconds: 100), () {
+        setState(() {
+          _controller.play();
+        });
+      });
+    });
+    widgets.add(Container(
+      height: 400,
+      width: 300,
+      child: VideoPlayer(_controller),
+    ));
     for (int i = 0; i < widget.pages.length; i++) {
       Walkthrough page = widget.pages[i];
       widgets.add(
