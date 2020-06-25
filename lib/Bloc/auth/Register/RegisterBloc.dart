@@ -65,8 +65,8 @@ Stream<bool> get submitRegisterStream => _registerPressed.stream.transform(Strea
             print("passs file await ");
             print("role id : "+lastRole.toString());
          var user =await  AuthRepository().register(lastEmail, lastpassword, lastConfirmPassword, lastRole);
-          token=user.token;
-          userid=user.id;
+            if(user!=null){
+
           if(file!=null)
           {
          var fileuploaded= await FileRepository().UploadFile(file, true);
@@ -76,7 +76,7 @@ Stream<bool> get submitRegisterStream => _registerPressed.stream.transform(Strea
           else
           sink.addError("Something went wrong");
 
-            
+            }
       }));
 
 

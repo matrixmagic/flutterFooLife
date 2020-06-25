@@ -13,12 +13,13 @@ import 'package:foolife/Network/ApiProvider.dart';
 class AuthRepository {
   ApiProvider api = new ApiProvider();
   Future<bool> login(String username, String password) async {
+   
+ try { 
     AuthDto authDto = new AuthDto();
     authDto.email = username;
     authDto.password = password;
-    var response = await api.post('auth/login', authDto.toJson());
+   var response = await api.post('auth/login', authDto.toJson());
     var data = ApiResponse.fromJson(json.decode(response.body));
-  
     if (data.success == true) {
       final storage = new FlutterSecureStorage();
       UserDto user = UserDto.fromJson(data.data) ;
@@ -28,9 +29,17 @@ class AuthRepository {
       return true;
     } else
       return false;
+}  
+ catch(e) { 
+   // code for handling exception 
+}    
+    
   }
 
   Future<bool> isEmailExists(String email) async {
+
+       
+ try { 
     AuthDto log = new AuthDto();
     log.email = email;
     var response = await api.post('auth/IsEmailExists', log.toJson());
@@ -40,9 +49,16 @@ class AuthRepository {
       return true;
     } else
       return false;
+
+      }  
+ catch(e) { 
+   // code for handling exception 
+}    
   }
 
    Future<UserDto> register(String email,String password,String confrim ,int role) async {
+            
+ try { 
     AuthDto register = new AuthDto();
     register.email = email;
     register.password=password;
@@ -61,6 +77,11 @@ class AuthRepository {
       return user;
     } else
       return null;
+
+           }  
+ catch(e) { 
+   print(e.toString());
+} 
   }
 
 

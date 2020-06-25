@@ -278,9 +278,12 @@ class UserSignup extends StatelessWidget {
                       borderRadius: new BorderRadius.circular(50.0),
                       side: BorderSide(color: AppTheme.primaryColor)),
                   onPressed: () {
+                    if(!isLooding)
+                     registerBloc.submitRegister(true);
                     isLooding = true;
                     _scrollController.position.jumpTo(0.0);
-                    registerBloc.submitRegister(true);
+                    
+                   
                   },
                   color: Colors.white,
                   textColor: Colors.grey[500],
