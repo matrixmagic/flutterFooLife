@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  final SharedPreferences prefs;
+ 
   final List<Walkthrough> pages = [
     Walkthrough(
       icon: Icons.developer_mode,
@@ -18,7 +18,7 @@ class WelcomeScreen extends StatefulWidget {
     ),
   ];
 
-  WelcomeScreen({this.prefs});
+  WelcomeScreen();
   //WelcomeScreen();
 
   @override
@@ -26,13 +26,30 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreen extends State<WelcomeScreen> {
+VideoPlayerController _controller;
+@override
+  void initState() {
+    
+    super.initState();
+
+      _controller = VideoPlayerController.asset("assets/videos/intro.mp4");
+    _controller.initialize().then((_) {
+      _controller.setLooping(false);
+      Timer(Duration(milliseconds: 100), () {
+        setState(() {
+          _controller.play();
+        });
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Swiper.children(
-        autoplay: false,
+        autoplay: true,
         index: 0,
-        loop: false,
+        loop: false,autoplayDelay: 21000,
         pagination: new SwiperPagination(
           margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 40.0),
           builder: new DotSwiperPaginationBuilder(
@@ -42,6 +59,7 @@ class _WelcomeScreen extends State<WelcomeScreen> {
               activeSize: 8.0),
         ),
         control: SwiperControl(
+
           iconPrevious: null,
           iconNext: null,
         ),
@@ -52,18 +70,8 @@ class _WelcomeScreen extends State<WelcomeScreen> {
 
   List<Widget> _getPages(BuildContext context) {
     List<Widget> widgets = [];
-    var _controller = VideoPlayerController.asset("assets/videos/intro.mp4");
-    _controller.initialize().then((_) {
-      _controller.setLooping(true);
-      Timer(Duration(milliseconds: 100), () {
-        setState(() {
-          _controller.play();
-        });
-      });
-    });
+   
     widgets.add(Container(
-      height: 400,
-      width: 300,
       child: VideoPlayer(_controller),
     ));
     for (int i = 0; i < widget.pages.length; i++) {
@@ -159,7 +167,7 @@ class _WelcomeScreen extends State<WelcomeScreen> {
                   fontWeight: FontWeight.w700,
                   textColor: Colors.white,
                   onPressed: () {
-                    widget.prefs.setBool('seen', true);
+                   // widget.prefs.setBool('seen', true);
                     Navigator.of(context).pushReplacementNamed('/signin');
                   },
                   splashColor: Colors.black12,

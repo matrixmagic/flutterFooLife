@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:foolife/AppTheme.dart';
+import 'package:foolife/Widget/custom_buttom_navigatior.dart';
+
 
 class MainScreen extends StatelessWidget {
   @override
@@ -9,8 +10,9 @@ class MainScreen extends StatelessWidget {
         body: Stack(children: <Widget>[
           Container(
             child: Image(
-              image: AssetImage('assets/images/Restaurant.jpg'),
-              fit: BoxFit.fill,
+              image: AssetImage('assets/images/Restaurant.jpg' ),
+              height: MediaQuery.of(context).size.height,
+              fit: BoxFit.fitHeight,
             ),
           ),
           Container(
@@ -32,7 +34,7 @@ class MainScreen extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 120),
-            child: Container(
+            child: Container(decoration:BoxDecoration(borderRadius:BorderRadius.circular(20),color:Colors.grey.withOpacity(0.5),) ,height: 370,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
@@ -121,36 +123,12 @@ class MainScreen extends StatelessWidget {
               ),
             ),
           )
+        ,Positioned(bottom: 0 ,left: 5.0,right: 5.0,child: CustomButtomNavigatior(),)
+        
         ]),
-        bottomNavigationBar: BottomNavigationBar(
-          showSelectedLabels: false,
 
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home, color: Colors.black38),
-              title: Text('Home'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search, color: Colors.black38),
-              title: Text('Home'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.group, color: Colors.black38),
-              title: Text('Home'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.favorite, color: Colors.black38),
-              title: Text('Home'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline, color: Colors.black38),
-              title: Text('Home'),
-            ),
-          ],
-          //   currentIndex: _selectedIndex,
-          selectedItemColor: Colors.amber[800],
-          //  onTap: _onItemTapped,
-        ),
+
+        
       ),
     );
   }
