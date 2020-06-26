@@ -10,10 +10,13 @@ class CustomButtomNavigatior extends StatefulWidget {
 class _CustomButtomNavigatiorState extends State<CustomButtomNavigatior> {
   @override
   Widget build(BuildContext context) {
-    return Container(decoration:BoxDecoration(borderRadius:BorderRadius.circular(20),color:Colors.grey.withOpacity(0.5),) ,
+    return Container(height: 60, decoration:BoxDecoration(borderRadius:BorderRadius.circular(20),color:Colors.grey.withOpacity(0.5),) ,
       child: Row( mainAxisAlignment: MainAxisAlignment.spaceAround ,children: <Widget>[
 
-        IconButton(icon: Icon(Icons.home, color:AppTheme.notWhite) ,),
+        Container(decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white)
+            ),child: IconButton(icon: Icon(Icons.home, color:AppTheme.notWhite,) ,)),
         IconButton(icon: Icon(Icons.search, color: AppTheme.notWhite) ,),
         IconButton(icon: Icon(Icons.group, color:AppTheme.notWhite) ,),
         IconButton(icon: Icon(Icons.favorite, color:AppTheme.notWhite) ,),
