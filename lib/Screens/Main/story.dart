@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_instagram_stories/flutter_instagram_stories.dart';
 import 'package:foolife/AppTheme.dart';
-import 'package:video_player/video_player.dart';
+
 
 class Story extends StatefulWidget {
   @override
@@ -15,20 +16,32 @@ class _StoryState extends State<Story> {
   Widget build(BuildContext context) {
 
     List<StoryItem> storyItems = [
-    StoryItem.text("helllo",AppTheme.primaryColor),
-    StoryItem.pageImage(AssetImage("assets/images/Restaurant1.jpg")),
+   StoryItem.pageImage(AssetImage("assets/images/Restaurant2.jpg")),
+   
 
   ]; 
-    return StoryView(
-    storyItems,
-    controller: controller, // pass controller here too
-    repeat: false, // should the stories be slid forever
-    onStoryShow: (s) {
-      
-    },
-    onComplete: () {Navigator.pop(context);},
-     // To disable vertical swipe gestures, ignore this parameter.
-      // Preferrably for inline story view.
-  );
+    return Stack(
+      children: <Widget>[
+        StoryView(
+        storyItems,
+        controller: controller, // pass controller here too
+        repeat: false, // should the stories be slid forever
+        onStoryShow: (s) {
+          
+        },
+        onComplete: () {Navigator.pop(context);},
+         // To disable vertical swipe gestures, ignore this parameter.
+          // Preferrably for inline story view.
+  ),
+  Positioned(bottom: 12,right: 25,child: Column(
+    children: <Widget>[
+      Icon(Icons.remove_red_eye, color: AppTheme.notWhite),
+      Text("150",style: TextStyle(color: AppTheme.notWhite,fontSize: 15),)
+    ],
+  ) ),
+   Positioned(bottom: 0,right: 25,child: Container(color: Colors.black, height: 15,width: 50,) )
+
+      ],
+    );
 }
   }

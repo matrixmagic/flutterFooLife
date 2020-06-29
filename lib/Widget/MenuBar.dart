@@ -15,25 +15,24 @@ class _MenuBarState extends State<MenuBar> {
         
         scrollDirection: Axis.horizontal,
         itemBuilder: (BuildContext context, int index) {
+          index=index%10;
           if(index==0){
           return   GestureDetector(
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
+          
+            
               child: Container(padding: EdgeInsets.symmetric( horizontal: 10),
-                decoration: BoxDecoration(color: Colors.grey.withOpacity(0.5),
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(44)),
-                height: 60,
-                child: Icon(Icons.home),
+               
+                height: 70,
+                child: Icon(Icons.home ,size: 30, color: AppTheme.notWhite,),
               ),
-            ),
+          
           );
           }
           return GestureDetector(
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(padding: EdgeInsets.symmetric( horizontal: 10),
-                decoration: BoxDecoration(color: Colors.grey.withOpacity(0.5),
+                decoration: BoxDecoration(
                     border: Border.all(color: Colors.white),
                     borderRadius: BorderRadius.circular(44)),
                 height: 60,

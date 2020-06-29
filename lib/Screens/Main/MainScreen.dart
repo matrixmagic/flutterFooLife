@@ -25,7 +25,7 @@ var names=['KFC','Pizza Hut','McDonald'];
   scrollDirection:Axis.vertical ,
   scale: 1.0,
 ),Positioned(bottom: 0 ,left: 5.0,right: 5.0,child: CustomButtomNavigatior(),),
-      Positioned(top: 40 ,left: 5.0,right: 5.0,child: Container(child: storiesBar()),),     ],
+       ],
         )
         
       ),
