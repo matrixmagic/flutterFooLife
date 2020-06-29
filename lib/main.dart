@@ -6,8 +6,9 @@ import 'package:foolife/Screens/Welcome/Welcome_Screen.dart';
 import 'AppLocalizations.dart';
 import 'Bloc/AuthBloc.dart';
 import 'Bloc/auth/Register/RegisterBloc.dart';
+import 'Screens/Main/story.dart';
 import 'Screens/Splash/VideoSplashScreen1.dart';
-import 'Screens/Splash/VideoSplashScreen2.dart';
+
 import 'Screens/Welcome/EntreyScreen.dart';
 import 'Screens/Welcome/RsetSignup.dart';
 import 'Screens/Welcome/SignInScreen.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
             '/restsignup': (BuildContext context) => new RestSignup(),
             '/mainscreen': (BuildContext context) => new MainScreen(),
             '/splash1': (BuildContext context) => new VideoSplashScreen1(),
-            '/splash2': (BuildContext context) => new VideoSplashScreen2(),
+           
             /* '/root': (BuildContext context) => new RootScreen(),
             '/signin': (BuildContext context) => new SignInScreen(),
             '/signup': (BuildContext context) => new SignUpScreen(),

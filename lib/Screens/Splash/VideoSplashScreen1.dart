@@ -14,23 +14,28 @@ class VideoSplashScreen1 extends StatefulWidget {
 class VideoState extends State<VideoSplashScreen1> {
   VideoPlayerController playerController;
   VoidCallback listener;
+  FlutterSecureStorage storage;
 
   @override
   @override
-  void initState() {
+   initState()  {
     super.initState();
+   
     listener = () {
       setState(() {});
     };
     initializeVideo();
-    playerController.play();
+    
 
     ///video splash display only 5 second you can change the duration according to your need
-    startTime();
+     startTime();
   }
 
   startTime() async {
-    var _duration = new Duration(seconds: 7);
+
+      storage = new FlutterSecureStorage();
+  var _firstTime = await storage.read(key: "_firstTime");
+    var _duration = new Duration(seconds: _firstTime==null?14:7);
     return new Timer(_duration, navigationPage);
   }
 
@@ -39,22 +44,27 @@ class VideoState extends State<VideoSplashScreen1> {
     playerController.removeListener(listener);
 
      final storage = new FlutterSecureStorage();
-     var _firstTime = await storage.read(key: "_firstTime");
-     if(_firstTime ==null )
-        Navigator.of(context).pushReplacementNamed('/splash2');
-      else
-         Navigator.of(context).pushReplacementNamed('/mainscreen');
+         await storage.write(key: "_firstTime", value:"true");
+       
+        Navigator.of(context).pushReplacementNamed('/mainscreen');
+    
     
    
   }
 
-  void initializeVideo() {
+  Future<void> initializeVideo() async {
+
+ var   storage = new FlutterSecureStorage();
+     var _firstTime = await storage.read(key: "_firstTime");
+     var video=_firstTime==null?"assets/videos/splash1.mp4":"assets/videos/splash2.mp4";
+
     playerController =
-        VideoPlayerController.asset('assets/videos/splash.mp4')
+        VideoPlayerController.asset(video)
           ..addListener(listener)
           ..setVolume(1.0)
           ..initialize()
           ..play();
+          playerController.play();
   }
 
   @override

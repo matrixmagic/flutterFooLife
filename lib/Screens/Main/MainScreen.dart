@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:foolife/Widget/CustomMainScreenWiget.dart';
 import 'package:foolife/Widget/custom_buttom_navigatior.dart';
+import 'package:foolife/Widget/stories_bar.dart';
 
 
 class MainScreen extends StatelessWidget {
@@ -14,6 +15,7 @@ var names=['KFC','Pizza Hut','McDonald'];
       child: Scaffold(
         body:  Stack(
           children: <Widget>[
+           
             Swiper(
   itemBuilder: (BuildContext context, int index) {
     return CustomMainScreenWiget(backgroundImage: images[index],restauranName: names[index],);
@@ -22,8 +24,8 @@ var names=['KFC','Pizza Hut','McDonald'];
   
   scrollDirection:Axis.vertical ,
   scale: 1.0,
-),Positioned(bottom: 0 ,left: 5.0,right: 5.0,child: CustomButtomNavigatior(),)
-          ],
+),Positioned(bottom: 0 ,left: 5.0,right: 5.0,child: CustomButtomNavigatior(),),
+      Positioned(top: 40 ,left: 5.0,right: 5.0,child: Container(child: storiesBar()),),     ],
         )
         
       ),
