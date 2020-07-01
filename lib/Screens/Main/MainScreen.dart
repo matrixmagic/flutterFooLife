@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:foolife/Widget/CustomMainScreenWiget.dart';
 import 'package:foolife/Widget/custom_buttom_navigatior.dart';
-import 'package:foolife/Widget/stories_bar.dart';
+
 
 
 class MainScreen extends StatelessWidget {

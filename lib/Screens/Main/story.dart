@@ -39,7 +39,7 @@ class _StoryState extends State<Story> {
       Text("150",style: TextStyle(color: AppTheme.notWhite,fontSize: 15),)
     ],
   ) ),
-   Positioned(bottom: 0,right: 25,child: Container(color: Colors.black, height: 15,width: 50,) )
+   Positioned(bottom: 0,right: 25,child: Container(color: Colors.black, height: 16,width: 50,) )
 
       ],
     );

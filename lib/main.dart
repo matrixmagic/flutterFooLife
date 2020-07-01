@@ -6,6 +6,7 @@ import 'package:foolife/Screens/Welcome/Welcome_Screen.dart';
 import 'AppLocalizations.dart';
 import 'Bloc/AuthBloc.dart';
 import 'Bloc/auth/Register/RegisterBloc.dart';
+import 'Screens/Main/SearchScreen.dart';
 import 'Screens/Main/story.dart';
 import 'Screens/Splash/VideoSplashScreen1.dart';
 
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
             '/entreyScreen': (BuildContext context) => new EntreyScreen(),
             '/usersignup': (BuildContext context) => new UserSignup(),
             '/restsignup': (BuildContext context) => new RestSignup(),
+            '/searchscreen': (BuildContext context) => new SearchScreen(),
             '/mainscreen': (BuildContext context) => new MainScreen(),
             '/splash1': (BuildContext context) => new VideoSplashScreen1(),
            
