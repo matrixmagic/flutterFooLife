@@ -70,7 +70,7 @@ class CustomButtomNavigatior extends StatelessWidget {
                               key: "_lastButtonPreesed", value: "3");
 
                           Navigator.of(context)
-                              .pushReplacementNamed('/searchscreen');
+                              .pushReplacementNamed('/notificationscreen');
                         },
                       )),
                   Container(
@@ -83,7 +83,7 @@ class CustomButtomNavigatior extends StatelessWidget {
                               key: "_lastButtonPreesed", value: "4");
 
                           Navigator.of(context)
-                              .pushReplacementNamed('/searchscreen');
+                              .pushReplacementNamed('/notificationscreen');
                         },
                       )),
                   Container(
@@ -97,7 +97,7 @@ class CustomButtomNavigatior extends StatelessWidget {
                               key: "_lastButtonPreesed", value: "5");
 
                           Navigator.of(context)
-                              .pushReplacementNamed('/searchscreen');
+                              .pushReplacementNamed('/mangemenuscreen');
                         },
                       ))
                 ],

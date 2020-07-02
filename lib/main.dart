@@ -6,8 +6,10 @@ import 'package:foolife/Screens/Welcome/Welcome_Screen.dart';
 import 'AppLocalizations.dart';
 import 'Bloc/AuthBloc.dart';
 import 'Bloc/auth/Register/RegisterBloc.dart';
+import 'Screens/Main/NotificationScreen.dart';
 import 'Screens/Main/SearchScreen.dart';
 import 'Screens/Main/story.dart';
+import 'Screens/Restaurant/MangeMenuScreen.dart';
 import 'Screens/Splash/VideoSplashScreen1.dart';
 
 import 'Screens/Welcome/EntreyScreen.dart';
@@ -38,6 +40,7 @@ class MyApp extends StatelessWidget {
           title: 'Flutter Demo',
           debugShowCheckedModeBanner: false,
           routes: <String, WidgetBuilder>{
+            '/splash1': (BuildContext context) => new VideoSplashScreen1(),
             '/walkthrough': (BuildContext context) => WelcomeScreen(),
             '/signin': (BuildContext context) => new SignInScreen(),
             '/entreyScreen': (BuildContext context) => new EntreyScreen(),
@@ -45,7 +48,10 @@ class MyApp extends StatelessWidget {
             '/restsignup': (BuildContext context) => new RestSignup(),
             '/searchscreen': (BuildContext context) => new SearchScreen(),
             '/mainscreen': (BuildContext context) => new MainScreen(),
-            '/splash1': (BuildContext context) => new VideoSplashScreen1(),
+             '/notificationscreen': (BuildContext context) => new NotificationScreen(),
+            '/mangemenuscreen': (BuildContext context) => new MangeMenuScreen(),
+
+            
            
             /* '/root': (BuildContext context) => new RootScreen(),
             '/signin': (BuildContext context) => new SignInScreen(),

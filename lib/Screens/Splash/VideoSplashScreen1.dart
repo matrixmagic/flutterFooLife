@@ -1,6 +1,5 @@
 import 'dart:async';
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -18,24 +17,23 @@ class VideoState extends State<VideoSplashScreen1> {
 
   @override
   @override
-   initState()  {
+  initState() {
     super.initState();
-   
+
     listener = () {
       setState(() {});
     };
     initializeVideo();
-    
 
     ///video splash display only 5 second you can change the duration according to your need
-     startTime();
+    startTime();
   }
 
   startTime() async {
-
-      storage = new FlutterSecureStorage();
-  var _firstTime = await storage.read(key: "_firstTime");
-    var _duration = new Duration(seconds: _firstTime==null?14:7);
+    storage = new FlutterSecureStorage();
+    await storage.write(key: "_lastButtonPreesed", value: "1");
+    var _firstTime = await storage.read(key: "_firstTime");
+    var _duration = new Duration(seconds: _firstTime == null ? 14 : 7);
     return new Timer(_duration, navigationPage);
   }
 
@@ -43,28 +41,25 @@ class VideoState extends State<VideoSplashScreen1> {
     playerController.setVolume(0.0);
     playerController.removeListener(listener);
 
-     final storage = new FlutterSecureStorage();
-         await storage.write(key: "_firstTime", value:"true");
-       
-        Navigator.of(context).pushReplacementNamed('/mainscreen');
-    
-    
-   
+    final storage = new FlutterSecureStorage();
+    await storage.write(key: "_firstTime", value: "true");
+
+    Navigator.of(context).pushReplacementNamed('/mainscreen');
   }
 
   Future<void> initializeVideo() async {
+    var storage = new FlutterSecureStorage();
+    var _firstTime = await storage.read(key: "_firstTime");
+    var video = _firstTime == null
+        ? "assets/videos/splash1.mp4"
+        : "assets/videos/splash2.mp4";
 
- var   storage = new FlutterSecureStorage();
-     var _firstTime = await storage.read(key: "_firstTime");
-     var video=_firstTime==null?"assets/videos/splash1.mp4":"assets/videos/splash2.mp4";
-
-    playerController =
-        VideoPlayerController.asset(video)
-          ..addListener(listener)
-          ..setVolume(1.0)
-          ..initialize()
-          ..play();
-          playerController.play();
+    playerController = VideoPlayerController.asset(video)
+      ..addListener(listener)
+      ..setVolume(1.0)
+      ..initialize()
+      ..play();
+    playerController.play();
   }
 
   @override

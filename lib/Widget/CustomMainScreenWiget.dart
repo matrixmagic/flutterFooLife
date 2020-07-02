@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:foolife/Widget/MenuBar.dart';
-import 'package:foolife/Widget/custom_buttom_navigatior.dart';
+
 import 'package:foolife/Widget/stories_bar.dart';
 
 
@@ -10,6 +11,7 @@ class CustomMainScreenWiget extends StatelessWidget {
   CustomMainScreenWiget({this.backgroundImage,this.restauranName});
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
       child: Scaffold(
         body: Stack(children: <Widget>[
