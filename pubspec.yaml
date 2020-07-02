@@ -38,6 +38,7 @@ dependencies:
   lite_rolling_switch: ^0.1.1
   infinite_listview: ^1.0.1+1
   path: ^1.6.4
+  flutter_icons: ^1.0.0+1
   flutter_localizations:
     sdk: flutter
 dev_dependencies:

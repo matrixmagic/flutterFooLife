@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:foolife/Screens/Restaurant/ExplorerScreen.dart';
 
-class MangeMenuScreen extends StatefulWidget {
+class ManageMenuScreen extends StatefulWidget {
   @override
-  _MangeMenuScreenState createState() => _MangeMenuScreenState();
+  _ManageMenuScreenState createState() => _ManageMenuScreenState();
 }
 
-class _MangeMenuScreenState extends State<MangeMenuScreen> {
+class _ManageMenuScreenState extends State<ManageMenuScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -47,7 +48,10 @@ class _MangeMenuScreenState extends State<MangeMenuScreen> {
                 ),
                 Expanded( child: 
              TabBarView(children: <Widget>[
-            
+            ExplorerScreen(title: "beka beka", path: "/mobile/ddd"),
+            ExplorerScreen(title: "beka beka", path: "/mobile/ddd"),
+            ExplorerScreen(title: "beka beka", path: "/mobile/ddd")
+
 
                 
               ],

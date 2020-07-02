@@ -8,8 +8,9 @@ import 'Bloc/AuthBloc.dart';
 import 'Bloc/auth/Register/RegisterBloc.dart';
 import 'Screens/Main/NotificationScreen.dart';
 import 'Screens/Main/SearchScreen.dart';
-import 'Screens/Main/story.dart';
-import 'Screens/Restaurant/MangeMenuScreen.dart';
+
+
+import 'Screens/Restaurant/ManageMenuScreen.dart';
 import 'Screens/Splash/VideoSplashScreen1.dart';
 
 import 'Screens/Welcome/EntreyScreen.dart';
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
             '/searchscreen': (BuildContext context) => new SearchScreen(),
             '/mainscreen': (BuildContext context) => new MainScreen(),
              '/notificationscreen': (BuildContext context) => new NotificationScreen(),
-            '/mangemenuscreen': (BuildContext context) => new MangeMenuScreen(),
+            '/mangemenuscreen': (BuildContext context) => new ManageMenuScreen(),
 
             
            
