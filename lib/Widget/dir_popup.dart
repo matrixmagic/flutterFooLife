@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foolife/AppTheme.dart';
 
 class DirPopup extends StatelessWidget {
   final String path;
@@ -21,6 +22,9 @@ class DirPopup extends StatelessWidget {
             "Rename",
           ),
         ),
+        PopupMenuDivider(
+      
+        ),
         PopupMenuItem(
           value: 1,
           child: Text(
@@ -32,7 +36,7 @@ class DirPopup extends StatelessWidget {
         Icons.arrow_drop_down,
         color: Colors.lightBlue,
       ),
-      color: Colors.red,
+      color: AppTheme.notWhite,
       offset: Offset(0, 30),
     );
   }

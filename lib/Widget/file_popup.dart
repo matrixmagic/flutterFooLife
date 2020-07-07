@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../AppTheme.dart';
+
 class FilePopup extends StatelessWidget {
   final String path;
   final Function popTap;
@@ -21,6 +23,9 @@ class FilePopup extends StatelessWidget {
             "Rename",
           ),
         ),
+      PopupMenuDivider(
+      
+        ),
         PopupMenuItem(
           value: 1,
           child: Text(
@@ -38,7 +43,7 @@ class FilePopup extends StatelessWidget {
         Icons.arrow_drop_down,
         color: Colors.lightBlue,
       ),
-      color: Colors.red,
+      color: AppTheme.notWhite,
       offset: Offset(0, 30),
     );
   }

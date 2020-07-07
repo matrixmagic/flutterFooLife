@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:foolife/AppTheme.dart';
 import 'package:foolife/Models/FileorDir.dart';
 import 'package:foolife/Widget/custom_alert.dart';
 import 'package:foolife/Widget/dir_item.dart';
 import 'package:foolife/Widget/file_item.dart';
 import 'package:foolife/Widget/path_bar.dart';
 import 'package:foolife/Widget/sort_sheet.dart';
-
-
-
-
 
 class ExplorerScreen extends StatefulWidget {
   final String title;
@@ -25,7 +22,8 @@ class ExplorerScreen extends StatefulWidget {
   _ExplorerScreenState createState() => _ExplorerScreenState();
 }
 
-class _ExplorerScreenState extends State<ExplorerScreen> with WidgetsBindingObserver {
+class _ExplorerScreenState extends State<ExplorerScreen>
+    with WidgetsBindingObserver {
   String path;
   List<String> paths = List();
 
@@ -40,9 +38,13 @@ class _ExplorerScreenState extends State<ExplorerScreen> with WidgetsBindingObse
   }
 
   getFiles() async {
-    files.add(FileorDir(path: "mobile/mmmm",isDirectory: true));
-    files.add(FileorDir(path: "mobile/image.jpg",isDirectory: false,imageURl: "https://cdn.mos.cms.futurecdn.net/BVb3Wzn9orDR8mwVnhrSyd-970-80.jpg"));
-    
+    files.add(FileorDir(path: "mobile/mmmm", isDirectory: true));
+    files.add(FileorDir(
+        path: "mobile/image.jpg",
+        isDirectory: false,
+        imageURl:
+            "https://cdn.mos.cms.futurecdn.net/BVb3Wzn9orDR8mwVnhrSyd-970-80.jpg"));
+
     // Directory dir = Directory(path);
     // List<FileSystemEntity> l = dir.listSync();
     // files.clear();
@@ -81,6 +83,73 @@ class _ExplorerScreenState extends State<ExplorerScreen> with WidgetsBindingObse
     getFiles();
     paths.add(widget.path);
     WidgetsBinding.instance.addObserver(this);
+
+
+    listData=new List<Widget>();
+int indexx=0;
+files.forEach((file) { 
+                      //return file.toString().split(":")[0] == "Directory"
+                      listData.add( file.isDirectory == true
+                          ? DirectoryItem(
+                            key: Key('$indexx'),
+                              popTap: (v) async {
+                                if (v == 0) {
+                                  renameDialog(context, file.path, "dir");
+                                } else if (v == 1) {
+                                  /*await Directory(file.path)
+                                      .delete()
+                                      .catchError((e) {
+                                    print(e.toString());
+                                    if (e
+                                        .toString()
+                                        .contains("Permission denied")) {
+                                      Provider.of<CoreProvider>(context,
+                                              listen: false)
+                                          .showToast(
+                                              "Cannot write to this Storage device!");
+                                    }
+                                  });
+                                  */
+                                  getFiles();
+                                }
+                              },
+                              file: file,
+                              tap: () {
+                                paths.add(file.path);
+                                setState(() {
+                                  path = file.path;
+                                });
+                                getFiles();
+                              },
+                            )
+                          : FileItem(
+                            key: Key('$indexx'),
+                              file: file,
+                              popTap: (v) async {
+                                if (v == 0) {
+                                  renameDialog(context, file.path, "file");
+                                } else if (v == 1) {
+                                  // await File(file.path).delete().catchError((e) {
+                                  //   print(e.toString());
+                                  //   if (e
+                                  //       .toString()
+                                  //       .contains("Permission denied")) {
+                                  //     Provider.of<CoreProvider>(context,
+                                  //             listen: false)
+                                  //         .showToast(
+                                  //             "Cannot write to this Storage device!");
+                                  //   }
+                                  // });
+                                  getFiles();
+                                } else if (v == 2) {
+                                  print("Share");
+                                }
+                              },
+                            ));
+
+indexx++;
+
+});
   }
 
   @override
@@ -88,9 +157,23 @@ class _ExplorerScreenState extends State<ExplorerScreen> with WidgetsBindingObse
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
+  List<Widget> listData;
+
+   void _onReorder(int oldIndex, int newIndex) {
+    setState(
+      () {
+        if (newIndex > oldIndex) {
+          newIndex -= 1;
+        }
+         var item = listData.removeAt(oldIndex);
+        listData.insert(newIndex, item);
+      },
+    );
+  } 
 
   @override
   Widget build(BuildContext context) {
+
     return WillPopScope(
       onWillPop: () async {
         if (paths.length == 1) {
@@ -105,41 +188,29 @@ class _ExplorerScreenState extends State<ExplorerScreen> with WidgetsBindingObse
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-            ),
-            onPressed: () {
-              if (paths.length == 1) {
-                Navigator.pop(context);
-              } else {
-                paths.removeLast();
-                setState(() {
-                  path = paths.last;
-                });
-                getFiles();
-              }
-            },
-          ),
-          elevation: 4,
-          title: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                "${widget.title}",
-              ),
-              Text(
-                "$path",
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ],
-          ),
-          bottom: PathBar(
+        // appBar: AppBar(
+
+        //   elevation: 4,
+
+        //   actions: <Widget>[
+        //     IconButton(
+        //       onPressed: () {
+        //         showModalBottomSheet(
+        //           context: context,
+        //           builder: (context) => SortSheet(),
+        //         ).then((v) {
+        //           getFiles();
+        //         });
+        //       },
+        //       tooltip: "Sort by",
+        //       icon: Icon(
+        //         Icons.sort,
+        //       ),
+        //     ),
+        //   ],
+        // ),
+        body: Column(children: <Widget>[
+          PathBar(
             child: Container(
               height: 50,
               child: Align(
@@ -152,23 +223,46 @@ class _ExplorerScreenState extends State<ExplorerScreen> with WidgetsBindingObse
                     String i = paths[index];
                     List splited = i.split("/");
                     return index == 0
-                        ? IconButton(
-                            icon: Icon(
-                              widget.path.toString().contains("emulated")
-                                  ? Feather.smartphone
-                                  : Icons.sd_card,
-                              color: index == paths.length - 1
-                                  ? Colors.lightBlue
-                                  :Colors.black,
-                            ),
-                            onPressed: () {
-                              print(paths[index]);
-                              setState(() {
-                                path = paths[index];
-                                paths.removeRange(index + 1, paths.length);
-                              });
-                              getFiles();
-                            },
+                        ? Row(
+                            children: <Widget>[
+                              paths.length == 1
+                                  ? Container()
+                                  : IconButton(
+                                      icon: Icon(
+                                        Icons.arrow_back,
+                                        color: Colors.lightBlue,
+                                      ),
+                                      onPressed: () {
+                                        if (paths.length == 1) {
+                                          Navigator.pop(context);
+                                        } else {
+                                          paths.removeLast();
+                                          setState(() {
+                                            path = paths.last;
+                                          });
+                                          getFiles();
+                                        }
+                                      },
+                                    ),
+                              IconButton(
+                                icon: Icon(
+                                  widget.path.toString().contains("emulated")
+                                      ? Feather.smartphone
+                                      : Icons.restaurant_menu,
+                                  color: index == paths.length - 1
+                                      ? Colors.lightBlue
+                                      : Colors.black,
+                                ),
+                                onPressed: () {
+                                  print(paths[index]);
+                                  setState(() {
+                                    path = paths[index];
+                                    paths.removeRange(index + 1, paths.length);
+                                  });
+                                  getFiles();
+                                },
+                              )
+                            ],
                           )
                         : InkWell(
                             onTap: () {
@@ -208,111 +302,52 @@ class _ExplorerScreenState extends State<ExplorerScreen> with WidgetsBindingObse
               ),
             ),
           ),
-          actions: <Widget>[
-            IconButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) => SortSheet(),
-                ).then((v) {
-                  getFiles();
-                });
-              },
-              tooltip: "Sort by",
-              icon: Icon(
-                Icons.sort,
-              ),
-            ),
-          ],
-        ),
-        body: files.isEmpty
-            ? Center(
-                child: Text("There's nothing here"),
-              )
-            : ListView.separated(
-                padding: EdgeInsets.only(left: 20),
-                itemCount: files.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var file = files[index];
-                  //return file.toString().split(":")[0] == "Directory"
-                  return file.isDirectory ==true
-                      ? DirectoryItem(
-                          popTap: (v) async {
-                            if (v == 0) {
-                              renameDialog(context, file.path, "dir");
-                            } else if (v == 1) {
-                              
-                              
-                              /*await Directory(file.path)
-                                  .delete()
-                                  .catchError((e) {
-                                print(e.toString());
-                                if (e
-                                    .toString()
-                                    .contains("Permission denied")) {
-                                  Provider.of<CoreProvider>(context,
-                                          listen: false)
-                                      .showToast(
-                                          "Cannot write to this Storage device!");
-                                }
-                              });
-                              */
-                              getFiles();
-                            }
-                          },
-                          file: file,
-                          tap: () {
-                            paths.add(file.path);
-                            setState(() {
-                              path = file.path;
-                            });
-                            getFiles();
-                          },
-                        )
-                      : FileItem(
-                          file: file,
-                          popTap: (v) async {
-                            if (v == 0) {
-                              renameDialog(context, file.path, "file");
-                            } else if (v == 1) {
-                              // await File(file.path).delete().catchError((e) {
-                              //   print(e.toString());
-                              //   if (e
-                              //       .toString()
-                              //       .contains("Permission denied")) {
-                              //     Provider.of<CoreProvider>(context,
-                              //             listen: false)
-                              //         .showToast(
-                              //             "Cannot write to this Storage device!");
-                              //   }
-                              // });
-                              getFiles();
-                            } else if (v == 2) {
-                              print("Share");
-                            }
-                          },
-                        );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return Stack(
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                          height: 1,
-                          color: Theme.of(context).dividerColor,
-                          width: MediaQuery.of(context).size.width - 70,
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => addDialog(context, path),
-          child: Icon(Feather.plus),
-          tooltip: "Add Folder",
-        ),
+          files.isEmpty
+              ? Center(
+                  child: Text("There's nothing here"),
+                )
+              : Expanded(
+                  child: ReorderableListView( onReorder: _onReorder,
+                  scrollDirection: Axis.vertical,
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  children: listData,
+                    
+                    // separatorBuilder: (BuildContext context, int index) {
+                    //   return Stack(
+                    //     children: <Widget>[
+                    //       Align(
+                    //         alignment: Alignment.centerRight,
+                    //         child: Container(
+                    //           height: 1,
+                    //           color: Theme.of(context).dividerColor,
+                    //           width: MediaQuery.of(context).size.width - 70,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   );
+                    // },
+                  ),
+                ),
+        ]),
+        floatingActionButton:
+            Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+          FloatingActionButton(
+            heroTag: "btn1",
+            onPressed: () => addDialog(context, path),
+            child: Icon(Icons.fastfood),
+            tooltip: "Add Folder",
+            backgroundColor: Colors.lightBlue,
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          FloatingActionButton(
+             heroTag: "btn2",
+            onPressed: () => addDialog(context, path),
+            child: Icon(Feather.folder_plus),
+            tooltip: "Add Folder",
+          ),
+        ]),
       ),
     );
   }
@@ -417,7 +452,7 @@ class _ExplorerScreenState extends State<ExplorerScreen> with WidgetsBindingObse
   renameDialog(BuildContext context, String path, String type) {
     final TextEditingController name = TextEditingController();
     setState(() {
-     // name.text = pathlib.basename(path);
+      // name.text = pathlib.basename(path);
     });
     showDialog(
       context: context,
