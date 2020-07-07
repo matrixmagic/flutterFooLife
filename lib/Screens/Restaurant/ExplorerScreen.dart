@@ -83,20 +83,42 @@ class _ExplorerScreenState extends State<ExplorerScreen>
     getFiles();
     paths.add(widget.path);
     WidgetsBinding.instance.addObserver(this);
+  }
 
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
 
-    listData=new List<Widget>();
-int indexx=0;
-files.forEach((file) { 
-                      //return file.toString().split(":")[0] == "Directory"
-                      listData.add( file.isDirectory == true
-                          ? DirectoryItem(
-                            key: Key('$indexx'),
-                              popTap: (v) async {
-                                if (v == 0) {
-                                  renameDialog(context, file.path, "dir");
-                                } else if (v == 1) {
-                                  /*await Directory(file.path)
+  List<Widget> listData;
+
+  void _onReorder(int oldIndex, int newIndex) {
+    setState(
+      () {
+        if (newIndex > oldIndex) {
+          newIndex -= 1;
+        }
+        var item = files.removeAt(oldIndex);
+        files.insert(newIndex, item);
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    listData = new List<Widget>();
+    int indexx = 0;
+    files.forEach((file) {
+      //return file.toString().split(":")[0] == "Directory"
+      listData.add(file.isDirectory == true
+          ? DirectoryItem(
+              key: Key('$indexx'),
+              popTap: (v) async {
+                if (v == 0) {
+                  renameDialog(context, file.path, "dir");
+                } else if (v == 1) {
+                  /*await Directory(file.path)
                                       .delete()
                                       .catchError((e) {
                                     print(e.toString());
@@ -110,70 +132,45 @@ files.forEach((file) {
                                     }
                                   });
                                   */
-                                  getFiles();
-                                }
-                              },
-                              file: file,
-                              tap: () {
-                                paths.add(file.path);
-                                setState(() {
-                                  path = file.path;
-                                });
-                                getFiles();
-                              },
-                            )
-                          : FileItem(
-                            key: Key('$indexx'),
-                              file: file,
-                              popTap: (v) async {
-                                if (v == 0) {
-                                  renameDialog(context, file.path, "file");
-                                } else if (v == 1) {
-                                  // await File(file.path).delete().catchError((e) {
-                                  //   print(e.toString());
-                                  //   if (e
-                                  //       .toString()
-                                  //       .contains("Permission denied")) {
-                                  //     Provider.of<CoreProvider>(context,
-                                  //             listen: false)
-                                  //         .showToast(
-                                  //             "Cannot write to this Storage device!");
-                                  //   }
-                                  // });
-                                  getFiles();
-                                } else if (v == 2) {
-                                  print("Share");
-                                }
-                              },
-                            ));
+                  getFiles();
+                }
+              },
+              file: file,
+              tap: () {
+                paths.add(file.path);
+                setState(() {
+                  path = file.path;
+                });
+                getFiles();
+              },
+            )
+          : FileItem(
+              key: Key('$indexx'),
+              file: file,
+              popTap: (v) async {
+                if (v == 0) {
+                  renameDialog(context, file.path, "file");
+                } else if (v == 1) {
+                  // await File(file.path).delete().catchError((e) {
+                  //   print(e.toString());
+                  //   if (e
+                  //       .toString()
+                  //       .contains("Permission denied")) {
+                  //     Provider.of<CoreProvider>(context,
+                  //             listen: false)
+                  //         .showToast(
+                  //             "Cannot write to this Storage device!");
+                  //   }
+                  // });
+                  getFiles();
+                } else if (v == 2) {
+                  print("Share");
+                }
+              },
+            ));
 
-indexx++;
-
-});
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
-  }
-  List<Widget> listData;
-
-   void _onReorder(int oldIndex, int newIndex) {
-    setState(
-      () {
-        if (newIndex > oldIndex) {
-          newIndex -= 1;
-        }
-         var item = listData.removeAt(oldIndex);
-        listData.insert(newIndex, item);
-      },
-    );
-  } 
-
-  @override
-  Widget build(BuildContext context) {
-
+      indexx++;
+    });
     return WillPopScope(
       onWillPop: () async {
         if (paths.length == 1) {
@@ -307,11 +304,12 @@ indexx++;
                   child: Text("There's nothing here"),
                 )
               : Expanded(
-                  child: ReorderableListView( onReorder: _onReorder,
-                  scrollDirection: Axis.vertical,
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  children: listData,
-                    
+                  child: ReorderableListView(
+                    onReorder: _onReorder,
+                    scrollDirection: Axis.vertical,
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    children: listData,
+
                     // separatorBuilder: (BuildContext context, int index) {
                     //   return Stack(
                     //     children: <Widget>[
@@ -342,7 +340,7 @@ indexx++;
             height: 5,
           ),
           FloatingActionButton(
-             heroTag: "btn2",
+            heroTag: "btn2",
             onPressed: () => addDialog(context, path),
             child: Icon(Feather.folder_plus),
             tooltip: "Add Folder",

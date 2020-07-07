@@ -4,6 +4,8 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:foolife/Widget/CustomMainScreenWiget.dart';
 import 'package:foolife/Widget/custom_buttom_navigatior.dart';
 
+import '../../AppTheme.dart';
+
 class MainScreen extends StatelessWidget {
   @override
   var images = [
@@ -32,10 +34,46 @@ class MainScreen extends StatelessWidget {
             bottom: 0,
             left: 5.0,
             right: 5.0,
-            child: CustomButtomNavigatior(),
+            child: CustomButtomNavigatior(
+              showDialog: _showSelectionDialog,
+            ),
           ),
         ],
       )),
     );
+  }
+
+  Future<void> _showSelectionDialog(BuildContext context) {
+    print('im clicked hiiiii');
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(
+                    Icons.image,
+                    color: AppTheme.primaryColor,
+                  ),
+                  title: Text("Gallery"),
+                  onTap: () {},
+                ),
+                Divider(
+                  height: 1.0,
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.camera_alt,
+                    color: AppTheme.primaryColor,
+                  ),
+                  title: Text("Camera"),
+                  onTap: () {},
+                )
+              ],
+            ),
+          ));
+        });
   }
 }
