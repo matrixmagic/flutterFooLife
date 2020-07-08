@@ -13,8 +13,10 @@ class MainScreen extends StatelessWidget {
     'assets/images/Restaurant2.jpg',
     'assets/images/Restaurant3.jpg'
   ];
+  BuildContext _context;
   var names = ['KFC', 'Pizza Hut', 'McDonald'];
   Widget build(BuildContext context) {
+    _context=context;
     return SafeArea(
       child: Scaffold(
           body: Stack(
@@ -35,15 +37,19 @@ class MainScreen extends StatelessWidget {
             left: 5.0,
             right: 5.0,
             child: CustomButtomNavigatior(
-              showDialog: _showSelectionDialog,
+              showDialog: _ParentFunction,
             ),
           ),
         ],
       )),
     );
   }
+  _ParentFunction() async {
+    print('im clickedxxxx hiiiii');
 
-  Future<void> _showSelectionDialog(BuildContext context) {
+  await  _showSelectionDialog(_context);
+  }
+  Future<void> _showSelectionDialog(BuildContext context) async {
     print('im clicked hiiiii');
     return showDialog(
         context: context,
