@@ -28,7 +28,7 @@ class UserSignup extends StatelessWidget {
     final RegisterBloc registerBloc = BlocProvider.of<RegisterBloc>(context);
 
     registerBloc.changeRole(1);
-    
+    registerBloc.changeFile(null);
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
@@ -40,7 +40,77 @@ class UserSignup extends StatelessWidget {
             children: <Widget>[
               Column(
                 children: <Widget>[
-                 
+                  Padding(
+                      padding: EdgeInsets.fromLTRB(0, 5, 0, 24),
+                      child: Stack(
+                        children: <Widget>[
+                          StreamBuilder<Object>(
+                              stream: registerBloc.fileStream,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Image.file(
+                                    snapshot.data,
+                                    height: 275,
+                                    width: MediaQuery.of(context).size.width,
+                                    fit: BoxFit.fill,
+                                  );
+                                }
+                                return Image.asset(
+                                  "assets/images/Avatar.png",
+                                  height: 275,
+                                  width: MediaQuery.of(context).size.width,
+                                  fit: BoxFit.fill,
+                                );
+                              }),
+                          Positioned(
+                            child: GestureDetector(
+                              onTap: () => _showSelectionDialog(context),
+                              child: Container(
+                                  width: 60,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(60.0)),
+                                      color: Colors.black),
+                                  child: Icon(
+                                    Icons.camera_alt,
+                                    color: AppTheme.nearlyWhite,
+                                    size: 30,
+                                  )),
+                            ),
+                            bottom: 5,
+                            right: 5,
+                          ),
+                          StreamBuilder<Object>(
+                              stream: registerBloc.fileStream,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Positioned(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        registerBloc.changeFile(null);
+                                      },
+                                      child: Container(
+                                          width: 30,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(30.0)),
+                                              color: Colors.black),
+                                          child: Icon(
+                                            Icons.close,
+                                            color: AppTheme.nearlyWhite,
+                                            size: 30,
+                                          )),
+                                    ),
+                                    top: 5,
+                                    right: 5,
+                                  );
+                                }
+                                return Container();
+                              }),
+                        ],
+                      )),
                   StreamBuilder(
                     stream: registerBloc.submitRegisterStream,
                     builder: (context, snapshot2) {
@@ -53,7 +123,7 @@ class UserSignup extends StatelessWidget {
                         
                             SchedulerBinding.instance.addPostFrameCallback((_) {
                               Navigator.of(context)
-                                  .pushReplacementNamed('/resturantSignup');
+                                  .pushReplacementNamed('/mainscreen');
                             });
                           }
                         } else {
@@ -67,7 +137,6 @@ class UserSignup extends StatelessWidget {
                   email(registerBloc),
                   password(registerBloc),
                   confrimPassword(registerBloc),
-                  phoneNumber(registerBloc),
                   Padding(
                     padding: EdgeInsets.only(top: 10),
                     child: Row(
@@ -100,7 +169,7 @@ class UserSignup extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 70,
+                    height: 20,
                   ),
                   registerButton(registerBloc),
                   SizedBox(
@@ -138,6 +207,60 @@ class UserSignup extends StatelessWidget {
     );
   }
 
+  Future<void> _showSelectionDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(
+                    Icons.image,
+                    color: AppTheme.primaryColor,
+                  ),
+                  title: Text("Gallery"),
+                  onTap: () {
+                    _openGallery(context);
+                  },
+                ),
+                Divider(
+                  height: 1.0,
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.camera_alt,
+                    color: AppTheme.primaryColor,
+                  ),
+                  title: Text("Camera"),
+                  onTap: () {
+                    _openCamera(context);
+                  },
+                )
+              ],
+            ),
+          ));
+        });
+  }
+
+  void _openGallery(BuildContext context) async {
+    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
+    final RegisterBloc registerBloc = BlocProvider.of<RegisterBloc>(context);
+
+    registerBloc.changeFile(picture);
+
+    Navigator.of(context).pop();
+  }
+
+  void _openCamera(BuildContext context) async {
+    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+
+    final RegisterBloc registerBloc = BlocProvider.of<RegisterBloc>(context);
+
+    registerBloc.changeFile(picture);
+    Navigator.of(context).pop();
+  }
 
   Center registerButton(RegisterBloc registerBloc) {
     return Center(
@@ -211,44 +334,6 @@ class UserSignup extends StatelessWidget {
           }),
     );
   }
-  Padding phoneNumber(RegisterBloc registerBloc) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(10.0, 22, 30, 24),
-      child: StreamBuilder(
-          stream: registerBloc.phoneNumberStream,
-          builder: (context, snapshot) {
-            return TextField(
-              onChanged: registerBloc.changePhoneNumber,
-              autocorrect: true,
-               keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                
-                icon: Icon(Icons.mobile_screen_share,
-                    color: snapshot.hasError
-                        ? AppTheme.redText
-                        : AppTheme.primaryColor),
-                errorText: snapshot.error,
-                labelText: 'Phone number',
-                hintText: 'Phone number',
-                hintStyle: TextStyle(color: Colors.grey),
-                filled: true,
-                fillColor: Colors.white70,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                  borderSide:
-                      BorderSide(color: AppTheme.primaryColor, width: 2),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  borderSide: BorderSide(
-                    color: AppTheme.primaryColor,
-                  ),
-                ),
-              ),
-            );
-          }),
-    );
-  }
 
   Padding password(RegisterBloc registerBloc) {
     return Padding(
@@ -289,7 +374,7 @@ class UserSignup extends StatelessWidget {
 
   Padding confrimPassword(RegisterBloc registerBloc) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(10.0, 22, 30, 0),
+      padding: EdgeInsets.fromLTRB(10.0, 22, 30, 24),
       child: StreamBuilder(
           stream: registerBloc.conforimPasswordStream,
           builder: (context, snapshot) {

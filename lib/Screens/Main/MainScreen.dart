@@ -63,8 +63,11 @@ class MainScreen extends StatelessWidget {
                     Icons.image,
                     color: AppTheme.primaryColor,
                   ),
-                  title: Text("Gallery"),
-                  onTap: () {},
+                  title: Text("Sign up"),
+                  onTap: () {
+                    
+                    Navigator.of(context).pushNamed('/usersignup');
+                  },
                 ),
                 Divider(
                   height: 1.0,
@@ -74,8 +77,10 @@ class MainScreen extends StatelessWidget {
                     Icons.camera_alt,
                     color: AppTheme.primaryColor,
                   ),
-                  title: Text("Camera"),
-                  onTap: () {},
+                  title: Text("Log in"),
+                  onTap: () {
+                      Navigator.of(context).pushNamed('/signin');
+                  },
                 )
               ],
             ),

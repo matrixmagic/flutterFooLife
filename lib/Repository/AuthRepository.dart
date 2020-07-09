@@ -52,7 +52,7 @@ class AuthRepository {
   }
 
   Future<UserDto> register(
-      String email, String password, String confrim, int role) async {
+      String email, String password, String confrim, int role,String phoneNumber) async {
     try {
       AuthDto register = new AuthDto();
       register.email = email;
