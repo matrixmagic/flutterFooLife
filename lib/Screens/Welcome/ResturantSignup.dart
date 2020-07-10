@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foolife/Bloc/auth/Register/RegisterBloc.dart';
 import 'package:foolife/Bloc/auth/Register/ResturantRegistertionBloc.dart';
 import 'package:foolife/Bloc/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:multiselect_formfield/multiselect_formfield.dart';
 
 import '../../AppTheme.dart';
 
 class RetsturantSignup extends StatelessWidget {
-bool firstTime = false;
+  bool firstTime = false;
   bool isLooding = false;
 
   ScrollController _scrollController = new ScrollController(
@@ -22,12 +24,13 @@ bool firstTime = false;
   );
   @override
   Widget build(BuildContext context) {
-    final ResturantRegistertionBloc resturantRegistertionBloc = BlocProvider.of<ResturantRegistertionBloc>(context);
-
+    final ResturantRegistertionBloc resturantRegistertionBloc =
+        BlocProvider.of<ResturantRegistertionBloc>(context);
 
     resturantRegistertionBloc.changeFile(null);
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.grey[100],
       body: SafeArea(
@@ -85,7 +88,8 @@ bool firstTime = false;
                                   return Positioned(
                                     child: GestureDetector(
                                       onTap: () {
-                                        resturantRegistertionBloc.changeFile(null);
+                                        resturantRegistertionBloc
+                                            .changeFile(null);
                                       },
                                       child: Container(
                                           width: 30,
@@ -113,11 +117,10 @@ bool firstTime = false;
                     builder: (context, snapshot2) {
                       if (snapshot2.hasData) {
                         if (snapshot2.data == true) {
-                    
                           if (!firstTime) {
                             firstTime = true;
-                            isLooding=false;
-                        
+                            isLooding = false;
+
                             SchedulerBinding.instance.addPostFrameCallback((_) {
                               Navigator.of(context)
                                   .pushReplacementNamed('/mainscreen');
@@ -137,14 +140,166 @@ bool firstTime = false;
                   street(resturantRegistertionBloc),
                   fax(resturantRegistertionBloc),
                   Padding(
-                    padding: const EdgeInsets.only(left: 8.0,right: 30.0,top:30.0 ),
-                    child: Row(children: <Widget>[
-                     opentime(resturantRegistertionBloc),
-                     SizedBox(width: 15,),
-                     closetime(resturantRegistertionBloc),
-                    ],),
+                    padding: const EdgeInsets.only(
+                        left: 8.0, right: 30.0, top: 30.0),
+                    child: Row(
+                      children: <Widget>[
+                        opentime(resturantRegistertionBloc),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        closetime(resturantRegistertionBloc),
+                      ],
+                    ),
                   ),
-                  
+                  Wrap(
+                    children: <Widget>[
+                      StreamBuilder<Object>(
+                          stream: null,
+                          builder: (context, snapshot) {
+                            return IconButton(
+                              icon: Icon(
+                                Icons.accessible,
+                                size: 38,
+                              ),
+                              onPressed: () {},
+                            );
+                          }),
+                      StreamBuilder<Object>(
+                          stream: null,
+                          builder: (context, snapshot) {
+                            return IconButton(
+                              icon: Icon(
+                                Icons.child_friendly,
+                                size: 38,
+                              ),
+                              onPressed: () {},
+                            );
+                          }),
+                      StreamBuilder<Object>(
+                          stream: null,
+                          builder: (context, snapshot) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 8.0, left: 8.0),
+                              child: IconButton(
+                                icon: FaIcon(
+                                  FontAwesomeIcons.gamepad,
+                                  size: 38,
+                                ),
+                                onPressed: () {},
+                              ),
+                            );
+                          }),
+                      StreamBuilder<Object>(
+                          stream: null,
+                          builder: (context, snapshot) {
+                            return IconButton(
+                              icon: Icon(
+                                Icons.wifi,
+                                size: 38,
+                              ),
+                              onPressed: () {},
+                            );
+                          }),
+                      StreamBuilder<Object>(
+                          stream: null,
+                          builder: (context, snapshot) {
+                            return IconButton(
+                              icon: Icon(
+                                Icons.power,
+                                size: 38,
+                              ),
+                              onPressed: () {},
+                            );
+                          }),
+                      StreamBuilder<Object>(
+                          stream: null,
+                          builder: (context, snapshot) {
+                            return IconButton(
+                              icon: Icon(
+                                Icons.pets,
+                                size: 38,
+                              ),
+                              onPressed: () {},
+                            );
+                          }),
+                    ],
+                  ),
+                  Wrap(
+                    children: <Widget>[
+                      StreamBuilder<Object>(
+                          stream: null,
+                          builder: (context, snapshot) {
+                            return Container(
+                              width: 100,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(22))),
+                              child: DropdownButton<String>(
+                                iconSize: 20,
+                                hint: Text('hiii'),
+                                items: <String>['A', 'B', 'C', 'D']
+                                    .map((String value) {
+                                  return new DropdownMenuItem<String>(
+                                    value: value,
+                                    child: new Text(value),
+                                  );
+                                }).toList(),
+                                onChanged: (_) {},
+                              ),
+                            );
+                          }),
+                      MultiSelectFormField(
+                        autovalidate: false,
+                        titleText: 'My workouts',
+                        validator: (value) {
+                          if (value == null || value.length == 0) {
+                            return 'Please select one or more options';
+                          }
+                          return null;
+                        },
+                        dataSource: [
+                          {
+                            "display": "Running",
+                            "value": "Running",
+                          },
+                          {
+                            "display": "Climbing",
+                            "value": "Climbing",
+                          },
+                          {
+                            "display": "Walking",
+                            "value": "Walking",
+                          },
+                          {
+                            "display": "Swimming",
+                            "value": "Swimming",
+                          },
+                          {
+                            "display": "Soccer Practice",
+                            "value": "Soccer Practice",
+                          },
+                          {
+                            "display": "Baseball Practice",
+                            "value": "Baseball Practice",
+                          },
+                          {
+                            "display": "Football Practice",
+                            "value": "Football Practice",
+                          },
+                        ],
+                        textField: 'display',
+                        valueField: 'value',
+                        okButtonLabel: 'OK',
+                        cancelButtonLabel: 'CANCEL',
+                        // required: true,
+                        hintText: 'Please choose one or more',
+                        onSaved: (value) {},
+                      ),
+                    ],
+                  ),
                   SizedBox(
                     height: 20,
                   ),
@@ -223,7 +378,8 @@ bool firstTime = false;
 
   void _openGallery(BuildContext context) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
-    final ResturantRegistertionBloc resturantRegistertionBloc = BlocProvider.of<ResturantRegistertionBloc>(context);
+    final ResturantRegistertionBloc resturantRegistertionBloc =
+        BlocProvider.of<ResturantRegistertionBloc>(context);
 
     resturantRegistertionBloc.changeFile(picture);
 
@@ -233,7 +389,8 @@ bool firstTime = false;
   void _openCamera(BuildContext context) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
 
-    final ResturantRegistertionBloc resturantRegistertionBloc = BlocProvider.of<ResturantRegistertionBloc>(context);
+    final ResturantRegistertionBloc resturantRegistertionBloc =
+        BlocProvider.of<ResturantRegistertionBloc>(context);
 
     resturantRegistertionBloc.changeFile(picture);
     Navigator.of(context).pop();
@@ -245,32 +402,29 @@ bool firstTime = false;
         width: 300,
         height: 50,
         child: StreamBuilder(
-           // stream: registerBloc.,
+            // stream: registerBloc.,
             builder: (context, snapshot) {
-              print("valid sayyy " + snapshot.hasData.toString());
-              return IgnorePointer(
-                ignoring: !snapshot.hasData,
-                child: RaisedButton(
-                  shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(50.0),
-                      side: BorderSide(color: AppTheme.primaryColor)),
-                  onPressed: () {
-                    if(!isLooding)
-                     registerBloc.submitRegister(true);
-                    isLooding = true;
-                    _scrollController.position.jumpTo(0.0);
-                    
-                   
-                  },
-                  color: Colors.white,
-                  textColor: Colors.grey[500],
-                  child: Text(
-                    'SignUp'.toUpperCase(),
-                    style: TextStyle(fontSize: 22),
-                  ),
-                ),
-              );
-            }),
+          print("valid sayyy " + snapshot.hasData.toString());
+          return IgnorePointer(
+            ignoring: !snapshot.hasData,
+            child: RaisedButton(
+              shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(50.0),
+                  side: BorderSide(color: AppTheme.primaryColor)),
+              onPressed: () {
+                if (!isLooding) registerBloc.submitRegister(true);
+                isLooding = true;
+                _scrollController.position.jumpTo(0.0);
+              },
+              color: Colors.white,
+              textColor: Colors.grey[500],
+              child: Text(
+                'SignUp'.toUpperCase(),
+                style: TextStyle(fontSize: 22),
+              ),
+            ),
+          );
+        }),
       ),
     );
   }
@@ -312,7 +466,7 @@ bool firstTime = false;
     );
   }
 
- Padding address(ResturantRegistertionBloc resturantRegistertionBloc) {
+  Padding address(ResturantRegistertionBloc resturantRegistertionBloc) {
     return Padding(
       padding: EdgeInsets.fromLTRB(10.0, 30, 30, 0),
       child: StreamBuilder(
@@ -348,6 +502,7 @@ bool firstTime = false;
           }),
     );
   }
+
   Padding city(ResturantRegistertionBloc resturantRegistertionBloc) {
     return Padding(
       padding: EdgeInsets.fromLTRB(10.0, 30, 30, 0),
@@ -385,7 +540,7 @@ bool firstTime = false;
     );
   }
 
-Padding street(ResturantRegistertionBloc resturantRegistertionBloc) {
+  Padding street(ResturantRegistertionBloc resturantRegistertionBloc) {
     return Padding(
       padding: EdgeInsets.fromLTRB(10.0, 30, 30, 0),
       child: StreamBuilder(
@@ -419,7 +574,9 @@ Padding street(ResturantRegistertionBloc resturantRegistertionBloc) {
               ),
             );
           }),
-    );}
+    );
+  }
+
   Padding fax(ResturantRegistertionBloc resturantRegistertionBloc) {
     return Padding(
       padding: EdgeInsets.fromLTRB(10.0, 30, 30, 0),
@@ -455,12 +612,9 @@ Padding street(ResturantRegistertionBloc resturantRegistertionBloc) {
             );
           }),
     );
-  
-
   }
-  
 
-Expanded opentime(ResturantRegistertionBloc resturantRegistertionBloc) {
+  Expanded opentime(ResturantRegistertionBloc resturantRegistertionBloc) {
     return Expanded(
       child: StreamBuilder(
           stream: resturantRegistertionBloc.openTimeStream,
@@ -494,11 +648,9 @@ Expanded opentime(ResturantRegistertionBloc resturantRegistertionBloc) {
             );
           }),
     );
-  
-
   }
- 
-Expanded closetime(ResturantRegistertionBloc resturantRegistertionBloc) {
+
+  Expanded closetime(ResturantRegistertionBloc resturantRegistertionBloc) {
     return Expanded(
       child: StreamBuilder(
           stream: resturantRegistertionBloc.closeTimeStream,
@@ -532,8 +684,5 @@ Expanded closetime(ResturantRegistertionBloc resturantRegistertionBloc) {
             );
           }),
     );
-  
-
   }
-
 }

@@ -1,11 +1,9 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:foolife/Bloc/auth/Register/RegisterBloc.dart';
 import 'package:foolife/Bloc/provider.dart';
-
+import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import '../../AppTheme.dart';
@@ -28,9 +26,9 @@ class UserSignup extends StatelessWidget {
     final RegisterBloc registerBloc = BlocProvider.of<RegisterBloc>(context);
 
     registerBloc.changeRole(1);
-    
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.grey[100],
       body: SafeArea(
@@ -40,17 +38,15 @@ class UserSignup extends StatelessWidget {
             children: <Widget>[
               Column(
                 children: <Widget>[
-                 
                   StreamBuilder(
                     stream: registerBloc.submitRegisterStream,
                     builder: (context, snapshot2) {
                       if (snapshot2.hasData) {
                         if (snapshot2.data == true) {
-                    
                           if (!firstTime) {
                             firstTime = true;
-                            isLooding=false;
-                        
+                            isLooding = false;
+
                             SchedulerBinding.instance.addPostFrameCallback((_) {
                               Navigator.of(context)
                                   .pushReplacementNamed('/resturantSignup');
@@ -138,7 +134,6 @@ class UserSignup extends StatelessWidget {
     );
   }
 
-
   Center registerButton(RegisterBloc registerBloc) {
     return Center(
       child: SizedBox(
@@ -155,12 +150,9 @@ class UserSignup extends StatelessWidget {
                       borderRadius: new BorderRadius.circular(50.0),
                       side: BorderSide(color: AppTheme.primaryColor)),
                   onPressed: () {
-                    if(!isLooding)
-                     registerBloc.submitRegister(true);
+                    if (!isLooding) registerBloc.submitRegister(true);
                     isLooding = true;
                     _scrollController.position.jumpTo(0.0);
-                    
-                   
                   },
                   color: Colors.white,
                   textColor: Colors.grey[500],
@@ -211,6 +203,7 @@ class UserSignup extends StatelessWidget {
           }),
     );
   }
+
   Padding phoneNumber(RegisterBloc registerBloc) {
     return Padding(
       padding: EdgeInsets.fromLTRB(10.0, 22, 30, 24),
@@ -220,9 +213,8 @@ class UserSignup extends StatelessWidget {
             return TextField(
               onChanged: registerBloc.changePhoneNumber,
               autocorrect: true,
-               keyboardType: TextInputType.number,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                
                 icon: Icon(Icons.mobile_screen_share,
                     color: snapshot.hasError
                         ? AppTheme.redText

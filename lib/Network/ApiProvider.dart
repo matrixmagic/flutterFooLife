@@ -6,7 +6,7 @@ import 'package:http/http.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiProvider {
-  final String _baseUrl = "http://82.165.202.180/FooLife/public/api/";
+  final String _baseUrl = "http://www.insperry.com/FooLife/public/api/";
   // final String _baseUrl = "http://10.0.0.1:8012/FooLife/public/api/";
 
   Future<Response> get(String url) async {
