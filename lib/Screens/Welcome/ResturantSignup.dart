@@ -10,18 +10,39 @@ import 'package:multiselect_formfield/multiselect_formfield.dart';
 
 import '../../AppTheme.dart';
 
-class RetsturantSignup extends StatelessWidget {
+class RetsturantSignup extends StatefulWidget {
+  @override
+  _RetsturantSignupState createState() => _RetsturantSignupState();
+}
+
+class _RetsturantSignupState extends State<RetsturantSignup> {
   bool firstTime = false;
+
   bool isLooding = false;
+
+  List _myActivities;
+
+  String _myActivitiesResult;
+
+  final formKey = new GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _myActivities = [];
+    _myActivitiesResult = '';
+  }
 
   ScrollController _scrollController = new ScrollController(
     initialScrollOffset: 0.0,
     keepScrollOffset: true,
   );
+
   final spinkit = SpinKitWave(
     color: AppTheme.primaryColor,
     size: 90.0,
   );
+
   @override
   Widget build(BuildContext context) {
     final ResturantRegistertionBloc resturantRegistertionBloc =
@@ -251,53 +272,107 @@ class RetsturantSignup extends StatelessWidget {
                               ),
                             );
                           }),
-                      MultiSelectFormField(
-                        autovalidate: false,
-                        titleText: 'My workouts',
-                        validator: (value) {
-                          if (value == null || value.length == 0) {
-                            return 'Please select one or more options';
-                          }
-                          return null;
-                        },
-                        dataSource: [
-                          {
-                            "display": "Running",
-                            "value": "Running",
-                          },
-                          {
-                            "display": "Climbing",
-                            "value": "Climbing",
-                          },
-                          {
-                            "display": "Walking",
-                            "value": "Walking",
-                          },
-                          {
-                            "display": "Swimming",
-                            "value": "Swimming",
-                          },
-                          {
-                            "display": "Soccer Practice",
-                            "value": "Soccer Practice",
-                          },
-                          {
-                            "display": "Baseball Practice",
-                            "value": "Baseball Practice",
-                          },
-                          {
-                            "display": "Football Practice",
-                            "value": "Football Practice",
-                          },
+                      Container(
+                          child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: MultiSelectFormField(
+                              autovalidate: false,
+                              titleText: 'type',
+                              validator: (value) {
+                                if (value == null || value.length == 0) {
+                                  return 'Please select the type for your ';
+                                }
+                                return null;
+                              },
+                              dataSource: [
+                                {
+                                  "display": "Resturant",
+                                  "value": "Resturant",
+                                },
+                                {
+                                  "display": "Cafe",
+                                  "value": "Cafe",
+                                },
+                                {
+                                  "display": "Bar",
+                                  "value": "Bar",
+                                },
+                                {
+                                  "display": "Shisha cafe",
+                                  "value": "Shisha cafe",
+                                },
+                                {
+                                  "display": "Night Club",
+                                  "value": "Night Club",
+                                },
+                              ],
+                              initialValue: _myActivities,
+                              textField: 'display',
+                              valueField: 'value',
+                              okButtonLabel: 'OK',
+                              cancelButtonLabel: 'CANCEL',
+                              // required: true,
+                              hintText: 'Please choose one or more',
+                              onSaved: (value) {},
+                            ),
+                          ),
+                          Expanded(
+                            child: MultiSelectFormField(
+                              autovalidate: false,
+                              titleText: 'payment',
+                              validator: (value) {
+                                if (value == null || value.length == 0) {
+                                  return 'Please select the type for payment ';
+                                }
+                                return null;
+                              },
+                              dataSource: [
+                                {
+                                  "display": "American Express",
+                                  "value": "American Express",
+                                },
+                                {
+                                  "display": "Mastercard",
+                                  "value": "Mastercard",
+                                },
+                                {
+                                  "display": "Visa",
+                                  "value": "Visa",
+                                },
+                                {
+                                  "display": "Amazon",
+                                  "value": "Amazon",
+                                },
+                                {
+                                  "display": "Paybal",
+                                  "value": "Paybal",
+                                },
+                                {
+                                  "display": "Girocard",
+                                  "value": "Girocard",
+                                },
+                                {
+                                  "display": "EC",
+                                  "value": "Ec",
+                                },
+                                {
+                                  "display": "Bitcoin",
+                                  "value": "Bitcoin",
+                                },
+                              ],
+                              initialValue: _myActivities,
+                              textField: 'display',
+                              valueField: 'value',
+                              okButtonLabel: 'OK',
+                              cancelButtonLabel: 'CANCEL',
+                              // required: true,
+                              hintText: 'Please choose one or more methods',
+                              onSaved: (value) {},
+                            ),
+                          ),
                         ],
-                        textField: 'display',
-                        valueField: 'value',
-                        okButtonLabel: 'OK',
-                        cancelButtonLabel: 'CANCEL',
-                        // required: true,
-                        hintText: 'Please choose one or more',
-                        onSaved: (value) {},
-                      ),
+                      )),
                     ],
                   ),
                   SizedBox(
