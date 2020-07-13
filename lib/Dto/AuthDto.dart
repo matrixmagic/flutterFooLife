@@ -3,14 +3,21 @@ class AuthDto {
   String email;
   String password;
   String passwordConfirmation;
+  String phoneNumber;
 
-  AuthDto({this.roleId, this.email, this.password, this.passwordConfirmation});
+  AuthDto(
+      {this.roleId,
+      this.email,
+      this.password,
+      this.passwordConfirmation,
+      this.phoneNumber});
 
   AuthDto.fromJson(Map<String, dynamic> json) {
     roleId = json['role_id'];
     email = json['email'];
     password = json['password'];
     passwordConfirmation = json['password_confirmation'];
+    phoneNumber = json['phoneNumber'];
   }
 
   Map<String, dynamic> toJson() {
@@ -19,6 +26,7 @@ class AuthDto {
     data['email'] = this.email;
     data['password'] = this.password;
     data['password_confirmation'] = this.passwordConfirmation;
+    data['phoneNumber'] = this.phoneNumber;
     return data;
   }
 }

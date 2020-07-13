@@ -6,7 +6,7 @@ import 'package:http/http.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiProvider {
-  final String _baseUrl = "http://www.insperry.com/FooLife/public/api/";
+  final String _baseUrl = "https://www.insperry.com/api/";
   // final String _baseUrl = "http://10.0.0.1:8012/FooLife/public/api/";
 
   Future<Response> get(String url) async {
@@ -17,7 +17,7 @@ class ApiProvider {
         var response = http.get(_baseUrl + url);
         return response;
       } else {
-        final response = http.get(url, headers: {
+        final response = http.get(_baseUrl + url, headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
           'Authorization': 'Beareer $token',

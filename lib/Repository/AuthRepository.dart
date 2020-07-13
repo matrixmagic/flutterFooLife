@@ -59,7 +59,7 @@ class AuthRepository {
       register.password = password;
       register.passwordConfirmation = confrim;
       register.roleId = role;
-
+      register.phoneNumber=phoneNumber;
       var response = await api.post('auth/register', register.toJson());
       var data = ApiResponse.fromJson(json.decode(response.body));
       final storage = new FlutterSecureStorage();

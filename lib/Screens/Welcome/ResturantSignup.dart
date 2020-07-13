@@ -5,6 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foolife/Bloc/auth/Register/RegisterBloc.dart';
 import 'package:foolife/Bloc/auth/Register/ResturantRegistertionBloc.dart';
 import 'package:foolife/Bloc/provider.dart';
+import 'package:foolife/Repository/PaymentRepository.dart';
+import 'package:foolife/Screens/Welcome/UserSignup.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 
@@ -18,9 +20,9 @@ class RetsturantSignup extends StatefulWidget {
 class _RetsturantSignupState extends State<RetsturantSignup> {
   bool firstTime = false;
 
-  bool isLooding = false;
 
   List _myActivities;
+
 
   String _myActivitiesResult;
 
@@ -31,6 +33,8 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
     super.initState();
     _myActivities = [];
     _myActivitiesResult = '';
+
+
   }
 
   ScrollController _scrollController = new ScrollController(
@@ -49,6 +53,13 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
         BlocProvider.of<ResturantRegistertionBloc>(context);
 
     resturantRegistertionBloc.changeFile(null);
+    resturantRegistertionBloc.changeAccessible(0);
+    resturantRegistertionBloc.changeChildfriendly(0);
+    resturantRegistertionBloc.changeGamepad(0);
+    resturantRegistertionBloc.changeWifi(0);
+    resturantRegistertionBloc.changePower(0);
+    resturantRegistertionBloc.changePets(0);
+  
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -133,28 +144,31 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
                               }),
                         ],
                       )),
-                  StreamBuilder(
-                    stream: resturantRegistertionBloc.submitRegisterStream,
-                    builder: (context, snapshot2) {
-                      if (snapshot2.hasData) {
-                        if (snapshot2.data == true) {
-                          if (!firstTime) {
-                            firstTime = true;
-                            isLooding = false;
-
-                            SchedulerBinding.instance.addPostFrameCallback((_) {
-                              Navigator.of(context)
-                                  .pushReplacementNamed('/mainscreen');
-                            });
-                          }
-                        } else {
-                          isLooding = false;
-                          return Text(snapshot2.error, style: AppTheme.error);
-                        }
+                   StreamBuilder(
+                stream: resturantRegistertionBloc.submitRegisterStream,
+                builder: (context, snapshot2) {
+                  if (snapshot2.hasData) {
+                    if (snapshot2.data == true) {
+                      if (firstTime) {
+                        print("Navigator goo go");
+          
+                        SchedulerBinding.instance.addPostFrameCallback((_) {
+                                     // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+                      firstTime=!firstTime;
+                          Navigator.of(context)
+                              .pushReplacementNamed('/resturantSignup');
+                        });
                       }
-                      return Container();
-                    },
-                  ),
+                    } else {
+                      firstTime=!firstTime;
+                      print("submit error");
+                     // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+                      return Text(snapshot2.error, style: AppTheme.error);
+                    }
+                  }
+                  return Container();
+                },
+              ),
                   resturantName(resturantRegistertionBloc),
                   address(resturantRegistertionBloc),
                   city(resturantRegistertionBloc),
@@ -176,29 +190,38 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
                   Wrap(
                     children: <Widget>[
                       StreamBuilder<Object>(
-                          stream: null,
-                          builder: (context, snapshot) {
+                          stream: resturantRegistertionBloc.accessibleStream,
+                          builder: (context, snapshot)  {
+                           
                             return IconButton(
                               icon: Icon(
                                 Icons.accessible,
                                 size: 38,
+                                color: snapshot.hasData ?snapshot.data==1? AppTheme.primaryColor:null:null,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                               
+                                resturantRegistertionBloc.changeAccessible(snapshot.hasData ?snapshot.data==1? 0:1:null);
+                              },
                             );
                           }),
                       StreamBuilder<Object>(
-                          stream: null,
+                          stream: resturantRegistertionBloc.childfriendlyStream,
                           builder: (context, snapshot) {
                             return IconButton(
                               icon: Icon(
                                 Icons.child_friendly,
                                 size: 38,
+                                color: snapshot.hasData ?snapshot.data==1? AppTheme.primaryColor:null:null,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+ resturantRegistertionBloc.changeChildfriendly(snapshot.hasData ?snapshot.data==1? 0:1:null);
+                              
+                              },
                             );
                           }),
                       StreamBuilder<Object>(
-                          stream: null,
+                          stream: resturantRegistertionBloc.gamepadStream,
                           builder: (context, snapshot) {
                             return Padding(
                               padding:
@@ -207,42 +230,52 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
                                 icon: FaIcon(
                                   FontAwesomeIcons.gamepad,
                                   size: 38,
+                                  color: snapshot.hasData ?snapshot.data==1? AppTheme.primaryColor:null:null,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                   resturantRegistertionBloc.changeGamepad(snapshot.hasData ?snapshot.data==1? 0:1:null);
+                                },
                               ),
                             );
                           }),
                       StreamBuilder<Object>(
-                          stream: null,
+                          stream: resturantRegistertionBloc.wifiStream,
                           builder: (context, snapshot) {
                             return IconButton(
                               icon: Icon(
                                 Icons.wifi,
                                 size: 38,
+                                color: snapshot.hasData ?snapshot.data==1? AppTheme.primaryColor:null:null,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                 resturantRegistertionBloc.changeWifi(snapshot.hasData ?snapshot.data==1? 0:1:null);
+                              },
                             );
                           }),
                       StreamBuilder<Object>(
-                          stream: null,
+                          stream: resturantRegistertionBloc.powerStream,
                           builder: (context, snapshot) {
                             return IconButton(
                               icon: Icon(
                                 Icons.power,
                                 size: 38,
+                                color: snapshot.hasData ?snapshot.data==1? AppTheme.primaryColor:null:null,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                 resturantRegistertionBloc.changePower(snapshot.hasData ?snapshot.data==1? 0:1:null);
+                              },
                             );
                           }),
                       StreamBuilder<Object>(
-                          stream: null,
+                          stream: resturantRegistertionBloc.petsStream,
                           builder: (context, snapshot) {
                             return IconButton(
                               icon: Icon(
                                 Icons.pets,
                                 size: 38,
+                                color: snapshot.hasData ?snapshot.data==1? AppTheme.primaryColor:null:null,
                               ),
-                              onPressed: () {},
+                              onPressed: () { resturantRegistertionBloc.changePets(snapshot.hasData ?snapshot.data==1? 0:1:null);},
                             );
                           }),
                     ],
@@ -276,45 +309,36 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
                           child: Row(
                         children: <Widget>[
                           Expanded(
-                            child: MultiSelectFormField(
-                              autovalidate: false,
-                              titleText: 'type',
-                              validator: (value) {
-                                if (value == null || value.length == 0) {
-                                  return 'Please select the type for your ';
+                            child: FutureBuilder<Object>(
+                              future: PaymentRepository().GetAll(),
+                              builder: (context, snapshot) {
+                                if(snapshot.connectionState ==ConnectionState.done){
+                                return MultiSelectFormField(
+                                  autovalidate: false,
+                                  titleText: 'Payment',
+                                  validator: (value) {
+                                    if (value == null || value.length == 0) {
+                                      return 'Please select the type for your ';
+                                    }
+                                    return null;
+                                  },
+                                  dataSource: snapshot.data as List<dynamic>
+                                  ,
+                                  initialValue: _myActivities,
+                                  textField: 'display',
+                                  valueField: 'value',
+                                  okButtonLabel: 'OK',
+                                  cancelButtonLabel: 'CANCEL',
+                                  // required: true,
+                                  hintText: 'Please choose one or more',
+                                  onSaved: (value) {
+                                    print(value[0]+10);
+                                  },
+                                );
+                                }else{
+                                  return Container();
                                 }
-                                return null;
-                              },
-                              dataSource: [
-                                {
-                                  "display": "Resturant",
-                                  "value": "Resturant",
-                                },
-                                {
-                                  "display": "Cafe",
-                                  "value": "Cafe",
-                                },
-                                {
-                                  "display": "Bar",
-                                  "value": "Bar",
-                                },
-                                {
-                                  "display": "Shisha cafe",
-                                  "value": "Shisha cafe",
-                                },
-                                {
-                                  "display": "Night Club",
-                                  "value": "Night Club",
-                                },
-                              ],
-                              initialValue: _myActivities,
-                              textField: 'display',
-                              valueField: 'value',
-                              okButtonLabel: 'OK',
-                              cancelButtonLabel: 'CANCEL',
-                              // required: true,
-                              hintText: 'Please choose one or more',
-                              onSaved: (value) {},
+                              }
                             ),
                           ),
                           Expanded(
@@ -384,29 +408,7 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
                   ),
                 ],
               ),
-              StreamBuilder(
-                stream: resturantRegistertionBloc.submitRegisterStream,
-                builder: (context, snapshot2) {
-                  if (isLooding) {
-                    return Stack(
-                      children: <Widget>[
-                        Container(
-                          height: MediaQuery.of(context).size.height,
-                          width: MediaQuery.of(context).size.width,
-                          color: Colors.grey.withAlpha(100),
-                        ),
-                        Positioned(
-                          top: MediaQuery.of(context).size.height / 2,
-                          left: MediaQuery.of(context).size.width / 2 -
-                              spinkit.size / 2,
-                          child: spinkit,
-                        )
-                      ],
-                    );
-                  } else
-                    return Container();
-                },
-              ),
+              
             ],
           ),
         ),
@@ -477,19 +479,20 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
         width: 300,
         height: 50,
         child: StreamBuilder(
-            // stream: registerBloc.,
+             stream: registerBloc.registerValid,
             builder: (context, snapshot) {
           print("valid sayyy " + snapshot.hasData.toString());
           return IgnorePointer(
-            ignoring: !snapshot.hasData,
+            ignoring: false,
             child: RaisedButton(
               shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(50.0),
                   side: BorderSide(color: AppTheme.primaryColor)),
               onPressed: () {
-                if (!isLooding) registerBloc.submitRegister(true);
-                isLooding = true;
-                _scrollController.position.jumpTo(0.0);
+                  if (!firstTime){registerBloc.submitRegister(true);
+                        firstTime=!firstTime;
+                    Dialogs.showLoadingDialog(context);
+                    }
               },
               color: Colors.white,
               textColor: Colors.grey[500],

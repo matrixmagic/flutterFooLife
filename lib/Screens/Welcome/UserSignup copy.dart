@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -116,11 +114,10 @@ class UserSignup extends StatelessWidget {
                     builder: (context, snapshot2) {
                       if (snapshot2.hasData) {
                         if (snapshot2.data == true) {
-                    
                           if (!firstTime) {
                             firstTime = true;
-                            isLooding=false;
-                        
+                            isLooding = false;
+
                             SchedulerBinding.instance.addPostFrameCallback((_) {
                               Navigator.of(context)
                                   .pushReplacementNamed('/mainscreen');
@@ -278,12 +275,9 @@ class UserSignup extends StatelessWidget {
                       borderRadius: new BorderRadius.circular(50.0),
                       side: BorderSide(color: AppTheme.primaryColor)),
                   onPressed: () {
-                    if(!isLooding)
-                     registerBloc.submitRegister(true);
+                    if (!isLooding) registerBloc.submitRegister(true);
                     isLooding = true;
                     _scrollController.position.jumpTo(0.0);
-                    
-                   
                   },
                   color: Colors.white,
                   textColor: Colors.grey[500],

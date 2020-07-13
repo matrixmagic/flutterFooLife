@@ -61,18 +61,19 @@ Stream<bool> get submitRegisterStream => _registerPressed.stream.transform(Strea
             int lastRole = await   roleStream.first;
             String lastConfirmPassword= await conforimPasswordStream.first; 
              String lastPhoneNumber= await phoneNumberStream.first; 
-            print("passs file await ");
-            print("role id : "+lastRole.toString());
+           
+            
          var user =await  AuthRepository().register(lastEmail, lastpassword, lastConfirmPassword, lastRole,lastPhoneNumber);
             if(user!=null){
 
-          
-          if(user!=null)
+              print(user);
           sink.add(true);
-          else
+          
+            }else
           sink.addError("Something went wrong");
 
-            }
+          
+
       }));
 
 
