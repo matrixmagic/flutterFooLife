@@ -81,25 +81,32 @@ Stream<bool> get submitRegisterStream => _registerPressed.stream.transform(Strea
             String lastResturantName=await  resturantNameStream.first;
             String lastAddress = await addressStream.first;
             String lastStreet = await   streetStream.first;
+            print("1");
             String lastCity= await cityStream.first; 
             String lastFax= await faxStream.first; 
+            print("2");
             String lastOpenTime= await openTimeStream.first;
             String lastCloseTime= await closeTimeStream.first;
+            print("3");
            // File lastfile = await fileStream.first;
 
             int lastAccessible= await accessibleStream.first;
             int lastChildfriendly= await childfriendlyStream.first;
             int lastGamepad = await gamepadStream.first;
+              print("4");
             int lastWifi = await wifiStream.first;
             int lastPower = await powerStream.first;
+              print("5");
             int lastPets = await petsStream.first;
             List<int> lastPayments =await paymentStream.first;
-        
+        print("6");
+        print(lastPayments.toString());
          var restaurant =await  RestaurantRepository().add(lastResturantName, lastAddress, lastCity,
           lastStreet, lastFax, lastOpenTime, lastCloseTime,
           lastAccessible, lastChildfriendly, lastGamepad, lastWifi,
           lastPower, lastPets ,lastPayments
           );
+             print("7");
            if(restaurant!=null){
    
              sink.add(true);
@@ -114,8 +121,8 @@ Stream<bool> get submitRegisterStream => _registerPressed.stream.transform(Strea
 
   /////////////////////////////////////////////////////////
   Stream<bool> get registerValid =>
-     Rx.combineLatest7(resturantNameStream ,faxStream,openTimeStream, closeTimeStream,paymentStream,
-     cityStream,streetStream,(a, b,c,d,e,f,g) => true);    
+     Rx.combineLatest5(resturantNameStream ,openTimeStream, closeTimeStream,
+     cityStream,streetStream,(a, b,c,d,e) => true);    
 
 
       

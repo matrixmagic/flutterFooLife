@@ -3,8 +3,8 @@ import 'dart:ffi';
 import 'RestaurantServicesDto.dart';
 
 class RestaurantDto {
-  int id;
-  int userId;
+  dynamic  id;
+  dynamic userId;
   String name;
   String city;
   String address;
@@ -12,8 +12,8 @@ class RestaurantDto {
   String fax;
   String openTime;
   String closeTime;
-  double longitude;
-  double latitude;
+  dynamic longitude;
+  dynamic latitude;
   String createdAt;
   String updatedAt;
   RestaurantServicesDto services;
@@ -78,8 +78,12 @@ class RestaurantDto {
     if (this.services != null) {
       data['services'] = this.services.toJson();
     }
-    data['payments'] = this.payments;
+    if(this.payments != null){
+      data['payments'] = this.payments;
+    }
+   if(this.currencies != null)
     data['currencies'] = this.currencies;
+    if(this.games !=null)
     data['games'] = this.games;
     return data;
   }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -59,6 +61,7 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
     resturantRegistertionBloc.changeWifi(0);
     resturantRegistertionBloc.changePower(0);
     resturantRegistertionBloc.changePets(0);
+    resturantRegistertionBloc.changePayments(null);
   
 
     return Scaffold(
@@ -332,7 +335,13 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
                                   // required: true,
                                   hintText: 'Please choose one or more',
                                   onSaved: (value) {
-                                    print(value[0]+10);
+                                  List<int> lst= new List<int>();
+                                  for (var item in value) {
+                                    lst.add(item);
+                                  }
+                                    print(lst);
+                                    
+                                   resturantRegistertionBloc.changePayments(lst);
                                   },
                                 );
                                 }else{

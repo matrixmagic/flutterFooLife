@@ -1,6 +1,6 @@
 class RestaurantServicesDto {
-  int id;
-  int restaurantId;
+  dynamic id;
+  dynamic restaurantId;
   int accessible;
   int childfriendly;
   int gamepad;

@@ -38,8 +38,9 @@ class RestaurantRepository {
       restaurantServices.power=power;
       restaurantServices.pets=pets;
       restaurant.services=restaurantServices;
-
+        List<int> x = null;
       restaurant.payments=payments;
+      print(restaurant.toJson());
       var response = await api.post('restaurant', restaurant.toJson());
       var data = ApiResponse.fromJson(json.decode(response.body));
       final storage = new FlutterSecureStorage();
@@ -47,10 +48,12 @@ class RestaurantRepository {
         RestaurantDto restaurantDto = RestaurantDto.fromJson(data.data);
         var restaurantId =
             await storage.write(key: "_restaurantId", value: restaurantDto.id.toString());
+            print("biiila");
         return restaurantDto;
       } else
       return null;
     } catch (e) {
+      print("ohh shit");
       print(e.toString());
     }
   }
