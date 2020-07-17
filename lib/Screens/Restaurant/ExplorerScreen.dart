@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:foolife/AppTheme.dart';
+import 'package:foolife/Dto/CategoryDto.dart';
 import 'package:foolife/Models/FileorDir.dart';
+import 'package:foolife/Repository/CategoryRepository.dart';
 import 'package:foolife/Widget/custom_alert.dart';
 import 'package:foolife/Widget/dir_item.dart';
 import 'package:foolife/Widget/file_item.dart';
@@ -26,8 +28,11 @@ class _ExplorerScreenState extends State<ExplorerScreen>
     with WidgetsBindingObserver {
   String path;
   List<String> paths = List();
+  List<FileorDir> enterPath = List();
 
-  List<FileorDir> files = List();
+  List<FileorDir> categoriesList = List();
+  List<FileorDir> productsList=List();
+  
   bool showHidden = false;
 
   @override
@@ -38,12 +43,33 @@ class _ExplorerScreenState extends State<ExplorerScreen>
   }
 
   getFiles() async {
-    files.add(FileorDir(path: "mobile/mmmm", isDirectory: true));
-    files.add(FileorDir(
-        path: "mobile/image.jpg",
-        isDirectory: false,
-        imageURl:
-            "https://cdn.mos.cms.futurecdn.net/BVb3Wzn9orDR8mwVnhrSyd-970-80.jpg"));
+    dynamic parentCategoryId = null;
+    print(parentCategoryId);
+    if (enterPath.length > 0) parentCategoryId = enterPath.last.id;
+    print(parentCategoryId);
+    List<CategoryDto> categories =
+        await CategoryRepository().getAllCatetoriesInSide(parentCategoryId);
+    var files1 = new List<FileorDir>();
+    if (categories != null) {
+      if (categories.length > 0)
+        categories.forEach((element) {
+          files1.add(FileorDir(
+              path: element.name,
+              isDirectory: true,
+              parentCategoryId: element.parentCategoryId,
+              id: element.id));
+        });
+    }
+    setState(() {
+      categoriesList = files1;
+    });
+    print("sds");
+    // files.add(FileorDir(path: "mobile/mmmm", isDirectory: true));
+    // files.add(FileorDir(
+    //     path: "mobile/image.jpg",
+    //     isDirectory: false,
+    //     imageURl:
+    //         "https://cdn.mos.cms.futurecdn.net/BVb3Wzn9orDR8mwVnhrSyd-970-80.jpg"));
 
     // Directory dir = Directory(path);
     // List<FileSystemEntity> l = dir.listSync();
@@ -83,6 +109,7 @@ class _ExplorerScreenState extends State<ExplorerScreen>
     getFiles();
     paths.add(widget.path);
     WidgetsBinding.instance.addObserver(this);
+    enterPath = List();
   }
 
   @override
@@ -93,31 +120,44 @@ class _ExplorerScreenState extends State<ExplorerScreen>
 
   List<Widget> listData;
 
-  void _onReorder(int oldIndex, int newIndex) {
-    setState(
-      () {
-        if (newIndex > oldIndex) {
-          newIndex -= 1;
-        }
-        var item = files.removeAt(oldIndex);
-        files.insert(newIndex, item);
-      },
-    );
+  Future<void> _onReorder(int oldIndex, int newIndex) async {
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+    var currentFile = categoriesList[oldIndex];
+    var switchFile = categoriesList[newIndex];
+    print(currentFile.path);
+    print(switchFile.path);
+
+    var result =
+        await CategoryRepository().changeOrder(currentFile.id, switchFile.id);
+    if (result) {
+      setState(
+        () {
+          getFiles();
+        },
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     listData = new List<Widget>();
     int indexx = 0;
-    files.forEach((file) {
+    categoriesList.forEach((file) {
       //return file.toString().split(":")[0] == "Directory"
       listData.add(file.isDirectory == true
           ? DirectoryItem(
               key: Key('$indexx'),
               popTap: (v) async {
                 if (v == 0) {
-                  renameDialog(context, file.path, "dir");
+                  renameDialog(context, file.path, "dir",file.id);
                 } else if (v == 1) {
+             var result   = await CategoryRepository().delete(file.id);
+    if(result)
+      setState(() {
+      
+    });
                   /*await Directory(file.path)
                                       .delete()
                                       .catchError((e) {
@@ -132,11 +172,14 @@ class _ExplorerScreenState extends State<ExplorerScreen>
                                     }
                                   });
                                   */
-                  getFiles();
+                  await getFiles();
                 }
               },
               file: file,
               tap: () {
+                enterPath.add(file);
+                categoriesList = new List<FileorDir>();
+                print(file.path);
                 paths.add(file.path);
                 setState(() {
                   path = file.path;
@@ -149,7 +192,7 @@ class _ExplorerScreenState extends State<ExplorerScreen>
               file: file,
               popTap: (v) async {
                 if (v == 0) {
-                  renameDialog(context, file.path, "file");
+                  renameDialog(context, file.path, "file",1);
                 } else if (v == 1) {
                   // await File(file.path).delete().catchError((e) {
                   //   print(e.toString());
@@ -233,6 +276,7 @@ class _ExplorerScreenState extends State<ExplorerScreen>
                                         if (paths.length == 1) {
                                           Navigator.pop(context);
                                         } else {
+                                          enterPath.removeLast();
                                           paths.removeLast();
                                           setState(() {
                                             path = paths.last;
@@ -256,6 +300,7 @@ class _ExplorerScreenState extends State<ExplorerScreen>
                                     path = paths[index];
                                     paths.removeRange(index + 1, paths.length);
                                   });
+                                  enterPath = new List<FileorDir>();
                                   getFiles();
                                 },
                               )
@@ -265,7 +310,11 @@ class _ExplorerScreenState extends State<ExplorerScreen>
                             onTap: () {
                               print(paths[index]);
                               setState(() {
+                                print(index);
+                                print(enterPath.length);
                                 path = paths[index];
+
+                                enterPath.removeRange(index, enterPath.length);
                                 paths.removeRange(index + 1, paths.length);
                               });
                               getFiles();
@@ -299,7 +348,7 @@ class _ExplorerScreenState extends State<ExplorerScreen>
               ),
             ),
           ),
-          files.isEmpty
+          categoriesList.isEmpty
               ? Center(
                   child: Text("There's nothing here"),
                 )
@@ -364,7 +413,7 @@ class _ExplorerScreenState extends State<ExplorerScreen>
             children: <Widget>[
               SizedBox(height: 15),
               Text(
-                "Add New Folder",
+                "Add New Category",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -412,29 +461,33 @@ class _ExplorerScreenState extends State<ExplorerScreen>
                         ),
                       ),
                       onPressed: () async {
-                        // if (name.text.isNotEmpty) {
-                        //   if (!Directory(path + "/${name.text}").existsSync()) {
-                        //     await Directory(path + "/${name.text}")
-                        //         .create()
-                        //         .catchError((e) {
-                        //       print(e.toString());
-                        //       if (e.toString().contains("Permission denied")) {
-                        //         Provider.of<CoreProvider>(context,
-                        //                 listen: false)
-                        //             .showToast(
-                        //                 "Cannot write to this Storage  device!");
-                        //       }
-                        //     });
-                        //   } else {
-                        //     Provider.of<CoreProvider>(context, listen: false)
-                        //         .showToast(
-                        //             "A Folder with that name already exists!");
-                        //   }
-                        //   Navigator.pop(context);
-                        //   getFiles();
-                        // }
+                        if (name.text.isNotEmpty) {
+                          dynamic parentCategoryId = null;
+                          print(parentCategoryId);
+                          if (enterPath.length > 0)
+                            parentCategoryId = enterPath.last.id;
+                          var catagory = await CategoryRepository()
+                              .add(name.text, parentCategoryId);
+                          if (catagory != null) {
+                            // await Directory(path + "/${name.text}")
+                            //     .create()
+                            //     .catchError((e) {
+                            //   print(e.toString());
+                            //   if (e.toString().contains("Permission denied")) {
+                            //     Provider.of<CoreProvider>(context,
+                            //             listen: false)
+                            //         .showToast(
+                            //             "Cannot write to this Storage  device!");
+                            //
+                          }
+                        } else {
+                          // Provider.of<CoreProvider>(context, listen: false)
+                          print("A Folder with that name already exists!");
+                        }
+                        Navigator.pop(context);
+                        getFiles();
                       },
-                      color: Theme.of(context).accentColor,
+                      color: AppTheme.primaryColor,
                     ),
                   ),
                 ],
@@ -447,7 +500,7 @@ class _ExplorerScreenState extends State<ExplorerScreen>
     );
   }
 
-  renameDialog(BuildContext context, String path, String type) {
+  renameDialog(BuildContext context, String path, String type,int id) {
     final TextEditingController name = TextEditingController();
     setState(() {
       // name.text = pathlib.basename(path);
@@ -512,7 +565,9 @@ class _ExplorerScreenState extends State<ExplorerScreen>
                         ),
                       ),
                       onPressed: () async {
-                        // if (name.text.isNotEmpty) {
+                         if (name.text.isNotEmpty) {
+
+                         await  CategoryRepository().Edit(name.text, id);
                         //   if (type == "file") {
                         //     if (!File(path.replaceAll(
                         //                 pathlib.basename(path), "") +
@@ -564,9 +619,9 @@ class _ExplorerScreenState extends State<ExplorerScreen>
                         //       });
                         //     }
                         //   }
-                        //   Navigator.pop(context);
-                        //   getFiles();
-                        // }
+                           Navigator.pop(context);
+                          getFiles();
+                         }
                       },
                       color: Theme.of(context).accentColor,
                     ),
