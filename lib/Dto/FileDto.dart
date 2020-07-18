@@ -1,4 +1,4 @@
-class FileUploaded {
+class FileDto {
   String path;
   bool isMain;
   String extension;
@@ -7,7 +7,7 @@ class FileUploaded {
   String createdAt;
   int id;
 
-  FileUploaded(
+  FileDto(
       {this.path,
       this.isMain,
       this.extension,
@@ -16,7 +16,7 @@ class FileUploaded {
       this.createdAt,
       this.id});
 
-  FileUploaded.fromJson(Map<String, dynamic> json) {
+  FileDto.fromJson(Map<String, dynamic> json) {
     path = json['path'];
     isMain = json['isMain'];
     extension = json['extension'];

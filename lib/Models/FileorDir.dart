@@ -5,12 +5,17 @@ class FileorDir{
   String imageURl;
   dynamic parentCategoryId;
   dynamic id;
+  dynamic categoryId;
+  dynamic price;
  FileorDir(
       {this.isDirectory,
       this.path,
       this.imageURl,
       this.parentCategoryId,
-      this.id
+      this.id,
+      this.categoryId,
+      this.price,
+      
 
      });
 

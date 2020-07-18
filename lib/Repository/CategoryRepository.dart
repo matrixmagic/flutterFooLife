@@ -91,7 +91,7 @@ Future<CategoryDto> Edit(String name,dynamic id) async {
       ChangeDisplayOrderDto  changeDisplayOrderDto = new ChangeDisplayOrderDto ();
       changeDisplayOrderDto.id1 = id1;
       changeDisplayOrderDto.id2=id2;
-      var response = await api.post("changeDisplayOrder", changeDisplayOrderDto);
+      var response = await api.post("changeCategoriesDisplayOrder", changeDisplayOrderDto);
 
       var data = ApiResponse.fromJson(json.decode(response.body));
       if (data.success == true) {

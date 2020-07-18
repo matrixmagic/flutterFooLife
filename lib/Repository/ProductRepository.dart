@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:foolife/Dto/CategoryDto.dart';
 import 'package:foolife/Dto/ChangeDisplayOrderDto.dart';
+import 'package:foolife/Dto/ProductDto.dart';
 
 import 'package:foolife/Dto/RestaurantDto.dart';
 import 'package:foolife/Dto/RestaurantServicesDto.dart';
@@ -13,20 +14,24 @@ import 'package:foolife/Network/ApiProvider.dart';
 class ProductRepository {
   ApiProvider api = new ApiProvider();
 
-  Future<CategoryDto> add(String name,double price,dynamic fileId,dynamic categoryId) async {
+  Future<ProductDto> add(String name,double price,dynamic fileId,dynamic categoryId) async {
     try {
-      CategoryDto categoryDto = new CategoryDto();
-      categoryDto.name=name;
-      categoryDto.parentCategoryId=parentCategoryId;
+      ProductDto productDto = new ProductDto();
+     
+productDto.name=name;
+productDto.price=price;
+productDto.fileId=fileId;
+productDto.categoryId=categoryId;
+
 
      
-      var response = await api.post('category', categoryDto.toJson());
+      var response = await api.post('product', productDto.toJson());
       var data = ApiResponse.fromJson(json.decode(response.body));
       if (data.success == true) {
-         categoryDto = CategoryDto.fromJson(data.data);
+         productDto = ProductDto.fromJson(data.data);
         
         print("biiila");
-        return categoryDto;
+        return productDto;
       } else
         return null;
     } catch (e) {
@@ -60,19 +65,19 @@ Future<CategoryDto> Edit(String name,dynamic id) async {
 
 
 
-  Future< List<CategoryDto>> getAllCatetoriesInSide(dynamic parentCategoryId) async {
+  Future< List<ProductDto>> getProductsInSide(dynamic categoryId) async {
     try {
-      CategoryDto categoryDto = new CategoryDto();
-      categoryDto.parentCategoryId = parentCategoryId;
-      var response = await api.post("getAllCatetoriesInSide", categoryDto);
+      ProductDto productDto = new ProductDto();
+      productDto.categoryId = categoryId;
+      var response = await api.post("getAllProductsInSide", productDto.toJson());
 
       var data = ApiResponse.fromJson(json.decode(response.body));
        print("waka wakaxzcxczxcx");
       if (data.success == true) {
         print("waka waka");
-        List<CategoryDto> lst = new List<CategoryDto>();
+        List<ProductDto> lst = new List<ProductDto>();
         data.data.forEach((v) {
-          lst.add(new CategoryDto.fromJson(v));
+          lst.add(new ProductDto.fromJson(v));
         });
         
 
@@ -91,7 +96,7 @@ Future<CategoryDto> Edit(String name,dynamic id) async {
       ChangeDisplayOrderDto  changeDisplayOrderDto = new ChangeDisplayOrderDto ();
       changeDisplayOrderDto.id1 = id1;
       changeDisplayOrderDto.id2=id2;
-      var response = await api.post("changeDisplayOrder", changeDisplayOrderDto);
+      var response = await api.post("changeproductsDisplayOrder", changeDisplayOrderDto);
 
       var data = ApiResponse.fromJson(json.decode(response.body));
       if (data.success == true) {
