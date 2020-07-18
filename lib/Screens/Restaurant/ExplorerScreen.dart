@@ -98,7 +98,7 @@ class _ExplorerScreenState extends State<ExplorerScreen>
       productsList=productList1;
     });
     print("asdsasaddsaasdsaasdsa");
-    print(productList1.first.imageURl);
+    
     // files.add(FileorDir(path: "mobile/mmmm", isDirectory: true));
     // files.add(FileorDir(
     //     path: "mobile/image.jpg",

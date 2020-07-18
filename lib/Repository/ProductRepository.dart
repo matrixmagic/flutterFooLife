@@ -26,11 +26,12 @@ productDto.categoryId=categoryId;
 
      
       var response = await api.post('product', productDto.toJson());
+       print("add product");
       var data = ApiResponse.fromJson(json.decode(response.body));
       if (data.success == true) {
          productDto = ProductDto.fromJson(data.data);
-        
-        print("biiila");
+      
+        print("cast data");
         return productDto;
       } else
         return null;
