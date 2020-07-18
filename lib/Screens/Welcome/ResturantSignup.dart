@@ -5,6 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foolife/Bloc/auth/Register/RegisterBloc.dart';
 import 'package:foolife/Bloc/auth/Register/ResturantRegistertionBloc.dart';
 import 'package:foolife/Bloc/provider.dart';
+import 'package:foolife/Repository/GamesRepository.dart';
+/*import 'package:foolife/Repository/GamesRepository.dart';*/
 import 'package:foolife/Repository/PaymentRepository.dart';
 import 'package:foolife/Screens/Welcome/UserSignup.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,9 +22,8 @@ class RetsturantSignup extends StatefulWidget {
 class _RetsturantSignupState extends State<RetsturantSignup> {
   bool firstTime = false;
 
-
   List _myActivities;
-
+  List _myActivities1;
 
   String _myActivitiesResult;
 
@@ -33,8 +34,6 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
     super.initState();
     _myActivities = [];
     _myActivitiesResult = '';
-
-
   }
 
   ScrollController _scrollController = new ScrollController(
@@ -59,7 +58,6 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
     resturantRegistertionBloc.changeWifi(0);
     resturantRegistertionBloc.changePower(0);
     resturantRegistertionBloc.changePets(0);
-  
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -144,31 +142,31 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
                               }),
                         ],
                       )),
-                   StreamBuilder(
-                stream: resturantRegistertionBloc.submitRegisterStream,
-                builder: (context, snapshot2) {
-                  if (snapshot2.hasData) {
-                    if (snapshot2.data == true) {
-                      if (firstTime) {
-                        print("Navigator goo go");
-          
-                        SchedulerBinding.instance.addPostFrameCallback((_) {
-                                     // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
-                      firstTime=!firstTime;
-                          Navigator.of(context)
-                              .pushReplacementNamed('/resturantSignup');
-                        });
+                  StreamBuilder(
+                    stream: resturantRegistertionBloc.submitRegisterStream,
+                    builder: (context, snapshot2) {
+                      if (snapshot2.hasData) {
+                        if (snapshot2.data == true) {
+                          if (firstTime) {
+                            print("Navigator goo go");
+
+                            SchedulerBinding.instance.addPostFrameCallback((_) {
+                              // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+                              firstTime = !firstTime;
+                              Navigator.of(context)
+                                  .pushReplacementNamed('/resturantSignup');
+                            });
+                          }
+                        } else {
+                          firstTime = !firstTime;
+                          print("submit error");
+                          // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+                          return Text(snapshot2.error, style: AppTheme.error);
+                        }
                       }
-                    } else {
-                      firstTime=!firstTime;
-                      print("submit error");
-                     // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
-                      return Text(snapshot2.error, style: AppTheme.error);
-                    }
-                  }
-                  return Container();
-                },
-              ),
+                      return Container();
+                    },
+                  ),
                   resturantName(resturantRegistertionBloc),
                   address(resturantRegistertionBloc),
                   city(resturantRegistertionBloc),
@@ -191,17 +189,22 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
                     children: <Widget>[
                       StreamBuilder<Object>(
                           stream: resturantRegistertionBloc.accessibleStream,
-                          builder: (context, snapshot)  {
-                           
+                          builder: (context, snapshot) {
                             return IconButton(
                               icon: Icon(
                                 Icons.accessible,
                                 size: 38,
-                                color: snapshot.hasData ?snapshot.data==1? AppTheme.primaryColor:null:null,
+                                color: snapshot.hasData
+                                    ? snapshot.data == 1
+                                        ? AppTheme.primaryColor
+                                        : null
+                                    : null,
                               ),
                               onPressed: () {
-                               
-                                resturantRegistertionBloc.changeAccessible(snapshot.hasData ?snapshot.data==1? 0:1:null);
+                                resturantRegistertionBloc.changeAccessible(
+                                    snapshot.hasData
+                                        ? snapshot.data == 1 ? 0 : 1
+                                        : null);
                               },
                             );
                           }),
@@ -212,11 +215,17 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
                               icon: Icon(
                                 Icons.child_friendly,
                                 size: 38,
-                                color: snapshot.hasData ?snapshot.data==1? AppTheme.primaryColor:null:null,
+                                color: snapshot.hasData
+                                    ? snapshot.data == 1
+                                        ? AppTheme.primaryColor
+                                        : null
+                                    : null,
                               ),
                               onPressed: () {
- resturantRegistertionBloc.changeChildfriendly(snapshot.hasData ?snapshot.data==1? 0:1:null);
-                              
+                                resturantRegistertionBloc.changeChildfriendly(
+                                    snapshot.hasData
+                                        ? snapshot.data == 1 ? 0 : 1
+                                        : null);
                               },
                             );
                           }),
@@ -230,10 +239,17 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
                                 icon: FaIcon(
                                   FontAwesomeIcons.gamepad,
                                   size: 38,
-                                  color: snapshot.hasData ?snapshot.data==1? AppTheme.primaryColor:null:null,
+                                  color: snapshot.hasData
+                                      ? snapshot.data == 1
+                                          ? AppTheme.primaryColor
+                                          : null
+                                      : null,
                                 ),
                                 onPressed: () {
-                                   resturantRegistertionBloc.changeGamepad(snapshot.hasData ?snapshot.data==1? 0:1:null);
+                                  resturantRegistertionBloc.changeGamepad(
+                                      snapshot.hasData
+                                          ? snapshot.data == 1 ? 0 : 1
+                                          : null);
                                 },
                               ),
                             );
@@ -245,10 +261,17 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
                               icon: Icon(
                                 Icons.wifi,
                                 size: 38,
-                                color: snapshot.hasData ?snapshot.data==1? AppTheme.primaryColor:null:null,
+                                color: snapshot.hasData
+                                    ? snapshot.data == 1
+                                        ? AppTheme.primaryColor
+                                        : null
+                                    : null,
                               ),
                               onPressed: () {
-                                 resturantRegistertionBloc.changeWifi(snapshot.hasData ?snapshot.data==1? 0:1:null);
+                                resturantRegistertionBloc.changeWifi(
+                                    snapshot.hasData
+                                        ? snapshot.data == 1 ? 0 : 1
+                                        : null);
                               },
                             );
                           }),
@@ -259,10 +282,17 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
                               icon: Icon(
                                 Icons.power,
                                 size: 38,
-                                color: snapshot.hasData ?snapshot.data==1? AppTheme.primaryColor:null:null,
+                                color: snapshot.hasData
+                                    ? snapshot.data == 1
+                                        ? AppTheme.primaryColor
+                                        : null
+                                    : null,
                               ),
                               onPressed: () {
-                                 resturantRegistertionBloc.changePower(snapshot.hasData ?snapshot.data==1? 0:1:null);
+                                resturantRegistertionBloc.changePower(
+                                    snapshot.hasData
+                                        ? snapshot.data == 1 ? 0 : 1
+                                        : null);
                               },
                             );
                           }),
@@ -273,9 +303,18 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
                               icon: Icon(
                                 Icons.pets,
                                 size: 38,
-                                color: snapshot.hasData ?snapshot.data==1? AppTheme.primaryColor:null:null,
+                                color: snapshot.hasData
+                                    ? snapshot.data == 1
+                                        ? AppTheme.primaryColor
+                                        : null
+                                    : null,
                               ),
-                              onPressed: () { resturantRegistertionBloc.changePets(snapshot.hasData ?snapshot.data==1? 0:1:null);},
+                              onPressed: () {
+                                resturantRegistertionBloc.changePets(
+                                    snapshot.hasData
+                                        ? snapshot.data == 1 ? 0 : 1
+                                        : null);
+                              },
                             );
                           }),
                     ],
@@ -310,90 +349,71 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
                         children: <Widget>[
                           Expanded(
                             child: FutureBuilder<Object>(
-                              future: PaymentRepository().GetAll(),
-                              builder: (context, snapshot) {
-                                if(snapshot.connectionState ==ConnectionState.done){
-                                return MultiSelectFormField(
-                                  autovalidate: false,
-                                  titleText: 'Payment',
-                                  validator: (value) {
-                                    if (value == null || value.length == 0) {
-                                      return 'Please select the type for your ';
-                                    }
-                                    return null;
-                                  },
-                                  dataSource: snapshot.data as List<dynamic>
-                                  ,
-                                  initialValue: _myActivities,
-                                  textField: 'display',
-                                  valueField: 'value',
-                                  okButtonLabel: 'OK',
-                                  cancelButtonLabel: 'CANCEL',
-                                  // required: true,
-                                  hintText: 'Please choose one or more',
-                                  onSaved: (value) {
-                                    print(value[0]+10);
-                                  },
-                                );
-                                }else{
-                                  return Container();
-                                }
-                              }
-                            ),
+                                future: PaymentRepository().GetAll(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    return MultiSelectFormField(
+                                      autovalidate: false,
+                                      titleText: 'Payment',
+                                      validator: (value) {
+                                        if (value == null ||
+                                            value.length == 0) {
+                                          return 'Please select the type for your ';
+                                        }
+                                        return null;
+                                      },
+                                      dataSource:
+                                          snapshot.data as List<dynamic>,
+                                      initialValue: _myActivities,
+                                      textField: 'display',
+                                      valueField: 'value',
+                                      okButtonLabel: 'OK',
+                                      cancelButtonLabel: 'CANCEL',
+                                      // required: true,
+                                      hintText: 'Please choose one or more',
+                                      onSaved: (value) {
+                                        print(value[0] + 10);
+                                      },
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                }),
                           ),
                           Expanded(
-                            child: MultiSelectFormField(
-                              autovalidate: false,
-                              titleText: 'payment',
-                              validator: (value) {
-                                if (value == null || value.length == 0) {
-                                  return 'Please select the type for payment ';
-                                }
-                                return null;
-                              },
-                              dataSource: [
-                                {
-                                  "display": "American Express",
-                                  "value": "American Express",
-                                },
-                                {
-                                  "display": "Mastercard",
-                                  "value": "Mastercard",
-                                },
-                                {
-                                  "display": "Visa",
-                                  "value": "Visa",
-                                },
-                                {
-                                  "display": "Amazon",
-                                  "value": "Amazon",
-                                },
-                                {
-                                  "display": "Paybal",
-                                  "value": "Paybal",
-                                },
-                                {
-                                  "display": "Girocard",
-                                  "value": "Girocard",
-                                },
-                                {
-                                  "display": "EC",
-                                  "value": "Ec",
-                                },
-                                {
-                                  "display": "Bitcoin",
-                                  "value": "Bitcoin",
-                                },
-                              ],
-                              initialValue: _myActivities,
-                              textField: 'display',
-                              valueField: 'value',
-                              okButtonLabel: 'OK',
-                              cancelButtonLabel: 'CANCEL',
-                              // required: true,
-                              hintText: 'Please choose one or more methods',
-                              onSaved: (value) {},
-                            ),
+                            child: FutureBuilder<Object>(
+                                future: GamesRepository().GetAll(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    return MultiSelectFormField(
+                                      autovalidate: false,
+                                      titleText: 'Games',
+                                      validator: (value) {
+                                        if (value == null ||
+                                            value.length == 0) {
+                                          return 'Please select the type for your ';
+                                        }
+                                        return null;
+                                      },
+                                      dataSource:
+                                          snapshot.data as List<dynamic>,
+                                      initialValue: _myActivities1,
+                                      textField: 'display',
+                                      valueField: 'value',
+                                      okButtonLabel: 'OK',
+                                      cancelButtonLabel: 'CANCEL',
+                                      // required: true,
+                                      hintText: 'Please choose one or more',
+                                      onSaved: (value) {
+                                        print(value[0] + 10);
+                                      },
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                }),
                           ),
                         ],
                       )),
@@ -408,7 +428,6 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
                   ),
                 ],
               ),
-              
             ],
           ),
         ),
@@ -479,30 +498,31 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
         width: 300,
         height: 50,
         child: StreamBuilder(
-             stream: registerBloc.registerValid,
+            stream: registerBloc.registerValid,
             builder: (context, snapshot) {
-          print("valid sayyy " + snapshot.hasData.toString());
-          return IgnorePointer(
-            ignoring: false,
-            child: RaisedButton(
-              shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(50.0),
-                  side: BorderSide(color: AppTheme.primaryColor)),
-              onPressed: () {
-                  if (!firstTime){registerBloc.submitRegister(true);
-                        firstTime=!firstTime;
-                    Dialogs.showLoadingDialog(context);
+              print("valid sayyy " + snapshot.hasData.toString());
+              return IgnorePointer(
+                ignoring: false,
+                child: RaisedButton(
+                  shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(50.0),
+                      side: BorderSide(color: AppTheme.primaryColor)),
+                  onPressed: () {
+                    if (!firstTime) {
+                      registerBloc.submitRegister(true);
+                      firstTime = !firstTime;
+                      Dialogs.showLoadingDialog(context);
                     }
-              },
-              color: Colors.white,
-              textColor: Colors.grey[500],
-              child: Text(
-                'SignUp'.toUpperCase(),
-                style: TextStyle(fontSize: 22),
-              ),
-            ),
-          );
-        }),
+                  },
+                  color: Colors.white,
+                  textColor: Colors.grey[500],
+                  child: Text(
+                    'SignUp'.toUpperCase(),
+                    style: TextStyle(fontSize: 22),
+                  ),
+                ),
+              );
+            }),
       ),
     );
   }
