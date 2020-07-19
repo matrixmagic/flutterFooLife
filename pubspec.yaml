@@ -33,6 +33,7 @@ dependencies:
   http: ^0.12.0+4
   flutter_swiper: ^1.1.6
   image_picker: ^0.6.7+2
+  multi_media_picker: ^0.2.3
   camera: ^0.5.8+2
   path_provider: ^1.6.11
   lite_rolling_switch: ^0.1.1

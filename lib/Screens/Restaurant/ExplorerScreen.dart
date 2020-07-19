@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:foolife/AppTheme.dart';
 import 'package:foolife/Bloc/Product/add/AddProductBloc.dart';
+import 'package:multi_media_picker/multi_media_picker.dart';
 import 'package:foolife/Bloc/provider.dart';
 import 'package:foolife/Dto/CategoryDto.dart';
 import 'package:foolife/Dto/ProductDto.dart';
@@ -13,7 +14,7 @@ import 'package:foolife/Widget/dir_item.dart';
 import 'package:foolife/Widget/file_item.dart';
 import 'package:foolife/Widget/path_bar.dart';
 import 'package:foolife/Widget/sort_sheet.dart';
-import 'package:image_picker/image_picker.dart';
+/*import 'package:image_picker/image_picker.dart';*/
 
 class ExplorerScreen extends StatefulWidget {
   final String title;
@@ -826,10 +827,10 @@ class _ExplorerScreenState extends State<ExplorerScreen>
                   color: AppTheme.primaryColor,
                 ),
                 onPressed: () async {
-                  var picture =
-                      await ImagePicker.pickImage(source: ImageSource.gallery);
+                  var picture = await MultiMediaPicker.pickImages(
+                      source: ImageSource.gallery);
 
-                  addProductBloc.changeFile(picture);
+                  addProductBloc.changeFile(picture[0]);
 
                   Navigator.of(context).pop();
                 },
@@ -845,7 +846,7 @@ class _ExplorerScreenState extends State<ExplorerScreen>
                         style: AppTheme.body1,
                       ),
                     ),
-                    IconButton(
+                    /* IconButton(
                       icon: Icon(
                         Icons.image,
                         size: 50,
@@ -856,19 +857,8 @@ class _ExplorerScreenState extends State<ExplorerScreen>
 
                         addProductBloc.changeFile(picture);
                       },
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.videocam,
-                        size: 50,
-                      ),
-                      onPressed: () async {
-                        var picture = await ImagePicker.pickVideo(
-                            source: ImageSource.gallery);
-
-                        addProductBloc.changeFile(picture);
-                      },
-                    ),
+                    ),*/
+                    cc
                   ]);
             }
           }),
