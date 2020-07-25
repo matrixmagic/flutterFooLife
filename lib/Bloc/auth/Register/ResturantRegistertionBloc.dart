@@ -101,6 +101,7 @@ Stream<bool> get submitRegisterStream => _registerPressed.stream.transform(Strea
             List<int> lastPayments =await paymentStream.first;
         print("6");
         print(lastPayments.toString());
+        print(lastPayments.runtimeType);
          var restaurant =await  RestaurantRepository().add(lastResturantName, lastAddress, lastCity,
           lastStreet, lastFax, lastOpenTime, lastCloseTime,
           lastAccessible, lastChildfriendly, lastGamepad, lastWifi,

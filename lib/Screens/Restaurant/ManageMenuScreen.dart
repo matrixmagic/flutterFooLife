@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:foolife/Screens/Restaurant/ExplorerScreen.dart';
 
 class ManageMenuScreen extends StatefulWidget {
@@ -7,6 +8,16 @@ class ManageMenuScreen extends StatefulWidget {
 }
 
 class _ManageMenuScreenState extends State<ManageMenuScreen> {
+
+
+    @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    
+    SystemChrome.setEnabledSystemUIOverlays([]);
+
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -23,19 +34,13 @@ class _ManageMenuScreenState extends State<ManageMenuScreen> {
                       children: <Widget>[
                         TabBar(tabs: [
             Tab(text: 'Category',
-              icon: Icon(
-                Icons.star,color: Colors.yellow,size: 35,
-              ),
+              
             ),
             Tab( text: 'Price',
-              icon: Icon(
-                Icons.favorite,color: Colors.red,size: 35,
-              ),
+            
             ),
             Tab( text: 'Time',
-              icon: Icon(
-                Icons.favorite,color: Colors.red,size: 35,
-              ),
+              
             ),
           
           

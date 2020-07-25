@@ -22,7 +22,7 @@ class CustomMainScreenWiget extends StatelessWidget {
             child: Image(
               image:  NetworkImage(backgroundImage),
               height: MediaQuery.of(context).size.height,
-              fit: BoxFit.fitHeight,
+              fit: BoxFit.cover,
             ),
           ),
           Container(
@@ -145,7 +145,7 @@ class CustomMainScreenWiget extends StatelessWidget {
 
 
           Positioned(top: 26 ,left: 5.0,right: 5.0,child: Container(child: storiesBar()),),  
-       cateogries !=null&& cateogries.length>0? Positioned(bottom:70 , child: Container(height:40 ,width: 500,child: MenuBar(items:cateogries ,) )):Container(),
+       cateogries !=null&& cateogries.length>0? Positioned(bottom:40 , child: Container(height:40 ,width: 500,child: MenuBar(items:cateogries ) )):Container(),
         ]),
 
 

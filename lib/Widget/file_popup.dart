@@ -14,22 +14,32 @@ class FilePopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton<int>(
+    return PopupMenuButton<int>( 
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30.0))) ,
       onSelected: popTap,
       itemBuilder: (context) => [
         PopupMenuItem(
           value: 0,
-          child: Text(
-            "Rename",
+          child: Row(
+         mainAxisAlignment:  MainAxisAlignment.center,
+            children:[ Text(
+              "Rename",
+            ),
+            ]
           ),
         ),
       PopupMenuDivider(
       
         ),
-        PopupMenuItem(
+       PopupMenuItem(
           value: 1,
-          child: Text(
-            "Delete",
+          
+         child: Row(
+         mainAxisAlignment:  MainAxisAlignment.center,
+            children:[ Text(
+              "Delete",
+            ),
+            ]
           ),
         ),
 //        PopupMenuItem(
@@ -40,11 +50,11 @@ class FilePopup extends StatelessWidget {
 //        ),
       ],
       icon: Icon(
-        Icons.arrow_drop_down,
+        Icons.settings,
         color: Colors.lightBlue,
       ),
       color: AppTheme.notWhite,
-      offset: Offset(0, 30),
+      offset: Offset(0, 700),
     );
   }
 }

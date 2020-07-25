@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:foolife/AppTheme.dart';
 import 'package:foolife/Bloc/Product/add/AddProductBloc.dart';
+import 'package:foolife/Screens/Restaurant/AddProduct.dart';
 import 'package:foolife/Screens/Welcome/UserSignup.dart';
 import 'package:multi_media_picker/multi_media_picker.dart';
 import 'package:foolife/Bloc/provider.dart';
@@ -48,9 +49,9 @@ class _ExplorerScreenState extends State<ExplorerScreen>
       getFiles();
     }
   }
-
+dynamic parentCategoryId = null;
   getFiles() async {
-    dynamic parentCategoryId = null;
+    
     print(parentCategoryId);
     if (enterPath.length > 0) parentCategoryId = enterPath.last.id;
     print(parentCategoryId);
@@ -229,7 +230,7 @@ class _ExplorerScreenState extends State<ExplorerScreen>
               file: file,
               popTap: (v) async {
                 if (v == 0) {
-                  renameDialog(context, file.path, "file", 1);
+                  renameDialog(context, file.path, "file", indexx);
                 } else if (v == 1) {
                   // await File(file.path).delete().catchError((e) {
                   //   print(e.toString());
@@ -287,7 +288,34 @@ class _ExplorerScreenState extends State<ExplorerScreen>
         //   ],
         // ),
         body: Column(children: <Widget>[
-          PathBar(
+          categoriesList.isEmpty
+              ? Center(
+                  child: Text("There's nothing here"),
+                )
+              : Expanded(
+                  child: ReorderableListView(
+                    onReorder: _onReorder,
+                    scrollDirection: Axis.vertical,
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    children: listData,
+
+                    // separatorBuilder: (BuildContext context, int index) {
+                    //   return Stack(
+                    //     children: <Widget>[
+                    //       Align(
+                    //         alignment: Alignment.centerRight,
+                    //         child: Container(
+                    //           height: 1,
+                    //           color: Theme.of(context).dividerColor,
+                    //           width: MediaQuery.of(context).size.width - 70,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   );
+                    // },
+                  ),
+                ),
+                  PathBar(
             child: Container(
               height: 50,
               child: Align(
@@ -385,37 +413,12 @@ class _ExplorerScreenState extends State<ExplorerScreen>
               ),
             ),
           ),
-          categoriesList.isEmpty
-              ? Center(
-                  child: Text("There's nothing here"),
-                )
-              : Expanded(
-                  child: ReorderableListView(
-                    onReorder: _onReorder,
-                    scrollDirection: Axis.vertical,
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    children: listData,
-
-                    // separatorBuilder: (BuildContext context, int index) {
-                    //   return Stack(
-                    //     children: <Widget>[
-                    //       Align(
-                    //         alignment: Alignment.centerRight,
-                    //         child: Container(
-                    //           height: 1,
-                    //           color: Theme.of(context).dividerColor,
-                    //           width: MediaQuery.of(context).size.width - 70,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   );
-                    // },
-                  ),
-                ),
+        
         ]),
+        
         floatingActionButton:
             Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-          FloatingActionButton(
+        parentCategoryId==null?SizedBox(height: 0,):FloatingActionButton(
             heroTag: "btn1",
             onPressed: () => addProductDialog(context, path),
             child: Icon(Icons.fastfood),
@@ -538,6 +541,18 @@ class _ExplorerScreenState extends State<ExplorerScreen>
   }
 
   addProductDialog(BuildContext context, String path) {
+
+ dynamic parentCategoryId = null;
+    print(parentCategoryId);
+    if (enterPath.length > 0) parentCategoryId = enterPath.last.id;
+    Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddProduct(categoryId: parentCategoryId,
+                       
+                        )),
+              );
+              /*
     final AddProductBloc addProductBloc = new AddProductBloc();
       bool isVideo=false,isImage=false;
 
@@ -653,6 +668,7 @@ class _ExplorerScreenState extends State<ExplorerScreen>
         ),
       ),
     );
+    */
   }
 
   renameDialog(BuildContext context, String path, String type, int id) {

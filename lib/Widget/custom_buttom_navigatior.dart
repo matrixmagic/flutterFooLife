@@ -17,97 +17,83 @@ class CustomButtomNavigatior extends StatelessWidget {
             print("not fished");
             return Container();
           } else {
-            BoxDecoration activeButtonDec = BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white));
+            
             int lastButtonPreesed;
             if (snapshot.hasData)
               lastButtonPreesed = int.parse(snapshot.data as String);
             else {
               lastButtonPreesed = 1;
             }
-            return Container(
-              height: 55,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.white.withOpacity(0.6),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Container(
-                      decoration:
-                          lastButtonPreesed == 1 ? activeButtonDec : null,
-                      child: IconButton(
-                          icon: Icon(
-                            Icons.home,
-                            color: AppTheme.notWhite,
-                          ),
-                          onPressed: () async {
-                            await storage.write(
-                                key: "_lastButtonPreesed", value: "1");
-
-                            Navigator.of(context)
-                                .pushReplacementNamed('/mainscreen');
-                          })),
-                  Container(
-                      decoration:
-                          lastButtonPreesed == 2 ? activeButtonDec : null,
-                      child: IconButton(
-                        icon: Icon(Icons.search, color: AppTheme.notWhite),
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Container(
+                    
+                    child: IconButton(
+                        icon: Icon(
+                          Icons.home,
+                          color: AppTheme.notWhite.withOpacity( lastButtonPreesed==1?1:0.7) ,
+                        ),
                         onPressed: () async {
                           await storage.write(
-                              key: "_lastButtonPreesed", value: "2");
+                              key: "_lastButtonPreesed", value: "1");
 
                           Navigator.of(context)
-                              .pushReplacementNamed('/searchscreen');
-                        },
-                      )),
-                  Container(
-                      decoration:
-                          lastButtonPreesed == 3 ? activeButtonDec : null,
-                      child: IconButton(
-                        icon: Icon(Icons.create, color: AppTheme.notWhite),
-                        onPressed: () async {
-                          await storage.write(
-                              key: "_lastButtonPreesed", value: "3");
+                              .pushReplacementNamed('/mainscreen');
+                        })),
+                Container(
 
-                          Navigator.of(context)
-                              .pushReplacementNamed('/notificationscreen');
-                        },
-                      )),
-                  Container(
-                      decoration:
-                          lastButtonPreesed == 4 ? activeButtonDec : null,
-                      child: IconButton(
-                        icon: Icon(Icons.favorite, color: AppTheme.notWhite),
-                        onPressed: () async {
-                          await storage.write(
-                              key: "_lastButtonPreesed", value: "4");
+                    child: IconButton(
+                      icon: Icon(Icons.search, color: AppTheme.notWhite.withOpacity( lastButtonPreesed==2?1:0.7)),
+                      onPressed: () async {
+                        await storage.write(
+                            key: "_lastButtonPreesed", value: "2");
 
+                        Navigator.of(context)
+                            .pushReplacementNamed('/searchscreen');
+                      },
+                    )),
+                Container(
+                    
+                    child: IconButton(
+                      icon: Icon(Icons.create, color: AppTheme.notWhite.withOpacity( lastButtonPreesed==3?1:0.7)),
+                      onPressed: () async {
+                        await storage.write(
+                            key: "_lastButtonPreesed", value: "3");
+
+                        Navigator.of(context)
+                            .pushReplacementNamed('/notificationscreen');
+                      },
+                    )),
+                Container(
+                    
+                    child: IconButton(
+                      icon: Icon(Icons.favorite,  color: AppTheme.notWhite.withOpacity( lastButtonPreesed==4?1:0.7)),
+                      onPressed: () async {
+                        await storage.write(
+                            key: "_lastButtonPreesed", value: "4");
+
+                        Navigator.of(context)
+                            .pushReplacementNamed('/notificationscreen');
+                      },
+                    )),
+                Container(
+                    
+                    child: IconButton(
+                      icon: Icon(Icons.person_outline,
+                          color: AppTheme.notWhite.withOpacity( lastButtonPreesed==5?1:0.7),),
+                      onPressed: () async {
+                        await storage.write(
+                            key: "_lastButtonPreesed", value: "5");
+                        var validUser = await AuthRepository().CheckToken();
+                        if (validUser == true) {
                           Navigator.of(context)
-                              .pushReplacementNamed('/notificationscreen');
-                        },
-                      )),
-                  Container(
-                      decoration:
-                          lastButtonPreesed == 5 ? activeButtonDec : null,
-                      child: IconButton(
-                        icon: Icon(Icons.person_outline,
-                            color: AppTheme.notWhite),
-                        onPressed: () async {
-                          await storage.write(
-                              key: "_lastButtonPreesed", value: "5");
-                          var validUser = await AuthRepository().CheckToken();
-                          if (validUser == true) {
-                            Navigator.of(context)
-                                .pushReplacementNamed('/mangemenuscreen');
-                          } else
-                             showDialog();
-                        },
-                      ))
-                ],
-              ),
+                              .pushReplacementNamed('/mangemenuscreen');
+                        } else
+                           showDialog();
+                      },
+                    ))
+              ],
             );
           }
         });

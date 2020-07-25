@@ -15,11 +15,17 @@ class DirPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton<int>(
       onSelected: popTap,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30.0))) ,
+
       itemBuilder: (context) => [
         PopupMenuItem(
           value: 0,
-          child: Text(
-            "Rename",
+          child: Row(
+         mainAxisAlignment:  MainAxisAlignment.center,
+            children:[ Text(
+              "Rename",
+            ),
+            ]
           ),
         ),
         PopupMenuDivider(
@@ -27,17 +33,23 @@ class DirPopup extends StatelessWidget {
         ),
         PopupMenuItem(
           value: 1,
-          child: Text(
-            "Delete",
+          
+         child: Row(
+         mainAxisAlignment:  MainAxisAlignment.center,
+            children:[ Text(
+              "Delete",
+            ),
+            ]
           ),
         ),
       ],
       icon: Icon(
-        Icons.arrow_drop_down,
+        Icons.settings,
         color: Colors.lightBlue,
       ),
       color: AppTheme.notWhite,
-      offset: Offset(0, 30),
+      offset: Offset(0, 700),
+    
     );
   }
 }

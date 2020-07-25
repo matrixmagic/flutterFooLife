@@ -22,8 +22,6 @@ class AddProductBloc extends Object with AddProductValdiator implements BlocBase
   final _file=BehaviorSubject<File>();
   final _categoryId=BehaviorSubject<dynamic>();
   final _addPressed=BehaviorSubject<bool>();
-  
-  
 
   
 ////
@@ -45,14 +43,14 @@ Stream<bool> get submitRegisterStream => _addPressed.stream.transform(StreamTran
 
   try{
             String lastProductName=await  _productName.first;
-            double lastPrice =double.parse(  await _price.first);
+           // double lastPrice =double.parse(  await _price.first);
             File lastfile = await   _file.first;
             print('before lastCategory');
             dynamic lastCategoryId= await _categoryId.first;
             print("before file");
         FileDto file=   await FileRepository().UploadFile(lastfile, true);
              print("after file");
-         var product =await  ProductRepository().add(lastProductName, lastPrice, file.id, lastCategoryId);
+         var product =await  ProductRepository().add(lastProductName,null ,file.id, lastCategoryId);
           if(product !=null){
             print("finish add product");
             sink.add(true);

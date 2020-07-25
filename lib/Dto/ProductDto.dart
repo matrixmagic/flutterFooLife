@@ -1,3 +1,5 @@
+import 'package:foolife/Dto/CategoryDto.dart';
+
 import 'FileDto.dart';
 
 class ProductDto {
@@ -12,6 +14,7 @@ class ProductDto {
   String createdAt;
   String updatedAt;
   FileDto file;
+  CategoryDto category;
 
   ProductDto(
       {this.id,
@@ -24,7 +27,9 @@ class ProductDto {
       this.displayOrder,
       this.createdAt,
       this.updatedAt,
-      this.file});
+      this.file,
+      this.category
+      });
 
   ProductDto.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -38,6 +43,9 @@ class ProductDto {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     file = json['file'] != null ? new FileDto.fromJson(json['file']) : null;
+    category = json['category'] != null ? new CategoryDto.fromJson(json['category']) : null;
+
+
   }
 
   Map<String, dynamic> toJson() {
@@ -54,6 +62,9 @@ class ProductDto {
     data['updated_at'] = this.updatedAt;
     if (this.file != null) {
       data['file'] = this.file.toJson();
+    }
+    if (this.category != null) {
+      data['category'] = this.category.toJson();
     }
     return data;
   }

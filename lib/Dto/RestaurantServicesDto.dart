@@ -1,12 +1,12 @@
 class RestaurantServicesDto {
   dynamic id;
   dynamic restaurantId;
-  dynamic accessible;
-  dynamic childfriendly;
-  dynamic gamepad;
-  dynamic wifi;
-  dynamic power;
-  dynamic pets;
+  int accessible;
+  int childfriendly;
+  int gamepad;
+  int wifi;
+  int power;
+  int pets;
   String createdAt;
   String updatedAt;
 

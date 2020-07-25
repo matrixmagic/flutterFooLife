@@ -59,6 +59,7 @@ class RestaurantRepository {
       return null;
       }
     } catch (e) {
+      
       print("exception on add resturant in repo");
       print(e.toString());
     }

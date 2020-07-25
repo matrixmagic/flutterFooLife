@@ -61,9 +61,14 @@ class RestaurantDto {
         ? new RestaurantServicesDto.fromJson(json['services'])
         : null;
 
-    payments = json['payments'] != null? json['payments'].cast<List<int>>():null;
-    currencies = json['currencies'] != null? json['currencies'].cast<List<int>>():null;
-    games =  json['games'] != null? json['games'].cast<List<int>>():null;
+
+ 
+
+   
+    payments =json['payments'] != null? json['payments'].cast<int>():null;
+  
+
+ 
     file = json['file'] != null ? new FileDto.fromJson(json['file']) : null;
     if (json['categories'] != null) {
       categories = new List<CategoryDto>();
@@ -91,8 +96,9 @@ class RestaurantDto {
     if (this.services != null) {
       data['services'] = this.services.toJson();
     }
-    if(this.payments != null){
-      data['payments'] = this.payments;
+ 
+     if (this.payments != null) {
+      data['payments'] = this.payments.map((v) => v).toList();
     }
    if(this.currencies != null)
     data['currencies'] = this.currencies;

@@ -169,6 +169,22 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
                       return Text(snapshot2.error, style: AppTheme.error);
                     }
                   }
+
+                  if(snapshot2.hasError){
+                    
+                        SchedulerBinding.instance.addPostFrameCallback((_) {
+                                     // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+                      
+                          Navigator.of(context)
+                              .pop();
+                        });
+
+                      return Text(snapshot2.error,
+                        style: AppTheme.error);
+                  }
+
+
+                  
                   return Container();
                 },
               ),
@@ -285,29 +301,7 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
                   ),
                   Wrap(
                     children: <Widget>[
-                      StreamBuilder<Object>(
-                          stream: null,
-                          builder: (context, snapshot) {
-                            return Container(
-                              width: 100,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(22))),
-                              child: DropdownButton<String>(
-                                iconSize: 20,
-                                hint: Text('hiii'),
-                                items: <String>['A', 'B', 'C', 'D']
-                                    .map((String value) {
-                                  return new DropdownMenuItem<String>(
-                                    value: value,
-                                    child: new Text(value),
-                                  );
-                                }).toList(),
-                                onChanged: (_) {},
-                              ),
-                            );
-                          }),
+                      
                       Container(
                           child: Row(
                         children: <Widget>[
