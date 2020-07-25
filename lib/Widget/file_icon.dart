@@ -18,9 +18,9 @@ class FileIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     File f = File(file.path);
-    String _extension = extension(f.path).toLowerCase();
+    String _extension = file.extention;
   //  String mimeType = mime(basename(file.path).toLowerCase());
-   String mimeType = "image";
+   String mimeType =  _extension=="mp4"?"video":"image";
     String type = mimeType == null ? "" : mimeType.split("/")[0];
     if (_extension == ".apk") {
       return Icon(
@@ -55,23 +55,18 @@ class FileIcon extends StatelessWidget {
           }
           break;
 
-     /*   case "video":
+        case "video":
           {
-//            return Image.file(
-//              File(),
-//              height: 40,
-//              width: 40,
-//            );
+           
             return Container(
               height: 40,
               width: 40,
-              child: VideoThumbnail(
-                path: file.path,
-              ),
+              child: Icon(Icons.play_arrow ,size: 40,),
             );
+            
           }
           break;
-*/
+
         case "audio":
           {
             return Icon(

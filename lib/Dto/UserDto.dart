@@ -1,7 +1,7 @@
 class UserDto {
   int id;
   String email;
-  Null emailVerifiedAt;
+  dynamic emailVerifiedAt;
   int roleId;
   String createdAt;
   String updatedAt;

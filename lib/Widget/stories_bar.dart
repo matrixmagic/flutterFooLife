@@ -26,15 +26,29 @@ class _storiesBarState extends State<storiesBar> {
     MaterialPageRoute(builder: (context) => Story()),
   ),
                                           child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(4.0),
                       
                         
-                                                child: Container(
-                            child: ClipRRect(child: Image.asset(images[index],height: 44, width: 44,fit: BoxFit.fill,),borderRadius: BorderRadius.circular(44),),
-                          ),
+                    child: ClipRRect(
+                     borderRadius: BorderRadius.circular(49.0),
+                      child: Container(
+                      width: 49.0,
+                      height: 49.0,
+                      decoration:  BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white,width: 2),
+                        
+                          image: DecorationImage(
+                             
+
+
+                              image:  AssetImage(images[index],)
+                            )
+                          )
                         ),
+                    ),
                       
-                    );
+                    ));
                   },
                 ),
  

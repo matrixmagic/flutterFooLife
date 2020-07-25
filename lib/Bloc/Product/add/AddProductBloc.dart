@@ -54,11 +54,16 @@ Stream<bool> get submitRegisterStream => _addPressed.stream.transform(StreamTran
              print("after file");
          var product =await  ProductRepository().add(lastProductName, lastPrice, file.id, lastCategoryId);
           if(product !=null){
+            print("finish add product");
             sink.add(true);
+          }else{
+             print("product nullll ");
+           sink.add(false);
           }
   }catch( e){
     print(e);
-    sink.addError(e);
+print("finish add with error product");
+    sink.add(false);
   }
       }));
 

@@ -1,6 +1,6 @@
 class FileDto {
   String path;
-  int isMain;
+  dynamic isMain;
   String extension;
   int userId;
   String updatedAt;

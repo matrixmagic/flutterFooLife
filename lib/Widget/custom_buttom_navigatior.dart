@@ -27,10 +27,10 @@ class CustomButtomNavigatior extends StatelessWidget {
               lastButtonPreesed = 1;
             }
             return Container(
-              height: 60,
+              height: 55,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Colors.grey.withOpacity(0.5),
+                color: Colors.white.withOpacity(0.6),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,

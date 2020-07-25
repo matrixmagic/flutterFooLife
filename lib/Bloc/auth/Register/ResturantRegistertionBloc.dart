@@ -110,8 +110,10 @@ Stream<bool> get submitRegisterStream => _registerPressed.stream.transform(Strea
            if(restaurant!=null){
    
              sink.add(true);
+             print('added reg bloc suc');
             } else{
-          sink.addError("Something went wrong");
+              print('expetion in registeration restuarant bloc');
+          sink.addError("Something went wrong in registeration bloc");
             }
            
       }));

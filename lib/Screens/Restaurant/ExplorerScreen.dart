@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:foolife/AppTheme.dart';
 import 'package:foolife/Bloc/Product/add/AddProductBloc.dart';
+import 'package:foolife/Screens/Welcome/UserSignup.dart';
 import 'package:multi_media_picker/multi_media_picker.dart';
 import 'package:foolife/Bloc/provider.dart';
 import 'package:foolife/Dto/CategoryDto.dart';
@@ -77,11 +78,12 @@ class _ExplorerScreenState extends State<ExplorerScreen>
               path: element.name,
               isDirectory: false,
               price: element.price,
+              extention:element.file.extension,
               imageURl: element.file.path,
               id: element.id));
         });
     }
-
+ 
     var productList1 = new List<FileorDir>();
     if (products != null) {
       if (products.length > 0)
@@ -537,6 +539,7 @@ class _ExplorerScreenState extends State<ExplorerScreen>
 
   addProductDialog(BuildContext context, String path) {
     final AddProductBloc addProductBloc = new AddProductBloc();
+      bool isVideo=false,isImage=false;
 
     dynamic categoryId = null;
     if (enterPath.length > 0) categoryId = enterPath.last.id;
@@ -563,11 +566,20 @@ class _ExplorerScreenState extends State<ExplorerScreen>
               StreamBuilder<Object>(
                   stream: addProductBloc.submitRegisterStream,
                   builder: (context, snapshot) {
-                    return Container();
+                     print("dsdsaas");
+                    print(snapshot);
+                     if(snapshot.hasData && snapshot.connectionState== ConnectionState.done )
+                {
+                  print("is looding offff");
+                  Navigator.pop(context);
+                 getFiles();
+                }
+                 print("is looding  waiiit");
+                return Container();
                   }),
               productName(addProductBloc),
               price(addProductBloc),
-              image(addProductBloc),
+              image(addProductBloc,isImage,isVideo),
               SizedBox(height: 40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -607,6 +619,8 @@ class _ExplorerScreenState extends State<ExplorerScreen>
                       onPressed: () async {
                         if ("fdgfddg".isNotEmpty) {
                           addProductBloc.addRegister(true);
+                           Navigator.pop(context);
+                          //Dialogs.showLoadingDialog(context);
                           // var catagory = await CategoryRepository()
                           //   .add(name.text, parentCategoryId);
                           // if (catagory != null) {
@@ -625,7 +639,7 @@ class _ExplorerScreenState extends State<ExplorerScreen>
                           // Provider.of<CoreProvider>(context, listen: false)
                           print("A Folder with that name already exists!");
                         }
-                        Navigator.pop(context);
+                       
                         getFiles();
                       },
                       color: AppTheme.primaryColor,
@@ -813,27 +827,53 @@ class _ExplorerScreenState extends State<ExplorerScreen>
     );
   }
 
-  Padding image(AddProductBloc addProductBloc) {
+  Padding image(AddProductBloc addProductBloc, isImage,isVideo ) {
     return Padding(
       padding: EdgeInsets.fromLTRB(10.0, 30, 30, 10.0),
       child: StreamBuilder(
           stream: addProductBloc.fileStream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return IconButton(
+              return Row(
+                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children:[ IconButton(
+                  icon: Icon(
+                    Icons.image,
+                    size: 50,
+                    color:isImage? AppTheme.primaryColor:null,
+                  ),
+                  onPressed: () async {
+                    var picture = await MultiMediaPicker.pickImages(
+                        source: ImageSource.gallery);
+                    if(picture!=null && picture.length>0)
+                    addProductBloc.changeFile(picture[0]);
+                isVideo=false;
+                isImage=true;
+                
+                  },
+                ),
+                
+                
+                IconButton(
                 icon: Icon(
-                  Icons.image,
+                  Icons.video_library,
                   size: 50,
-                  color: AppTheme.primaryColor,
+                  color: isVideo? AppTheme.primaryColor:null
+                
                 ),
                 onPressed: () async {
-                  var picture = await MultiMediaPicker.pickImages(
+                  var picture = await MultiMediaPicker.pickVideo(
                       source: ImageSource.gallery);
+                  print(picture.path);
+                  addProductBloc.changeFile(picture);
+                  isVideo=true;
+                isImage=false;
 
-                  addProductBloc.changeFile(picture[0]);
-
-                  Navigator.of(context).pop();
+                 
                 },
+              )
+                
+                ]
               );
             } else {
               return Row(
@@ -842,23 +882,41 @@ class _ExplorerScreenState extends State<ExplorerScreen>
                     Padding(
                       padding: const EdgeInsets.only(top: 16),
                       child: Text(
-                        "Add Picutre",
+                        "Add media",
                         style: AppTheme.body1,
                       ),
                     ),
-                    /* IconButton(
+                     IconButton(
                       icon: Icon(
                         Icons.image,
                         size: 50,
                       ),
                       onPressed: () async {
-                        var picture = await ImagePicker.pickImage(
-                            source: ImageSource.gallery);
-
-                        addProductBloc.changeFile(picture);
+                       var picture = await MultiMediaPicker.pickImages(
+                      source: ImageSource.gallery);
+                  if(picture!=null && picture.length>0)
+                  addProductBloc.changeFile(picture[0]);
+                        isVideo=false;
+                isImage=true;
+                      
                       },
-                    ),*/
-                    cc
+                    ),
+                     IconButton(
+                icon: Icon(
+                  Icons.video_library,
+                  size: 50,
+                
+                ),
+                onPressed: () async {
+                  var picture = await MultiMediaPicker.pickVideo(
+                      source: ImageSource.gallery);
+                  print(picture.path);
+                  addProductBloc.changeFile(picture);
+                isVideo=true;
+                isImage=false;
+                 
+                },
+              )
                   ]);
             }
           }),

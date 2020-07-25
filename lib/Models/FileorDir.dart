@@ -1,12 +1,13 @@
 class FileorDir{
   
-  bool isDirectory;
+  dynamic isDirectory;
   String path;
   String imageURl;
   dynamic parentCategoryId;
   dynamic id;
   dynamic categoryId;
   dynamic price;
+  dynamic extention;
  FileorDir(
       {this.isDirectory,
       this.path,
@@ -15,6 +16,7 @@ class FileorDir{
       this.id,
       this.categoryId,
       this.price,
+      this.extention
       
 
      });

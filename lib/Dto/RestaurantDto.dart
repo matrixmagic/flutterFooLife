@@ -1,5 +1,8 @@
 import 'dart:ffi';
 
+import 'package:foolife/Dto/CategoryDto.dart';
+
+import 'FileDto.dart';
 import 'RestaurantServicesDto.dart';
 
 class RestaurantDto {
@@ -20,6 +23,8 @@ class RestaurantDto {
   List<int> payments;
   List<int> currencies;
   List<int> games;
+  FileDto file;
+  List<CategoryDto>  categories;
 
   RestaurantDto(
       {this.id,
@@ -35,7 +40,8 @@ class RestaurantDto {
       this.latitude,
       this.createdAt,
       this.updatedAt,
-      this.services});
+      this.services,
+      this.file});
 
   RestaurantDto.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -55,9 +61,16 @@ class RestaurantDto {
         ? new RestaurantServicesDto.fromJson(json['services'])
         : null;
 
-    payments = json['payments'].cast<int>();
-    currencies = json['currencies'].cast<int>();
-    games = json['games'].cast<int>();
+    payments = json['payments'] != null? json['payments'].cast<List<int>>():null;
+    currencies = json['currencies'] != null? json['currencies'].cast<List<int>>():null;
+    games =  json['games'] != null? json['games'].cast<List<int>>():null;
+    file = json['file'] != null ? new FileDto.fromJson(json['file']) : null;
+    if (json['categories'] != null) {
+      categories = new List<CategoryDto>();
+      json['categories'].forEach((v) {
+        categories.add(new CategoryDto.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {

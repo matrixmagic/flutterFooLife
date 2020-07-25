@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:foolife/Bloc/auth/Register/ResturantRegistertionBloc.dart';
 import 'package:foolife/Bloc/provider.dart';
@@ -20,7 +21,8 @@ import 'Screens/Welcome/SignInScreen.dart';
 import 'Screens/Welcome/UserSignup.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent ,statusBarBrightness:  Brightness.light));
   // SharedPreferences prefs = await SharedPreferences.getInstance();
 
   runApp(MyApp());
@@ -112,7 +114,7 @@ class MyApp extends StatelessWidget {
       return new WalkthroughScreen(prefs: prefs);
     }*/
 
-    return VideoSplashScreen1();
+    return MainScreen();
     //return WelcomeScreen();
   }
 }

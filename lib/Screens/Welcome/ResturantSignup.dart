@@ -153,13 +153,13 @@ class _RetsturantSignupState extends State<RetsturantSignup> {
                   if (snapshot2.hasData) {
                     if (snapshot2.data == true) {
                       if (firstTime) {
-                        print("Navigator goo go");
+                        print("Navigator goo go2");
           
                         SchedulerBinding.instance.addPostFrameCallback((_) {
                                      // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
                       firstTime=!firstTime;
                           Navigator.of(context)
-                              .pushReplacementNamed('/resturantSignup');
+                              .pushReplacementNamed('/');
                         });
                       }
                     } else {
