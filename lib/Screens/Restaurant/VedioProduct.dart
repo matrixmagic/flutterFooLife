@@ -39,7 +39,7 @@ didUpdateWidget(VideoProductView oldWidget){
        
       });
 
-       _controller.setVolume(0.0);
+       _controller.setVolume(1.0);
        _controller.play();
 
  }

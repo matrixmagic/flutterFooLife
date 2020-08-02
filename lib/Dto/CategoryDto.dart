@@ -1,3 +1,5 @@
+import 'package:foolife/Dto/ProductDto.dart';
+
 class CategoryDto {
   dynamic id;
   dynamic parentCategoryId;
@@ -6,6 +8,7 @@ class CategoryDto {
   dynamic displayOrder;
   String createdAt;
   String updatedAt;
+  List<ProductDto>  products;
 
   CategoryDto(
       {this.id,
@@ -14,7 +17,8 @@ class CategoryDto {
       this.name,
       this.displayOrder,
       this.createdAt,
-      this.updatedAt});
+      this.updatedAt,
+      this.products});
 
   CategoryDto.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -24,7 +28,14 @@ class CategoryDto {
     displayOrder = json['displayOrder'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    if (json['products'] != null) {
+      products = new List<ProductDto>();
+      json['products'].forEach((v) {
+        products.add(new ProductDto.fromJson(v));
+      });
+    }
   }
+  
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

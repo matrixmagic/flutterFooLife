@@ -28,6 +28,22 @@ var body ={
     return null;
 
   }
+  Future<FileDto> UploadFile2(File file,int isMain) async {
+
+
+
+
+    var response =await api.uploadFile("file", file,isMain);
+    // var data = ApiResponse.fromJson(json.decode(response.body));
+     var data = ApiResponse.fromJson(json.decode(response.body));
+    if(data.success){
+
+      var file = FileDto.fromJson(data.data) ;
+      return file;
+    }
+    return null;
+
+  }
 
 
 

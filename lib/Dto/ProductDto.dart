@@ -1,6 +1,7 @@
 import 'package:foolife/Dto/CategoryDto.dart';
 
 import 'FileDto.dart';
+import 'ProductExtraDto.dart';
 
 class ProductDto {
   dynamic id;
@@ -11,10 +12,12 @@ class ProductDto {
   dynamic price;
   dynamic hidden;
   dynamic displayOrder;
+  String details;
   String createdAt;
   String updatedAt;
   FileDto file;
   CategoryDto category;
+  List<ProductExtraDto>  productExtra;
 
   ProductDto(
       {this.id,
@@ -28,7 +31,9 @@ class ProductDto {
       this.createdAt,
       this.updatedAt,
       this.file,
-      this.category
+      this.category,
+       this.details,
+       this.productExtra
       });
 
   ProductDto.fromJson(Map<String, dynamic> json) {
@@ -42,9 +47,15 @@ class ProductDto {
     displayOrder = json['displayOrder'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+     details = json['details'];
     file = json['file'] != null ? new FileDto.fromJson(json['file']) : null;
     category = json['category'] != null ? new CategoryDto.fromJson(json['category']) : null;
-
+    if (json['product_extra'] != null) {
+      productExtra = new List<ProductExtraDto>();
+      json['product_extra'].forEach((v) {
+        productExtra.add(new ProductExtraDto.fromJson(v));
+      });
+    }
 
   }
 
@@ -54,6 +65,7 @@ class ProductDto {
     data['restaurant_id'] = this.restaurantId;
     data['category_id'] = this.categoryId;
     data['file_id'] = this.fileId;
+    data['details'] = this.details;
     data['name'] = this.name;
     data['price'] = this.price;
     data['hidden'] = this.hidden;

@@ -4,22 +4,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:foolife/AppTheme.dart';
 import 'package:foolife/Bloc/Product/add/AddProductBloc.dart';
+import 'package:foolife/Screens/Restaurant/TrimmerView.dart';
 import 'package:foolife/Screens/Restaurant/VedioProduct.dart';
+import 'package:foolife/Screens/Restaurant/addProductDetails.dart';
 import 'package:foolife/Screens/Welcome/UserSignup.dart';
 import 'package:multi_media_picker/multi_media_picker.dart';
-import 'package:video_player/video_player.dart';
+
+import 'package:video_trimmer/video_trimmer.dart';
+
 
 class AddProduct extends StatelessWidget {
   int categoryId;
 
   AddProduct({this.categoryId});
-
+AddProductBloc addProductBloc =new AddProductBloc();
+ final Trimmer _trimmer = Trimmer();
   @override
   Widget build(BuildContext context) {
 
-    AddProductBloc addProductBloc =new AddProductBloc();
+    
 
     addProductBloc.changeCategoryId(categoryId);
+    addProductBloc.chageDetails(" ");
+    addProductBloc.changeProductName(" ");
 
 
 
@@ -175,7 +182,7 @@ class AddProduct extends StatelessWidget {
                    
                           Navigator.of(context).pop();
                       print("submit error");
-                         return Text(snapshot2.error, style: AppTheme.error);
+                         return Text("eeeeee", style: AppTheme.error);
                      }
                      // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
                    
@@ -191,7 +198,11 @@ class AddProduct extends StatelessWidget {
             bottom: 40,
             child: Column( 
             children: <Widget>[
-              IconButton(icon:Icon( Icons.info,size: 30,color: Colors.black, ),),         
+              IconButton(icon:Icon( Icons.info,size: 30,color: Colors.black, ),onPressed:(){Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => addProductDetails( addProductBloc:addProductBloc)
+              ),);} ,),         
               IconButton(icon:Icon( Icons.check_circle,size: 30, color: Colors.green, ),onPressed: (){
                 print("addd product");
                   Dialogs.showLoadingDialog(context);
@@ -238,12 +249,20 @@ var  picture = await MultiMediaPicker.pickImages(
             leading: new Icon(Icons.videocam),
             title: new Text('Video'),
             onTap: ()  async {
-               var picture = await MultiMediaPicker.pickVideo(
+               var video = await MultiMediaPicker.pickVideo(
                       source: ImageSource.gallery);
-                      addProductBloc.changeFile(picture);
-                print(picture.path);
-                       Navigator.of(bc).pop();
-                       
+
+                       if (video != null) {
+             var videoo =  await _trimmer.loadVideo(videoFile: video);
+
+                 Navigator.of(bc)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return TrimmerView(_trimmer ,addProductBloc);
+                }));
+                  //    addProductBloc.changeFile(video);
+                print(video.path);
+                    //   Navigator.of(bc).pop();
+                       }
             },          
           ),
             ],

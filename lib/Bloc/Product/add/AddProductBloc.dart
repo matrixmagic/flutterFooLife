@@ -22,6 +22,7 @@ class AddProductBloc extends Object with AddProductValdiator implements BlocBase
   final _file=BehaviorSubject<File>();
   final _categoryId=BehaviorSubject<dynamic>();
   final _addPressed=BehaviorSubject<bool>();
+  final _details=BehaviorSubject<dynamic>();
 
   
 ////
@@ -31,11 +32,13 @@ class AddProductBloc extends Object with AddProductValdiator implements BlocBase
   Function(String) get changePrice => _price.sink.add;
    Function(dynamic) get changeCategoryId => _categoryId.sink.add;
    Function(bool) get addRegister => _addPressed.sink.add;
+   Function(dynamic) get chageDetails => _details.sink.add;
 ///////////////////////////stream(output)////////////////////////////////////////
  Stream<String> get productNameStream => _productName.stream.transform(valdiator);
  Stream<String> get priceStream => _price.stream.transform(valdiator);
  Stream<File> get fileStream => _file.stream;
  Stream<dynamic> get categoryIdStream => _categoryId.stream;
+ Stream<dynamic> get detailsStream => _details.stream;
 
 
 Stream<bool> get submitRegisterStream => _addPressed.stream.transform(StreamTransformer<bool, bool>.fromHandlers(
@@ -47,10 +50,13 @@ Stream<bool> get submitRegisterStream => _addPressed.stream.transform(StreamTran
             File lastfile = await   _file.first;
             print('before lastCategory');
             dynamic lastCategoryId= await _categoryId.first;
+             print('before lastDetalis');
+            dynamic lastDetalis =await _details.first;
+             print(lastDetalis);
             print("before file");
-        FileDto file=   await FileRepository().UploadFile(lastfile, true);
+         var file=   await FileRepository().UploadFile2(lastfile, 1);
              print("after file");
-         var product =await  ProductRepository().add(lastProductName,null ,file.id, lastCategoryId);
+         var product =await  ProductRepository().add(lastProductName,null ,file.id, lastCategoryId,lastDetalis);
           if(product !=null){
             print("finish add product");
             sink.add(true);

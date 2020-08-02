@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foolife/Screens/Restaurant/ExplorerScreen.dart';
 
+import 'ProductsPrice.dart';
+
 class ManageMenuScreen extends StatefulWidget {
   @override
   _ManageMenuScreenState createState() => _ManageMenuScreenState();
@@ -54,7 +56,7 @@ class _ManageMenuScreenState extends State<ManageMenuScreen> {
                 Expanded( child: 
              TabBarView(children: <Widget>[
             ExplorerScreen(title: "beka beka", path: "/mobile/ddd"),
-            ExplorerScreen(title: "beka beka", path: "/mobile/ddd"),
+            PorductPrice(),
             ExplorerScreen(title: "beka beka", path: "/mobile/ddd")
 
 
