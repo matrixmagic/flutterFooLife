@@ -54,6 +54,9 @@ dynamic parentCategoryId = null;
     
     print(parentCategoryId);
     if (enterPath.length > 0) parentCategoryId = enterPath.last.id;
+    else{
+      parentCategoryId=null;
+    }
     print(parentCategoryId);
     List<CategoryDto> categories =
         await CategoryRepository().getAllCatetoriesInSide(parentCategoryId);
@@ -288,34 +291,8 @@ dynamic parentCategoryId = null;
         //   ],
         // ),
         body: Column(children: <Widget>[
-          categoriesList.isEmpty
-              ? Center(
-                  child: Text("There's nothing here"),
-                )
-              : Expanded(
-                  child: ReorderableListView(
-                    onReorder: _onReorder,
-                    scrollDirection: Axis.vertical,
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    children: listData,
 
-                    // separatorBuilder: (BuildContext context, int index) {
-                    //   return Stack(
-                    //     children: <Widget>[
-                    //       Align(
-                    //         alignment: Alignment.centerRight,
-                    //         child: Container(
-                    //           height: 1,
-                    //           color: Theme.of(context).dividerColor,
-                    //           width: MediaQuery.of(context).size.width - 70,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   );
-                    // },
-                  ),
-                ),
-                  PathBar(
+            PathBar(
             child: Container(
               height: 50,
               child: Align(
@@ -323,14 +300,14 @@ dynamic parentCategoryId = null;
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
-                  itemCount: paths.length,
+                  itemCount: enterPath.length,
                   itemBuilder: (BuildContext context, int index) {
                     String i = paths[index];
                     List splited = i.split("/");
                     return index == 0
                         ? Row(
                             children: <Widget>[
-                              paths.length == 1
+                              enterPath.length != 0
                                   ? Container()
                                   : IconButton(
                                       icon: Icon(
@@ -338,34 +315,32 @@ dynamic parentCategoryId = null;
                                         color: Colors.lightBlue,
                                       ),
                                       onPressed: () {
-                                        if (paths.length == 1) {
+                                        if (enterPath.length == 0) {
                                           Navigator.pop(context);
                                         } else {
                                           enterPath.removeLast();
                                           paths.removeLast();
-                                          setState(() {
-                                            path = paths.last;
-                                          });
+                                          
                                           getFiles();
                                         }
                                       },
                                     ),
                               IconButton(
                                 icon: Icon(
-                                  widget.path.toString().contains("emulated")
-                                      ? Feather.smartphone
-                                      : Icons.restaurant_menu,
-                                  color: index == paths.length - 1
+                              
+                                    Icons.restaurant_menu,
+                                  color: index == enterPath.length - 1
                                       ? Colors.lightBlue
                                       : Colors.black,
                                 ),
                                 onPressed: () {
-                                  print(paths[index]);
-                                  setState(() {
-                                    path = paths[index];
-                                    paths.removeRange(index + 1, paths.length);
-                                  });
-                                  enterPath = new List<FileorDir>();
+                                
+
+                                    print("resturant is pressedddd");
+                                setState(() {
+                                   enterPath.clear();
+                                });
+                                 
                                   getFiles();
                                 },
                               )
@@ -394,7 +369,7 @@ dynamic parentCategoryId = null;
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
-                                      color: index == paths.length - 1
+                                      color: index == enterPath.length 
                                           ? Colors.lightBlue
                                           : Colors.black,
                                     ),
@@ -414,6 +389,34 @@ dynamic parentCategoryId = null;
             ),
           ),
         
+          categoriesList.isEmpty
+              ? Center(
+                  child: Text("There's nothing here"),
+                )
+              : Expanded(
+                  child: ReorderableListView(
+                    onReorder: _onReorder,
+                    scrollDirection: Axis.vertical,
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    children: listData,
+
+                    // separatorBuilder: (BuildContext context, int index) {
+                    //   return Stack(
+                    //     children: <Widget>[
+                    //       Align(
+                    //         alignment: Alignment.centerRight,
+                    //         child: Container(
+                    //           height: 1,
+                    //           color: Theme.of(context).dividerColor,
+                    //           width: MediaQuery.of(context).size.width - 70,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   );
+                    // },
+                  ),
+                ),
+                
         ]),
         
         floatingActionButton:
@@ -428,7 +431,7 @@ dynamic parentCategoryId = null;
           SizedBox(
             height: 5,
           ),
-          FloatingActionButton(
+         parentCategoryId!=null?SizedBox(height: 0,): FloatingActionButton(
             heroTag: "btn2",
             onPressed: () => addCategoryDialog(context, path),
             child: Icon(Feather.folder_plus),
@@ -548,7 +551,7 @@ dynamic parentCategoryId = null;
     Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => AddProduct(categoryId: parentCategoryId,
+                    builder: (context) => AddProduct(categoryId: parentCategoryId,updateExplorer: getFiles,
                        
                         )),
               );

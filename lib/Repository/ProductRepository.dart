@@ -164,7 +164,49 @@ class ProductRepository {
       var data = ApiResponse.fromJson(json.decode(response.body));
       if (data.success == true) {
         print("the price is change");
-        return data.data as ProductDto;
+        return ProductDto.fromJson(data.data);
+      } else
+        return null;
+    } catch (e) {
+      print("ohh shit");
+      print(e.toString());
+    }
+  }
+
+  Future<ProductDto> changeContent(int id, String content) async {
+    try {
+      var body = {
+        "id": id,
+        "content": content,
+      };
+
+      var response = await api.post("changeProductContent", body);
+
+      var data = ApiResponse.fromJson(json.decode(response.body));
+      if (data.success == true) {
+        print("the content is change");
+        return ProductDto.fromJson(data.data);
+      } else
+        return null;
+    } catch (e) {
+      print("ohh shit");
+      print(e.toString());
+    }
+  }
+
+  Future<ProductExtraDto> changeExtraContent(int id, String content) async {
+    try {
+      var body = {
+        "id": id,
+        "content": content,
+      };
+
+      var response = await api.post("changeContentproductExtra", body);
+
+      var data = ApiResponse.fromJson(json.decode(response.body));
+      if (data.success == true) {
+        print("the extra content is change");
+        return ProductExtraDto.fromJson(data.data);
       } else
         return null;
     } catch (e) {
@@ -184,7 +226,7 @@ class ProductRepository {
       var data = ApiResponse.fromJson(json.decode(response.body));
       if (data.success == true) {
         print("the extra price is change");
-        return data.data as ProductExtraDto;
+        return ProductExtraDto.fromJson(data.data);
       } else
         return null;
     } catch (e) {
@@ -209,21 +251,48 @@ class ProductRepository {
       print("ohh shit");
       print(e.toString());
     }
-
-   
   }
 
-   Future<bool> ChangeporductsAllPrice(String statement) async {
+  Future<bool> ChangeporductsAllPrice(String statement) async {
+    try {
+      var body = {
+        "statement": statement,
+      };
+
+      var response = await api.post("changePriceِForAllporducts", body);
+
+      var data = ApiResponse.fromJson(json.decode(response.body));
+      if (data.success == true) {
+        print("the all prices is change");
+        return true;
+      } else
+        return false;
+    } catch (e) {
+      print("ohh shit");
+      print(e.toString());
+      return false;
+    }
+  }
+
+
+
+
+
+
+  Future<bool> AllporductCateegoryChangePrice (int categoryId ,String statement) async {
       try {
         var body = {
-          "statement": statement,
+            "statement": statement,
+            "category_id": categoryId,
+
+
         };
 
-        var response = await api.post("changePriceِForAllporducts", body);
+        var response = await api.post("changePriceِForAllporductCateegory", body);
 
         var data = ApiResponse.fromJson(json.decode(response.body));
         if (data.success == true) {
-          print("the all prices is change");
+          print("the all prices for category is change");
           return true;
         } else
           return false;

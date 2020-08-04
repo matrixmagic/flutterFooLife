@@ -1,9 +1,10 @@
-
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:foolife/Bloc/Product/add/AddProductBloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_trimmer/storage_dir.dart';
@@ -14,7 +15,8 @@ import 'package:video_trimmer/video_viewer.dart';
 class TrimmerView extends StatefulWidget {
   final Trimmer _trimmer;
   final AddProductBloc addProductBloc;
-  TrimmerView(this._trimmer,this.addProductBloc);
+  File video;
+  TrimmerView(this._trimmer, this.addProductBloc, this.video);
   @override
   _TrimmerViewState createState() => _TrimmerViewState();
 }
@@ -23,33 +25,31 @@ class _TrimmerViewState extends State<TrimmerView> {
   double _startValue = 0.0;
   double _endValue = 0.0;
 
+
+
   bool _isPlaying = false;
   bool _progressVisibility = false;
 
-  Future<String> _saveVideo() async {
-    setState(() {
-      _progressVisibility = true;
-    });
+  
+String  _miliSecoundToString(double time){
+  double  toSecond=time/1000;
+  int sec = (toSecond%60).toInt();
+  double  toMinute=(toSecond-sec)/60;
+  int min =(toMinute%60).toInt();
+  double  toHour=(toMinute-min)/60;
+  int hour =(toHour%60).toInt();
+  String sec_str=sec>=10?sec.toString():"0"+sec.toString();
+  String min_str=min>=10?min.toString():"0"+min.toString();
+  String hour_str=hour>=10?hour.toString():"0"+hour.toString();
 
-    String _value;
+  return hour_str+":"+min_str+":"+sec_str;
 
 
-    await widget._trimmer
-        .saveTrimmedVideo(startValue: _startValue, endValue: _endValue,storageDir: StorageDir.externalStorageDirectory )
-        .then((value) {
-      setState(() {
-        _progressVisibility = false;
-        _value = value;
-      });
-    });
-
-    return _value;
-  }
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     
       body: Builder(
         builder: (context) => Center(
           child: Container(
@@ -69,20 +69,48 @@ class _TrimmerViewState extends State<TrimmerView> {
                   onPressed: _progressVisibility
                       ? null
                       : () async {
-                          _saveVideo().then((outputPath) {
-                            print('OUTPUT PATH: $outputPath');
-                            final snackBar = SnackBar(content: Text('Video Saved successfully'));
-                                  File video=new File(outputPath);
-                            widget.addProductBloc.changeFile(video);
-                            Scaffold.of(context).showSnackBar(snackBar);
-                             SchedulerBinding.instance.addPostFrameCallback((_) {
-                                     // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
-                                      Navigator.of(context).pop();
-                        });
-                         
-                        });
-                             
-                        
+                          Directory appDocumentDir =
+                              await getExternalStorageDirectory();
+
+                          String rawDocumentPath = appDocumentDir.path;
+                          print(rawDocumentPath);
+
+                          var _random = new Random();
+                          var _rand = _random.nextInt(9999999) + 1;
+                          String outputPath =
+                              rawDocumentPath + "/" + _rand.toString() + ".mp4";
+                          final FlutterFFmpeg _flutterFFmpeg =
+                              new FlutterFFmpeg();
+
+
+                              _endValue= _endValue<= _startValue ? _startValue+16*1000:_endValue;
+              
+                       
+                          _flutterFFmpeg
+                              .execute("-i " +
+                                  widget.video.path +
+                                  " -ss "+_miliSecoundToString(_startValue) +" -t "+ ((_endValue - _startValue) >= (15*1000) ?"00:00:15":_miliSecoundToString(_endValue - _startValue))+ " -c:v copy -c:a copy  " +
+                                  outputPath)
+                              .then((rc) {
+                            if (rc == 0) {
+                              File video = new File(outputPath);
+
+                              final snackBar = SnackBar(
+                                  content: Text('Video Saved successfully'));
+                              widget.addProductBloc.changeFile(video);
+                              Scaffold.of(context).showSnackBar(snackBar);
+                              SchedulerBinding.instance
+                                  .addPostFrameCallback((_) {
+                                // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+                                Navigator.of(context).pop();
+                              });
+                            } else {
+                              final snackBar =
+                                  SnackBar(content: Text('Video error'));
+
+                              Scaffold.of(context).showSnackBar(snackBar);
+                            }
+                          });
                         },
                   child: Text("Trim"),
                 ),
@@ -94,13 +122,10 @@ class _TrimmerViewState extends State<TrimmerView> {
                     viewerHeight: 50.0,
                     viewerWidth: MediaQuery.of(context).size.width,
                     onChangeStart: (value) {
-                      // _endValue = _endValue -value >=15*1000?value+15*1000:_endValue;
-                      // print("defff is "+ (_endValue -value ).toString() );
                       _startValue = value;
+                       
                     },
                     onChangeEnd: (value) {
-                      // _startValue = value-_startValue >=15*1000?value-15*1000:_startValue;
-                      // print("defff is "+ (value-_startValue  ).toString() );
                       _endValue = value;
                     },
                     onChangePlaybackState: (value) {

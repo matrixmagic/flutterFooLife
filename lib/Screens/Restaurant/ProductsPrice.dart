@@ -16,12 +16,14 @@ class PorductPrice extends StatefulWidget {
 
 class _PorductPriceState extends State<PorductPrice> {
 
-
+ static var _allPricecontroller = TextEditingController();
  List<CategoryDto> categories;
+
   Future<List<CategoryDto>> _fetchsCategory()  async {
  var x= await  ProductRepository().getAllCatetoriesAndProucts();
     setState(()  {
        categories=   x;
+       
     });
 
 
@@ -39,6 +41,7 @@ class _PorductPriceState extends State<PorductPrice> {
   @override
   Widget build(BuildContext context) {
 
+    print("rebuld parent wi");
     PriceProductBloc priceProductBloc = new PriceProductBloc();
     return Column(
       children: <Widget>[
@@ -55,6 +58,7 @@ class _PorductPriceState extends State<PorductPrice> {
                 stream: priceProductBloc.allProductPriceStream,
                 builder: (context, snapshot) {
                   return TextField(
+                    controller:  _allPricecontroller,
                      onChanged: priceProductBloc.changeAllProductPrice,
                     autocorrect: true,
                     decoration: InputDecoration(
@@ -81,6 +85,7 @@ class _PorductPriceState extends State<PorductPrice> {
             IconButton(icon: Icon(Icons.send,color: AppTheme.primaryColor,),
             onPressed: (){
               priceProductBloc.changeAllProductPriceSubmit(true);
+              _allPricecontroller.clear();
             },)
           ],
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -89,7 +94,7 @@ class _PorductPriceState extends State<PorductPrice> {
           stream: priceProductBloc.allProductPriceSubmitStream,
           builder: (context, snapshot) {
             print(snapshot);
-            if(snapshot.hasData  ){
+            if(snapshot.hasData  && snapshot.connectionState ==ConnectionState.done ){
               if(snapshot.data ==true){
               upDateList();
             
@@ -116,7 +121,7 @@ class _PorductPriceState extends State<PorductPrice> {
   }
 
   upDateList() async {
- 
+ print("call upDateList");
    await _fetchsCategory();
  }
 
@@ -146,6 +151,9 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
 
     HashMap map = new HashMap<int, int>();
      HashMap mapEx = new HashMap<int, int>();
+      HashMap categoryMap = new HashMap<int, int>();
+      
+
       bool mo=false;
   bool sa=false;
   bool so=false;
@@ -156,19 +164,24 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
   bool isVisible = false;
   @override
   Widget build(BuildContext context) {
+      var _priceCategorycontroller = TextEditingController();
      productincategory = new List();
-    print(widget.categories[widget.index].products.length);
-  PriceProductBloc priceProductBloc= PriceProductBloc();
+  PriceProductBloc priceProductBloc=new  PriceProductBloc();
     int i=0,j=0;
-    widget.categories[widget.index].products.forEach((pro) {
 
+    widget.categories[widget.index].products.forEach((pro) {
+      priceProductBloc.RequestNewContentSubject();
       priceProductBloc.RequestNewPriceSubject();
-      print(pro.name);
-      print(i);
+    
        if( !map.containsKey(pro.id)){
-                          print(pro.id.toString() + "is key to"+ i.toString());
+                         
                             map[pro.id]=i;
                         }
+
+
+                 
+
+                       
       productincategory.add(
         Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -177,27 +190,37 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
               Container(
                 height: 30,
                 width: 150,
-                child: TextField(
-                  // onChanged: resturantRegistertionBloc.changeResturantName,
-                  autocorrect: true,
-                  decoration: InputDecoration(
-                     contentPadding: EdgeInsets.all(5.0),
-                    hintText: pro.details,
-                    hintStyle: TextStyle(color: Colors.grey),
-                    filled: true,
-                    fillColor: Colors.white70,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                      borderSide:
-                          BorderSide(color: AppTheme.primaryColor, width: 2),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      borderSide: BorderSide(
-                        color: AppTheme.primaryColor,
+                child: StreamBuilder(
+                  stream: priceProductBloc.productContentStream(map[pro.id]) ,
+                  builder: (context, snapshot) {
+                    return TextField(
+                       onChanged: (value){
+                      ShortModel short =new ShortModel();
+                      short.id=pro.id;
+                      short.value=value;
+               priceProductBloc.changContent(short, map[pro.id]);
+                       } ,
+                      autocorrect: true,
+                      decoration: InputDecoration(
+                         contentPadding: EdgeInsets.all(5.0),
+                        hintText: pro.content,
+                        hintStyle: TextStyle(color: Colors.grey),
+                        filled: true,
+                        fillColor: Colors.white70,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                          borderSide:
+                              BorderSide(color: AppTheme.primaryColor, width: 2),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                            color: AppTheme.primaryColor,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  }
                 ),
               ),
               Container(
@@ -263,8 +286,9 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
       widget.categories[widget.index].products[i].productExtra.forEach((proEx) {
       print(proEx.name);
        priceProductBloc.RequestNewExtraPriceSubject();
+       priceProductBloc.RequestNewextraProductContentSubject();
         if( !mapEx.containsKey(proEx.id)){
-                          print(proEx.id.toString() + "exxx is key to"+ i.toString());
+                          
                             mapEx[proEx.id]=j;
                         }
       productincategory.add(
@@ -275,27 +299,38 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
               Container(
                 height: 30,
                 width: 150,
-                child: TextField(
-                  // onChanged: resturantRegistertionBloc.changeResturantName,
-                  autocorrect: true,
-                  decoration: InputDecoration(
-                     contentPadding: EdgeInsets.all(5.0),
-                    hintText: proEx.name,
-                    hintStyle: TextStyle(color: Colors.grey),
-                    filled: true,
-                    fillColor: Colors.white70,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                      borderSide:
-                          BorderSide(color: AppTheme.primaryColor, width: 2),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      borderSide: BorderSide(
-                        color: AppTheme.primaryColor,
+                child: StreamBuilder(
+                  stream: priceProductBloc.productExtraContentStream(mapEx[proEx.id]),
+                  builder: (context, snapshot) {
+                    return TextField(
+                       onChanged: (value){
+                         ShortModel short =ShortModel();
+                         short.id=proEx.id;
+                         short.value =value;
+                         priceProductBloc.changExtraProductContent(short, mapEx[proEx.id]);
+
+                       },
+                      autocorrect: true,
+                      decoration: InputDecoration(
+                         contentPadding: EdgeInsets.all(5.0),
+                        hintText: proEx.name,
+                        hintStyle: TextStyle(color: Colors.grey),
+                        filled: true,
+                        fillColor: Colors.white70,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                          borderSide:
+                              BorderSide(color: AppTheme.primaryColor, width: 2),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                            color: AppTheme.primaryColor,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  }
                 ),
               ),
               Container(
@@ -313,7 +348,7 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
                    priceProductBloc.changExtraPrice(short, mapEx[proEx.id]);
 
                       },
-                      // onChanged: resturantRegistertionBloc.changeResturantName,
+                  
                       autocorrect: true,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(5.0),
@@ -376,28 +411,57 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
               Container(
                 height: 30,
                 width: 150,
-                child: TextField(
-                  // onChanged: resturantRegistertionBloc.changeResturantName,
-                  autocorrect: true,
-                  decoration: InputDecoration(
-                     contentPadding: EdgeInsets.all(5.0),
-                    hintStyle: TextStyle(color: Colors.grey),
-                    filled: true,
-                    fillColor: Colors.white70,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                      borderSide:
-                          BorderSide(color: AppTheme.primaryColor, width: 2),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      borderSide: BorderSide(
-                        color: AppTheme.primaryColor,
+                child: StreamBuilder(
+                  stream: priceProductBloc.categoryPriceStream,
+                  builder: (context, snapshot) {
+                    return TextField(
+                       onChanged:(value)=>  priceProductBloc.changCategoryPrice(value),
+                      autocorrect: true,
+                      controller: _priceCategorycontroller,
+                      decoration: InputDecoration(
+                         contentPadding: EdgeInsets.all(5.0),
+                        hintStyle: TextStyle(color: Colors.grey),
+                        filled: true,
+                        errorText: snapshot.error,
+                        fillColor: Colors.white70,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                          borderSide:
+                              BorderSide(color: AppTheme.primaryColor, width: 2),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                            color: AppTheme.primaryColor,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  }
                 ),
               ),
+
+               IconButton(icon: Icon(Icons.send,color: AppTheme.primaryColor,),
+            onPressed: (){
+              priceProductBloc.changCategoryPriceSubmit(widget.categories[widget.index].id );
+              _priceCategorycontroller.clear();
+            },),
+             StreamBuilder(
+          stream: priceProductBloc.categoryPriceSubmitStream,
+          builder: (context, snapshot) {
+            print(snapshot);
+            if(snapshot.hasData  && snapshot.connectionState ==ConnectionState.done ){
+      
+             widget.updateList.call();
+             print('call parent  ');
+            
+            
+            
+
+            }
+            return Container();
+          }
+        ), 
             ],
           ),
           AnimatedSwitcher(

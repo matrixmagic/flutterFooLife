@@ -32,6 +32,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
   void initState() {
     super.initState();
     if(widget.extention=="mp4"){
+      print(widget.backgroundImage);
     _controller = VideoPlayerController.network(
        widget.backgroundImage)
       ..initialize().then((_) {

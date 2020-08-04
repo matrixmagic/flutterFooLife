@@ -15,8 +15,9 @@ import 'package:video_trimmer/video_trimmer.dart';
 
 class AddProduct extends StatelessWidget {
   int categoryId;
+  Function updateExplorer;
 
-  AddProduct({this.categoryId});
+  AddProduct({this.categoryId,this.updateExplorer});
 AddProductBloc addProductBloc =new AddProductBloc();
  final Trimmer _trimmer = Trimmer();
   @override
@@ -169,7 +170,7 @@ AddProductBloc addProductBloc =new AddProductBloc();
                     if (snapshot2.data == true) {
                   
                         print("Navigator goo go");
-          
+                         updateExplorer.call();
                         SchedulerBinding.instance.addPostFrameCallback((_) {
                                      // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
                       
@@ -254,10 +255,10 @@ var  picture = await MultiMediaPicker.pickImages(
 
                        if (video != null) {
              var videoo =  await _trimmer.loadVideo(videoFile: video);
-
+                                  
                  Navigator.of(bc)
                     .push(MaterialPageRoute(builder: (context) {
-                  return TrimmerView(_trimmer ,addProductBloc);
+                  return TrimmerView(_trimmer ,addProductBloc, video);
                 }));
                   //    addProductBloc.changeFile(video);
                 print(video.path);

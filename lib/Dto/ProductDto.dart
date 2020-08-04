@@ -15,6 +15,7 @@ class ProductDto {
   String details;
   String createdAt;
   String updatedAt;
+  String content;
   FileDto file;
   CategoryDto category;
   List<ProductExtraDto>  productExtra;
@@ -30,6 +31,7 @@ class ProductDto {
       this.displayOrder,
       this.createdAt,
       this.updatedAt,
+      this.content,
       this.file,
       this.category,
        this.details,
@@ -48,6 +50,7 @@ class ProductDto {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
      details = json['details'];
+     content= json['content'];
     file = json['file'] != null ? new FileDto.fromJson(json['file']) : null;
     category = json['category'] != null ? new CategoryDto.fromJson(json['category']) : null;
     if (json['product_extra'] != null) {
@@ -72,6 +75,7 @@ class ProductDto {
     data['displayOrder'] = this.displayOrder;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
+    data['content']= this.content;
     if (this.file != null) {
       data['file'] = this.file.toJson();
     }
