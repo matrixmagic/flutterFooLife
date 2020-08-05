@@ -41,6 +41,11 @@ dependencies:
   path: ^1.6.4
   multiselect_formfield: ^0.1.3
   flutter_icons: ^1.0.0+1
+  screenshot:
+  flutter_datetime_picker:
+  flutter_time_picker_spinner:
+  flutter_colorpicker: ^0.3.2
+  signature: ^3.0.0
   flutter_localizations:
     sdk: flutter
 dev_dependencies:

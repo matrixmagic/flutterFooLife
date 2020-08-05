@@ -59,7 +59,7 @@ class MainScreen extends StatelessWidget {
                   
                 );
               },
-              itemCount: 1,
+              itemCount: 1, 
               scrollDirection: Axis.vertical,
               scale: 1.0,
             );
@@ -78,6 +78,7 @@ class MainScreen extends StatelessWidget {
             showDialog: _ParentFunction,
           ),
         ),
+        
       ],
     ));
   }
