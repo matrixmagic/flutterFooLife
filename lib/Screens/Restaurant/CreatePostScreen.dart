@@ -260,7 +260,7 @@ void toggeltimingVisibility(){
                                               style: TextStyle(
                                                   color: AppTheme.notWhite),
                                             ),
-                                            OutlineButton(
+                                            FlatButton(
                                               child: Text(
                                                 toDate == null
                                                     ? "Click"
