@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 class TextView extends StatefulWidget {
   final double left;
   final double top;
-  final Function ontap;
+  final Function onDoubleTap;
   final Function onlongpress;
   final Function(DragUpdateDetails) onpanupdate;
   final double fontsize;
@@ -14,7 +14,7 @@ class TextView extends StatefulWidget {
       this.onlongpress,
       this.left,
       this.top,
-      this.ontap,
+      this.onDoubleTap,
       this.onpanupdate,
       this.fontsize,
       this.value,
@@ -34,7 +34,7 @@ class _TextViewState extends State<TextView> {
     
       child: GestureDetector(
         onLongPress: widget.onlongpress,
-          onTap: widget.ontap,
+          onDoubleTap: widget.onDoubleTap,
           onPanUpdate: widget.onpanupdate,
           child: Text(widget.value,
               textAlign: widget.align,

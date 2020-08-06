@@ -41,6 +41,9 @@ class _CreatePostState extends State<CreatePost> {
   List type = [];
   List fontcolor = [];
   Map<String, bool> week;
+  int isEditing;
+  Color pickerColor = Color(0xff443a49);
+  Color currentColor = Color(0xff443a49);
 
   Timer timeprediction;
   TimeOfDay fromDate;
@@ -79,14 +82,17 @@ class _CreatePostState extends State<CreatePost> {
       "Fi.": false,
       "Sa.": false,
     };
+    isEditing = -1;
     // TODO: implement initState
     super.initState();
   }
-void toggeltimingVisibility(){
-  setState(() {
-   timingVisibility ? timingVisibility=false: timingVisibility=true;
-  });
-}
+
+  void toggeltimingVisibility() {
+    setState(() {
+      timingVisibility ? timingVisibility = false : timingVisibility = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,57 +154,59 @@ void toggeltimingVisibility(){
                                               align: TextAlign.center,
                                             )
                                           : type[f.key] == 2
-                                              ? TextView(
-                                                  left: offsets[f.key].dx,
-                                                  top: offsets[f.key].dy,
-                                                  value: f.value.toString(),
-                                                  fontsize: fontsize[f.key]
-                                                      .toDouble(),
-                                                  color: fontcolor[f.key],
-                                                  align: TextAlign.center,
-                                                  ontap: () {
-                                                    showDialog(
-                                                        context: context,
-                                                        child: AlertDialog(
-                                                            content:
-                                                                SingleChildScrollView(
-                                                                    child:
-                                                                        Sliders(
-                                                          size: f.key,
-                                                          sizevalue:
-                                                              fontsize[f.key]
+                                              ? isEditing != f.key
+                                                  ? TextView(
+                                                      left: offsets[f.key].dx,
+                                                      top: offsets[f.key].dy,
+                                                      value: f.value.toString(),
+                                                      fontsize: fontsize[f.key]
+                                                          .toDouble(),
+                                                      color: fontcolor[f.key],
+                                                      align: TextAlign.center,
+                                                      onDoubleTap: () {
+                                                        showDialog(
+                                                            context: context,
+                                                            child: AlertDialog(
+                                                                content:
+                                                                    SingleChildScrollView(
+                                                                        child:
+                                                                            Sliders(
+                                                              size: f.key,
+                                                              sizevalue: fontsize[
+                                                                      f.key]
                                                                   .toDouble(),
-                                                        ))));
-                                                  },
-                                                  onpanupdate: (details) {
-                                                    setState(() {
-                                                      offsets[f.key] = Offset(
-                                                          offsets[f.key].dx +
-                                                              details.delta.dx,
-                                                          offsets[f.key].dy +
-                                                              details.delta.dy);
-                                                    });
-                                                  },
-                                                  onlongpress: () async {
-                                                    final MapEntry newvalue =
-                                                        await Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    TextEditor(f
-                                                                        .value)));
-                                                    if (newvalue.key
-                                                        .toString()
-                                                        .isEmpty) {
-                                                      print("true");
-                                                    } else {
-                                                      multiwidget[f.key] =
-                                                          newvalue.key;
-                                                      fontcolor[f.key] =
-                                                          newvalue.value;
-                                                    }
-                                                  },
-                                                )
+                                                            ))));
+                                                      },
+                                                      onpanupdate: (details) {
+                                                        setState(() {
+                                                          offsets[f.key] =
+                                                              Offset(
+                                                                  offsets[f.key]
+                                                                          .dx +
+                                                                      details
+                                                                          .delta
+                                                                          .dx,
+                                                                  offsets[f.key]
+                                                                          .dy +
+                                                                      details
+                                                                          .delta
+                                                                          .dy);
+                                                        });
+                                                      },
+                                                      onlongpress: () async {
+                                                        setState(() {
+                                                          isEditing = f.key;
+                                                        });
+                                                      },
+                                                    )
+                                                  : putEditMode(
+                                                      f.key,
+                                                      f.value.toString(),
+                                                      fontcolor[f.key],
+                                                      fontsize[f.key]
+                                                          .toDouble(),
+                                                      offsets[f.key].dx,
+                                                      offsets[f.key].dy)
                                               : new Container();
                                     }).toList(),
                                   )
@@ -210,201 +218,184 @@ void toggeltimingVisibility(){
                     openbottomsheet
                         ? new Container()
                         : Positioned(
-                              bottom: 40,
-                              left: 5.0,
-                              right: 5.0,
-                              child: Column(
-                                children: <Widget>[
-                                  Visibility(
-                                    visible: timingVisibility,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: week.entries.map((day) {
-                                            return checkbox(day.key, day.value);
-                                          }).toList(),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            Text(
-                                              "From:",
-                                              style: TextStyle(
-                                                  color: AppTheme.notWhite),
-                                            ),
-                                            FlatButton(
-                                              child: Text(
-                                                fromDate == null
-                                                    ? "Click"
-                                                    : fromDate.format(context),
-                                                style: TextStyle(
-                                                    color: Colors.green),
-                                              ),
-                                              onPressed: () {
-                                                showTimePicker(
-                                                  initialTime: TimeOfDay.now(),
-                                                  context: context,
-                                                ).then(
-                                                    (value) => fromDate = value);
-                                              },
-                                            ),
-                                            Text(
-                                              "To:",
-                                              style: TextStyle(
-                                                  color: AppTheme.notWhite),
-                                            ),
-                                            FlatButton(
-                                              child: Text(
-                                                toDate == null
-                                                    ? "Click"
-                                                    : toDate.format(context),
-                                                style: TextStyle(
-                                                    color: Colors.green),
-                                              ),
-                                              onPressed: () {
-                                                showTimePicker(
-                                                  initialTime: TimeOfDay.now(),
-                                                  context: context,
-                                                ).then((value) => toDate = value);
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                            bottom: 40,
+                            left: 5.0,
+                            right: 5.0,
+                            child: Column(
+                              children: <Widget>[
+                                Visibility(
+                                  visible: timingVisibility,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
-                                      Container(
-                                        child: IconButton(
-                                          icon: Icon(
-                                            Icons.text_fields,
-                                            color: AppTheme.notWhite,
-                                          ),
-                                          onPressed: () async {
-                                            final MapEntry value =
-                                                await Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            TextEditor("")));
-                                            if (value.key.toString().isEmpty) {
-                                              print("true");
-                                            } else {
-                                              type.add(2);
-                                              fontsize.add(22);
-                                              offsets.add(Offset.zero);
-                                              multiwidget.add(value.key);
-                                              fontcolor.add(value.value);
-                                              howmuchwidgetis++;
-                                            }
-                                          },
-                                        ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: week.entries.map((day) {
+                                          return checkbox(day.key, day.value);
+                                        }).toList(),
                                       ),
-                                      Container(
-                                        child: IconButton(
-                                          icon: Icon(
-                                            Icons.layers_clear,
-                                            color: AppTheme.notWhite,
-                                            size: 35,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Text(
+                                            "From:",
+                                            style: TextStyle(
+                                                color: AppTheme.notWhite),
                                           ),
-                                          onPressed: () {
-                                            _controller.clear();
-                                            type.clear();
-                                            fontsize.clear();
-                                            offsets.clear();
-                                            multiwidget.clear();
-                                            howmuchwidgetis = 0;
-                                          },
-                                        ),
-                                      ),
-                                      Container(
-                                        child: IconButton(
-                                          icon: Icon(
-                                            Icons.face,
-                                            color: AppTheme.notWhite,
+                                          FlatButton(
+                                            child: Text(
+                                              fromDate == null
+                                                  ? "Click"
+                                                  : fromDate.format(context),
+                                              style: TextStyle(
+                                                  color: Colors.green),
+                                            ),
+                                            onPressed: () {
+                                              showTimePicker(
+                                                initialTime: TimeOfDay.now(),
+                                                context: context,
+                                              ).then(
+                                                  (value) => fromDate = value);
+                                            },
                                           ),
-                                          onPressed: () {
-                                            Future getemojis =
-                                                showModalBottomSheet(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return Emojies();
-                                                    });
-                                            getemojis.then((value) {
-                                              if (value != null) {
-                                                type.add(1);
-                                                fontsize.add(20);
-                                                offsets.add(Offset.zero);
-                                                multiwidget.add(value);
-                                                howmuchwidgetis++;
-                                              }
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                      Container(
-                                        child: IconButton(
-                                          icon: Icon(
-                                            Icons.visibility,
-                                            color: AppTheme.notWhite,
+                                          Text(
+                                            "To:",
+                                            style: TextStyle(
+                                                color: AppTheme.notWhite),
                                           ),
-                                          onPressed: toggeltimingVisibility,
-                                        ),
-                                      ),
-                                      Container(
-                                        child: IconButton(
-                                          icon: Icon(
-                                            Icons.done,
-                                            color: AppTheme.notWhite,
+                                          FlatButton(
+                                            child: Text(
+                                              toDate == null
+                                                  ? "Click"
+                                                  : toDate.format(context),
+                                              style: TextStyle(
+                                                  color: Colors.green),
+                                            ),
+                                            onPressed: () {
+                                              showTimePicker(
+                                                initialTime: TimeOfDay.now(),
+                                                context: context,
+                                              ).then((value) => toDate = value);
+                                            },
                                           ),
-                                          onPressed: () {
-                                            // File _imageFile;
-                                            // _imageFile = null;
-                                            // screenshotController
-                                            //     .capture(
-                                            //         delay: Duration(milliseconds: 500), pixelRatio: 1.5)
-                                            //     .then((File image) async {
-                                            //   //print("Capture Done");
-                                            //   setState(() {
-                                            //     _imageFile = image;
-                                            //   });
-                                            //   final paths = await getExternalStorageDirectory();
-                                            //   image.copy(paths.path +
-                                            //       '/' +
-                                            //       DateTime.now().millisecondsSinceEpoch.toString() +
-                                            //       '.png');
-                                            //   Navigator.pop(context, image);
-                                            // }).catchError((onError) {
-                                            //   print(onError);
-                                            // });
-                                          },
-                                        ),
-                                      ),
-                                      Container(
-                                        child: IconButton(
-                                          icon: Icon(
-                                            Icons.visibility,
-                                            color: AppTheme.notWhite,
-                                          ),
-                                          onPressed: toggeltimingVisibility,
-                                        ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
-                            
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    Container(
+                                      child: IconButton(
+                                        icon: Icon(
+                                          Icons.text_fields,
+                                          color: AppTheme.notWhite,
+                                        ),
+                                        onPressed: () async {
+                                          
+                                            type.add(2);
+                                            fontsize.add(22);
+                                            offsets.add(Offset.zero);
+                                            multiwidget.add("Type Here");
+                                            fontcolor.add(Color(0xff443a49));
+                                            isEditing = howmuchwidgetis;
+                                            howmuchwidgetis++;
+                                          
+                                        },
+                                      ),
+                                    ),
+                                    Container(
+                                      child: IconButton(
+                                        icon: Icon(
+                                          Icons.layers_clear,
+                                          color: AppTheme.notWhite,
+                                          size: 35,
+                                        ),
+                                        onPressed: () {
+                                          _controller.clear();
+                                          type.clear();
+                                          fontsize.clear();
+                                          offsets.clear();
+                                          multiwidget.clear();
+                                          howmuchwidgetis = 0;
+                                        },
+                                      ),
+                                    ),
+                                    Container(
+                                      child: IconButton(
+                                        icon: Icon(
+                                          Icons.face,
+                                          color: AppTheme.notWhite,
+                                        ),
+                                        onPressed: () {
+                                          Future getemojis =
+                                              showModalBottomSheet(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return Emojies();
+                                                  });
+                                          getemojis.then((value) {
+                                            if (value != null) {
+                                              type.add(1);
+                                              fontsize.add(20);
+                                              offsets.add(Offset.zero);
+                                              multiwidget.add(value);
+                                              howmuchwidgetis++;
+                                            }
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    Container(
+                                      child: IconButton(
+                                        icon: Icon(
+                                          Icons.visibility,
+                                          color: AppTheme.notWhite,
+                                        ),
+                                        onPressed: toggeltimingVisibility,
+                                      ),
+                                    ),
+                                    Container(
+                                      child: IconButton(
+                                        icon: Icon(
+                                          Icons.done,
+                                          color: AppTheme.notWhite,
+                                        ),
+                                        onPressed: () {
+                                          // File _imageFile;
+                                          // _imageFile = null;
+                                          // screenshotController
+                                          //     .capture(
+                                          //         delay: Duration(milliseconds: 500), pixelRatio: 1.5)
+                                          //     .then((File image) async {
+                                          //   //print("Capture Done");
+                                          //   setState(() {
+                                          //     _imageFile = image;
+                                          //   });
+                                          //   final paths = await getExternalStorageDirectory();
+                                          //   image.copy(paths.path +
+                                          //       '/' +
+                                          //       DateTime.now().millisecondsSinceEpoch.toString() +
+                                          //       '.png');
+                                          //   Navigator.pop(context, image);
+                                          // }).catchError((onError) {
+                                          //   print(onError);
+                                          // });
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           )
                   ],
                 ),
@@ -414,6 +405,95 @@ void toggeltimingVisibility(){
     );
   }
 
+  Widget putEditMode(int f, String value, Color color, double fontsize,
+      double left, double top) {
+    TextEditingController _controller = TextEditingController();
+    _controller.text = value;
+   
+    return Stack(
+      children: <Widget>[
+        Positioned(
+            left: left + 150,
+            top: top + 250,
+            child: Container(
+              width: 150,
+              height: 50,
+              child: EditableText(
+                controller: _controller,
+
+                autofocus: true,
+                cursorColor: color,
+                focusNode: FocusNode(),
+                onChanged: (newValue) {
+                  multiwidget[f] = newValue;
+                },
+                onSubmitted: (newValue) {
+                  setState(() {
+                    multiwidget[f] = newValue;
+                    isEditing = -1;
+                  });
+                },
+                style: TextStyle(
+                    color: color,
+                    fontSize: fontsize,
+                    decoration: TextDecoration.underline),
+                backgroundCursorColor: color,
+              ),
+            )),
+        Positioned(
+          left: 5.0,
+              bottom: 90,
+              child: Column(
+                children: <Widget>[
+                  IconButton(
+                    icon:Icon(Icons.done_outline,
+                    color: color,), 
+                    onPressed: (){
+                      setState(() {
+                    isEditing = -1;
+                  });
+                    },
+                  ),
+                  IconButton(
+                     icon: Icon(Icons.color_lens,color: color,),
+                    onPressed: () {
+                    // raise the [showDialog] widget
+                    showDialog(
+                        context: context,
+                        child: AlertDialog(
+                          title: const Text('Pick a color!'),
+                          content: SingleChildScrollView(
+                            child: ColorPicker(
+                              pickerColor: pickerColor,
+                              onColorChanged: changeColor,
+                              showLabel: true,
+                              pickerAreaHeightPercent: 0.8,
+                            ),
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: const Text('Got it'),
+                              onPressed: () {
+                                setState(() => fontcolor[f] = pickerColor);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        ));
+                  } ,
+                  ),
+                ],
+              ),
+        )
+      ],
+    );
+  }
+void changeColor(Color color) {
+    setState(() => pickerColor = color);
+    var points = _controller.points;
+    _controller =
+        SignatureController(penStrokeWidth: 5, penColor: color, points: points);
+  }
   Widget checkbox(String title, bool boolValue) {
     return Column(
       mainAxisSize: MainAxisSize.min,
