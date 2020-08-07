@@ -45,6 +45,7 @@ class _CreatePostState extends State<CreatePost> {
   int isEditing;
   Color pickerColor = Color(0xff443a49);
   Color currentColor = Color(0xff443a49);
+    TextEditingController _econtroller = TextEditingController();
 
   Timer timeprediction;
   TimeOfDay fromDate;
@@ -59,6 +60,7 @@ class _CreatePostState extends State<CreatePost> {
   @override
   void dispose() {
     timeprediction.cancel();
+    _econtroller.dispose();
     // TODO: implement dispose
     super.dispose();
   }
@@ -172,6 +174,8 @@ class _CreatePostState extends State<CreatePost> {
                                                       },
                                                       onlongpress: () async {
                                                         setState(() {
+                                                          _econtroller.text = multiwidget[f.key];
+
                                                           isEditing = f.key;
                                                         });
                                                       },
@@ -464,9 +468,6 @@ class _CreatePostState extends State<CreatePost> {
 
   Widget putEditMode(int f, String value, Color color, double fontsize,
       double left, double top) {
-    TextEditingController _controller = TextEditingController();
-    _controller.text = value;
-
     return Stack(
       children: <Widget>[
         Positioned(
@@ -475,14 +476,15 @@ class _CreatePostState extends State<CreatePost> {
             child: Container(
               width: 150,
               height: 50,
-              child: EditableText(
-                controller: _controller,
+              child: TextField(
+                controller: _econtroller,
+                decoration: InputDecoration(hintText: "type here"),
                 autofocus: true,
                 cursorColor: color,
                 focusNode: FocusNode(),
-                onChanged: (newValue) {
-                  multiwidget[f] = newValue;
-                },
+                // onChanged: (newValue) {
+                //  multiwidget[f] = newValue;
+                // },
                 onSubmitted: (newValue) {
                   setState(() {
                     multiwidget[f] = newValue;
@@ -491,9 +493,7 @@ class _CreatePostState extends State<CreatePost> {
                 },
                 style: TextStyle(
                     color: color,
-                    fontSize: fontsize,
-                    decoration: TextDecoration.underline),
-                backgroundCursorColor: color,
+                    fontSize: fontsize,),
               ),
             )),
         Positioned(
