@@ -44,6 +44,7 @@ dependencies:
   flutter_icons: ^1.0.0+1
   video_trimmer: ^0.2.6
   string_validator: ^0.1.4
+  cached_network_image: ^2.2.0+1
   flutter_localizations:
     sdk: flutter
 dev_dependencies:

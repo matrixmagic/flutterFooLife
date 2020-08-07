@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:foolife/Dto/CategoryDto.dart';
@@ -19,11 +20,18 @@ class CustomMainScreenWiget extends StatelessWidget {
       child: Scaffold(
         body: Stack(children: <Widget>[
           Container(
-            child: Image(
-              image:  NetworkImage(backgroundImage),
+            child: 
+            
+            
+            CachedNetworkImage(
+              imageUrl:  backgroundImage,
               height: MediaQuery.of(context).size.height,
+              width:  MediaQuery.of(context).size.width,
+               progressIndicatorBuilder: (context, url, downloadProgress) => 
+                Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
               fit: BoxFit.cover,
-            ),
+            )
+            
           ),
           Container(
             child: Column(

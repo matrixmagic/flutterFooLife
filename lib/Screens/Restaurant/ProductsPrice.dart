@@ -41,7 +41,7 @@ class _PorductPriceState extends State<PorductPrice> {
   @override
   Widget build(BuildContext context) {
 
-    print("rebuld parent wi");
+  
     PriceProductBloc priceProductBloc = new PriceProductBloc();
     return Column(
       children: <Widget>[
