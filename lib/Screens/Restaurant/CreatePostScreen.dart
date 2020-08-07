@@ -6,6 +6,7 @@ import 'package:foolife/Models/colors_picker.dart';
 import 'package:foolife/Models/emoji.dart';
 import 'package:foolife/Models/text.dart';
 import 'package:foolife/Models/textview.dart';
+import 'package:infinite_listview/infinite_listview.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:flutter/cupertino.dart';
@@ -121,12 +122,11 @@ class _CreatePostState extends State<CreatePost> {
                               child: Stack(
                                 children: <Widget>[
                                   Stack(
-                                    children:
-                                        multiwidget.asMap().entries.map((f) {
-                                      return type[f.key] == 1
-                                          ? EmojiView(
-                                              left: offsets[f.key].dx,
-                                              top: offsets[f.key].dy,
+                                      children:
+                                          multiwidget.asMap().entries.map((f) {
+                                    return type[f.key] == 1
+                                        ? DraggableWrap(
+                                            EmojiView(
                                               ontap: () {
                                                 showDialog(
                                                     context: context,
@@ -139,25 +139,18 @@ class _CreatePostState extends State<CreatePost> {
                                                           .toDouble(),
                                                     ))));
                                               },
-                                              onpanupdate: (details) {
-                                                setState(() {
-                                                  offsets[f.key] = Offset(
-                                                      offsets[f.key].dx +
-                                                          details.delta.dx,
-                                                      offsets[f.key].dy +
-                                                          details.delta.dy);
-                                                });
-                                              },
                                               value: f.value.toString(),
                                               fontsize:
                                                   fontsize[f.key].toDouble(),
                                               align: TextAlign.center,
-                                            )
-                                          : type[f.key] == 2
-                                              ? isEditing != f.key
-                                                  ? TextView(
-                                                      left: offsets[f.key].dx,
-                                                      top: offsets[f.key].dy,
+                                            ),
+                                            offsets[f.key].dx,
+                                            offsets[f.key].dy,
+                                            f.key)
+                                        : type[f.key] == 2
+                                            ? isEditing != f.key
+                                                ? DraggableWrap(
+                                                    TextView(
                                                       value: f.value.toString(),
                                                       fontsize: fontsize[f.key]
                                                           .toDouble(),
@@ -177,39 +170,24 @@ class _CreatePostState extends State<CreatePost> {
                                                                   .toDouble(),
                                                             ))));
                                                       },
-                                                      onpanupdate: (details) {
-                                                        setState(() {
-                                                          offsets[f.key] =
-                                                              Offset(
-                                                                  offsets[f.key]
-                                                                          .dx +
-                                                                      details
-                                                                          .delta
-                                                                          .dx,
-                                                                  offsets[f.key]
-                                                                          .dy +
-                                                                      details
-                                                                          .delta
-                                                                          .dy);
-                                                        });
-                                                      },
                                                       onlongpress: () async {
                                                         setState(() {
                                                           isEditing = f.key;
                                                         });
                                                       },
-                                                    )
-                                                  : putEditMode(
-                                                      f.key,
-                                                      f.value.toString(),
-                                                      fontcolor[f.key],
-                                                      fontsize[f.key]
-                                                          .toDouble(),
-                                                      offsets[f.key].dx,
-                                                      offsets[f.key].dy)
-                                              : new Container();
-                                    }).toList(),
-                                  )
+                                                    ),
+                                                    offsets[f.key].dx,
+                                                    offsets[f.key].dy,
+                                                    f.key)
+                                                : putEditMode(
+                                                    f.key,
+                                                    f.value.toString(),
+                                                    fontcolor[f.key],
+                                                    fontsize[f.key].toDouble(),
+                                                    offsets[f.key].dx,
+                                                    offsets[f.key].dy)
+                                            : new Container();
+                                  }).toList()),
                                 ],
                               )),
                         ),
@@ -288,6 +266,69 @@ class _CreatePostState extends State<CreatePost> {
                                     ],
                                   ),
                                 ),
+                                Positioned(
+                                    width: double.infinity,
+                                    left: 5,
+                                    bottom: 90,
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: <Widget>[
+                                          SizedBox(width: 20,),
+                                          Container(
+                                                 width: 100,
+                                                 height: 20,
+                                                 child: TextField(
+                                                   style: TextStyle(color: AppTheme.notWhite),
+                                                   decoration: InputDecoration(
+                  hintText: "Post name",
+                  hintStyle: TextStyle(color: Colors.white),
+                  fillColor: Colors.grey[600],
+                  filled: true,
+                  
+                  contentPadding: EdgeInsets.only(left:5 ,bottom: 10),
+                  alignLabelWithHint: true,
+                ),
+                                                 ),
+                                               ),
+                                               multiwidget.length == 0
+                                              ? Container()
+                                              : DragTarget(
+                                                  builder: (context,
+                                                      List<int> candidateData,
+                                                      rejectedData) {
+                                                    return Icon(
+                                                      Icons.delete,
+                                                      color: AppTheme.notWhite,
+                                                    );
+                                                  },
+                                                  onWillAccept: (data) {
+                                                    return true;
+                                                  },
+                                                  onAccept: (data) {
+                                                    setState(() {
+                                                      if (type[data] == 1) {
+                                                        multiwidget
+                                                            .removeAt(data);
+                                                        type.removeAt(data);
+                                                        offsets.removeAt(data);
+                                                        fontsize.removeAt(data);
+                                                        howmuchwidgetis--;
+                                                      } else {
+                                                        type.removeAt(data);
+                                                        fontsize.removeAt(data);
+                                                        offsets.removeAt(data);
+                                                        multiwidget
+                                                            .removeAt(data);
+                                                        fontcolor
+                                                            .removeAt(data);
+                                                        howmuchwidgetis--;
+                                                      }
+                                                    });
+                                                  },
+                                                )
+                                                ,SizedBox(width: 20,)
+                                        ])),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
@@ -299,15 +340,13 @@ class _CreatePostState extends State<CreatePost> {
                                           color: AppTheme.notWhite,
                                         ),
                                         onPressed: () async {
-                                          
-                                            type.add(2);
-                                            fontsize.add(22);
-                                            offsets.add(Offset.zero);
-                                            multiwidget.add("Type Here");
-                                            fontcolor.add(Color(0xff443a49));
-                                            isEditing = howmuchwidgetis;
-                                            howmuchwidgetis++;
-                                          
+                                          type.add(2);
+                                          fontsize.add(22);
+                                          offsets.add(Offset(150, 250));
+                                          multiwidget.add("Type Here");
+                                          fontcolor.add(Color(0xff443a49));
+                                          isEditing = howmuchwidgetis;
+                                          howmuchwidgetis++;
                                         },
                                       ),
                                     ),
@@ -346,7 +385,7 @@ class _CreatePostState extends State<CreatePost> {
                                             if (value != null) {
                                               type.add(1);
                                               fontsize.add(20);
-                                              offsets.add(Offset.zero);
+                                              offsets.add(Offset(150, 250));
                                               multiwidget.add(value);
                                               howmuchwidgetis++;
                                             }
@@ -405,22 +444,39 @@ class _CreatePostState extends State<CreatePost> {
     );
   }
 
+  Widget DraggableWrap(Widget widget, double left, double top, int f) {
+    return Positioned(
+      left: left,
+      top: top,
+      child: Draggable(
+        data: f,
+        child: widget,
+        feedback: widget,
+        childWhenDragging: Container(),
+        onDragEnd: (details) {
+          setState(() {
+            offsets[f] = Offset(details.offset.dx, details.offset.dy);
+          });
+        },
+      ),
+    );
+  }
+
   Widget putEditMode(int f, String value, Color color, double fontsize,
       double left, double top) {
     TextEditingController _controller = TextEditingController();
     _controller.text = value;
-   
+
     return Stack(
       children: <Widget>[
         Positioned(
-            left: left + 150,
-            top: top + 250,
+            left: left,
+            top: top,
             child: Container(
               width: 150,
               height: 50,
               child: EditableText(
                 controller: _controller,
-
                 autofocus: true,
                 cursorColor: color,
                 focusNode: FocusNode(),
@@ -442,58 +498,65 @@ class _CreatePostState extends State<CreatePost> {
             )),
         Positioned(
           left: 5.0,
-              bottom: 90,
-              child: Column(
-                children: <Widget>[
-                  IconButton(
-                    icon:Icon(Icons.done_outline,
-                    color: color,), 
-                    onPressed: (){
-                      setState(() {
+          bottom: 90,
+          child: Column(
+            children: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.done_outline,
+                  color: color,
+                ),
+                onPressed: () {
+                  setState(() {
                     isEditing = -1;
                   });
-                    },
-                  ),
-                  IconButton(
-                     icon: Icon(Icons.color_lens,color: color,),
-                    onPressed: () {
-                    // raise the [showDialog] widget
-                    showDialog(
-                        context: context,
-                        child: AlertDialog(
-                          title: const Text('Pick a color!'),
-                          content: SingleChildScrollView(
-                            child: ColorPicker(
-                              pickerColor: pickerColor,
-                              onColorChanged: changeColor,
-                              showLabel: true,
-                              pickerAreaHeightPercent: 0.8,
-                            ),
-                          ),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: const Text('Got it'),
-                              onPressed: () {
-                                setState(() => fontcolor[f] = pickerColor);
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        ));
-                  } ,
-                  ),
-                ],
+                },
               ),
+              IconButton(
+                icon: Icon(
+                  Icons.color_lens,
+                  color: color,
+                ),
+                onPressed: () {
+                  // raise the [showDialog] widget
+                  showDialog(
+                      context: context,
+                      child: AlertDialog(
+                        title: const Text('Pick a color!'),
+                        content: SingleChildScrollView(
+                          child: ColorPicker(
+                            pickerColor: pickerColor,
+                            onColorChanged: changeColor,
+                            showLabel: true,
+                            pickerAreaHeightPercent: 0.8,
+                          ),
+                        ),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: const Text('Got it'),
+                            onPressed: () {
+                              setState(() => fontcolor[f] = pickerColor);
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ));
+                },
+              ),
+            ],
+          ),
         )
       ],
     );
   }
-void changeColor(Color color) {
+
+  void changeColor(Color color) {
     setState(() => pickerColor = color);
     var points = _controller.points;
     _controller =
         SignatureController(penStrokeWidth: 5, penColor: color, points: points);
   }
+
   Widget checkbox(String title, bool boolValue) {
     return Column(
       mainAxisSize: MainAxisSize.min,
