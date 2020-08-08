@@ -241,6 +241,7 @@ class _CreatePostState extends State<CreatePost> {
                                               showTimePicker(
                                                 initialTime: TimeOfDay.now(),
                                                 context: context,
+                                                
                                               ).then(
                                                   (value) => fromDate = value);
                                             },
@@ -278,7 +279,6 @@ class _CreatePostState extends State<CreatePost> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceAround,
                                         children: <Widget>[
-                                          SizedBox(width: 20,),
                                           Container(
                                                  width: 100,
                                                  height: 20,
@@ -287,7 +287,7 @@ class _CreatePostState extends State<CreatePost> {
                                                    decoration: InputDecoration(
                   hintText: "Post name",
                   hintStyle: TextStyle(color: Colors.white),
-                  fillColor: Colors.grey[600],
+                  fillColor: Colors.grey[600].withOpacity(0.2),
                   filled: true,
                   
                   contentPadding: EdgeInsets.only(left:5 ,bottom: 10),
@@ -435,6 +435,9 @@ class _CreatePostState extends State<CreatePost> {
                                         },
                                       ),
                                     ),
+                                    Container(
+                                      child: SizedBox(width: 20,)
+                                    ),
                                   ],
                                 ),
                               ],
@@ -508,6 +511,7 @@ class _CreatePostState extends State<CreatePost> {
                 ),
                 onPressed: () {
                   setState(() {
+                    multiwidget[f] = _econtroller.text;
                     isEditing = -1;
                   });
                 },

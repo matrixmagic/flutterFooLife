@@ -188,7 +188,7 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
           ),
           Positioned(
               right: 5.0,
-              bottom: 90,
+              bottom: 40,
               child: mainScreenWidgetVisibility
                   ? Container(
                       child: IconButton(
@@ -203,6 +203,7 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
                       icon: Icon(
                         Icons.close,
                         color: AppTheme.notWhite,
+                        size: 27,
                       ),
                       onPressed: closeCreatePostScreen,
                     ))),
