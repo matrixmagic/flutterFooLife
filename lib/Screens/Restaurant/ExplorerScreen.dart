@@ -49,13 +49,14 @@ class _ExplorerScreenState extends State<ExplorerScreen>
       getFiles();
     }
   }
-dynamic parentCategoryId = null;
+
+  dynamic parentCategoryId = null;
   getFiles() async {
-    
     print(parentCategoryId);
-    if (enterPath.length > 0) parentCategoryId = enterPath.last.id;
-    else{
-      parentCategoryId=null;
+    if (enterPath.length > 0)
+      parentCategoryId = enterPath.last.id;
+    else {
+      parentCategoryId = null;
     }
     print(parentCategoryId);
     List<CategoryDto> categories =
@@ -82,12 +83,12 @@ dynamic parentCategoryId = null;
               path: element.name,
               isDirectory: false,
               price: element.price,
-              extention:element.file.extension,
+              extention: element.file.extension,
               imageURl: element.file.path,
               id: element.id));
         });
     }
- 
+
     var productList1 = new List<FileorDir>();
     if (products != null) {
       if (products.length > 0)
@@ -291,8 +292,7 @@ dynamic parentCategoryId = null;
         //   ],
         // ),
         body: Column(children: <Widget>[
-
-            PathBar(
+          PathBar(
             child: Container(
               height: 50,
               child: Align(
@@ -320,27 +320,24 @@ dynamic parentCategoryId = null;
                                         } else {
                                           enterPath.removeLast();
                                           paths.removeLast();
-                                          
+
                                           getFiles();
                                         }
                                       },
                                     ),
                               IconButton(
                                 icon: Icon(
-                              
-                                    Icons.restaurant_menu,
+                                  Icons.restaurant_menu,
                                   color: index == enterPath.length - 1
                                       ? Colors.lightBlue
                                       : Colors.black,
                                 ),
                                 onPressed: () {
-                                
+                                  print("resturant is pressedddd");
+                                  setState(() {
+                                    enterPath.clear();
+                                  });
 
-                                    print("resturant is pressedddd");
-                                setState(() {
-                                   enterPath.clear();
-                                });
-                                 
                                   getFiles();
                                 },
                               )
@@ -369,7 +366,7 @@ dynamic parentCategoryId = null;
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
-                                      color: index == enterPath.length 
+                                      color: index == enterPath.length
                                           ? Colors.lightBlue
                                           : Colors.black,
                                     ),
@@ -388,7 +385,6 @@ dynamic parentCategoryId = null;
               ),
             ),
           ),
-        
           categoriesList.isEmpty
               ? Center(
                   child: Text("There's nothing here"),
@@ -416,28 +412,22 @@ dynamic parentCategoryId = null;
                     // },
                   ),
                 ),
-                
         ]),
-        
-        floatingActionButton:
-            Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-        parentCategoryId==null?SizedBox(height: 0,):FloatingActionButton(
-            heroTag: "btn1",
-            onPressed: () => addProductDialog(context, path),
-            child: Icon(Icons.fastfood),
-            tooltip: "Add Folder",
-            backgroundColor: Colors.lightBlue,
-          ),
-          SizedBox(
-            height: 5,
-          ),
-         parentCategoryId!=null?SizedBox(height: 0,): FloatingActionButton(
-            heroTag: "btn2",
-            onPressed: () => addCategoryDialog(context, path),
-            child: Icon(Feather.folder_plus),
-            tooltip: "Add Folder",
-          ),
-        ]),
+
+        floatingActionButton: parentCategoryId == null
+            ? FloatingActionButton(
+                heroTag: "btn2",
+                onPressed: () => addCategoryDialog(context, path),
+                child: Icon(Feather.folder_plus),
+                tooltip: "Add Folder",
+              )
+            : FloatingActionButton(
+                heroTag: "btn1",
+                onPressed: () => addProductDialog(context, path),
+                child: Icon(Icons.fastfood),
+                tooltip: "Add Folder",
+                backgroundColor: Colors.lightBlue,
+              ),
       ),
     );
   }
@@ -544,18 +534,18 @@ dynamic parentCategoryId = null;
   }
 
   addProductDialog(BuildContext context, String path) {
-
- dynamic parentCategoryId = null;
+    dynamic parentCategoryId = null;
     print(parentCategoryId);
     if (enterPath.length > 0) parentCategoryId = enterPath.last.id;
     Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AddProduct(categoryId: parentCategoryId,updateExplorer: getFiles,
-                       
-                        )),
-              );
-              /*
+      context,
+      MaterialPageRoute(
+          builder: (context) => AddProduct(
+                categoryId: parentCategoryId,
+                updateExplorer: getFiles,
+              )),
+    );
+    /*
     final AddProductBloc addProductBloc = new AddProductBloc();
       bool isVideo=false,isImage=false;
 
@@ -657,7 +647,7 @@ dynamic parentCategoryId = null;
                           // Provider.of<CoreProvider>(context, listen: false)
                           print("A Folder with that name already exists!");
                         }
-                       
+
                         getFiles();
                       },
                       color: AppTheme.primaryColor,
@@ -846,7 +836,7 @@ dynamic parentCategoryId = null;
     );
   }
 
-  Padding image(AddProductBloc addProductBloc, isImage,isVideo ) {
+  Padding image(AddProductBloc addProductBloc, isImage, isVideo) {
     return Padding(
       padding: EdgeInsets.fromLTRB(10.0, 30, 30, 10.0),
       child: StreamBuilder(
@@ -854,46 +844,37 @@ dynamic parentCategoryId = null;
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Row(
-                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children:[ IconButton(
-                  icon: Icon(
-                    Icons.image,
-                    size: 50,
-                    color:isImage? AppTheme.primaryColor:null,
-                  ),
-                  onPressed: () async {
-                    var picture = await MultiMediaPicker.pickImages(
-                        source: ImageSource.gallery);
-                    if(picture!=null && picture.length>0)
-                    addProductBloc.changeFile(picture[0]);
-                isVideo=false;
-                isImage=true;
-                
-                  },
-                ),
-                
-                
-                IconButton(
-                icon: Icon(
-                  Icons.video_library,
-                  size: 50,
-                  color: isVideo? AppTheme.primaryColor:null
-                
-                ),
-                onPressed: () async {
-                  var picture = await MultiMediaPicker.pickVideo(
-                      source: ImageSource.gallery);
-                  print(picture.path);
-                  addProductBloc.changeFile(picture);
-                  isVideo=true;
-                isImage=false;
-
-                 
-                },
-              )
-                
-                ]
-              );
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.image,
+                        size: 50,
+                        color: isImage ? AppTheme.primaryColor : null,
+                      ),
+                      onPressed: () async {
+                        var picture = await MultiMediaPicker.pickImages(
+                            source: ImageSource.gallery);
+                        if (picture != null && picture.length > 0)
+                          addProductBloc.changeFile(picture[0]);
+                        isVideo = false;
+                        isImage = true;
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.video_library,
+                          size: 50,
+                          color: isVideo ? AppTheme.primaryColor : null),
+                      onPressed: () async {
+                        var picture = await MultiMediaPicker.pickVideo(
+                            source: ImageSource.gallery);
+                        print(picture.path);
+                        addProductBloc.changeFile(picture);
+                        isVideo = true;
+                        isImage = false;
+                      },
+                    )
+                  ]);
             } else {
               return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -905,37 +886,34 @@ dynamic parentCategoryId = null;
                         style: AppTheme.body1,
                       ),
                     ),
-                     IconButton(
+                    IconButton(
                       icon: Icon(
                         Icons.image,
                         size: 50,
                       ),
                       onPressed: () async {
-                       var picture = await MultiMediaPicker.pickImages(
-                      source: ImageSource.gallery);
-                  if(picture!=null && picture.length>0)
-                  addProductBloc.changeFile(picture[0]);
-                        isVideo=false;
-                isImage=true;
-                      
+                        var picture = await MultiMediaPicker.pickImages(
+                            source: ImageSource.gallery);
+                        if (picture != null && picture.length > 0)
+                          addProductBloc.changeFile(picture[0]);
+                        isVideo = false;
+                        isImage = true;
                       },
                     ),
-                     IconButton(
-                icon: Icon(
-                  Icons.video_library,
-                  size: 50,
-                
-                ),
-                onPressed: () async {
-                  var picture = await MultiMediaPicker.pickVideo(
-                      source: ImageSource.gallery);
-                  print(picture.path);
-                  addProductBloc.changeFile(picture);
-                isVideo=true;
-                isImage=false;
-                 
-                },
-              )
+                    IconButton(
+                      icon: Icon(
+                        Icons.video_library,
+                        size: 50,
+                      ),
+                      onPressed: () async {
+                        var picture = await MultiMediaPicker.pickVideo(
+                            source: ImageSource.gallery);
+                        print(picture.path);
+                        addProductBloc.changeFile(picture);
+                        isVideo = true;
+                        isImage = false;
+                      },
+                    )
                   ]);
             }
           }),

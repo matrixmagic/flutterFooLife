@@ -16,6 +16,33 @@ class _MenuBarState extends State<MenuBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        // borderRadius: BorderRadius.only(
+        // topLeft: Radius.circular(40.0),
+        //topRight: Radius.circular(40.0),
+        //),
+        gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            stops: [
+              0.1,
+              0.2,
+              0.5,
+              0.8,
+              0.9
+            ],
+            colors: [
+              Colors.white.withOpacity(0.1),
+              Colors.grey.withOpacity(0.4),
+              Colors.grey.withOpacity(0.3),
+              Colors.grey.withOpacity(0.4),
+              Colors.white.withOpacity(0.1)
+            ]),
+        //image: new DecorationImage(
+        //image: new AssetImage('assets/images/gray.jpg'),
+        //fit: BoxFit.cover,
+        //),
+      ),
       height: 60,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -57,8 +84,10 @@ class _MenuBarState extends State<MenuBar> {
                 height: 60,
                 child: Text(
                   widget.items[index - 1].name,
-              
-                  style: TextStyle(fontSize: 18 ,color: AppTheme.notWhite,),
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: AppTheme.notWhite,
+                  ),
                 ),
               ),
             ),

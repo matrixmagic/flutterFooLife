@@ -7,37 +7,33 @@ import 'package:foolife/Widget/my_flutter_app_icons.dart';
 
 import 'package:foolife/Widget/stories_bar.dart';
 
-
 class CustomMainScreenWiget extends StatelessWidget {
   String backgroundImage;
   String restauranName;
   List<CategoryDto> cateogries;
-  CustomMainScreenWiget({this.backgroundImage,this.restauranName,this.cateogries});
+  CustomMainScreenWiget(
+      {this.backgroundImage, this.restauranName, this.cateogries});
   @override
   Widget build(BuildContext context) {
-  print(MediaQuery.of(context).size.height/7);
+    print(MediaQuery.of(context).size.height / 7);
     return SafeArea(
       child: Scaffold(
         body: Stack(children: <Widget>[
           Container(
-            child: 
-            
-            
-            CachedNetworkImage(
-              imageUrl:  backgroundImage,
-              height: MediaQuery.of(context).size.height,
-              width:  MediaQuery.of(context).size.width,
-               progressIndicatorBuilder: (context, url, downloadProgress) => 
-                Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-              fit: BoxFit.cover,
-            )
-            
-          ),
+              child: CachedNetworkImage(
+            imageUrl: backgroundImage,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                Center(
+                    child: CircularProgressIndicator(
+                        value: downloadProgress.progress)),
+            fit: BoxFit.cover,
+          )),
           Container(
             child: Column(
               children: <Widget>[
                 Padding(
-                
                   child: Center(
                     child: Text(
                       restauranName,
@@ -52,112 +48,155 @@ class CustomMainScreenWiget extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only( top: MediaQuery.of(context).size.height/7),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  child: Column(
-                    children: <Widget>[
-                      IconButton(
-                        padding: EdgeInsets.all(0),
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.favorite,
-                          size: 31,
-                          color: Colors.white.withOpacity(0.8),
-                        ),
-                      ),
-                      Text(
-                        '22',style: TextStyle(color:Colors.white.withOpacity(0.8) ),
-                        
-                      )
-                    ],
-                  ),
+            padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height / 7,
+                bottom: MediaQuery.of(context).size.height / 5),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20.0),
                 ),
-                Container(
-                  child: Column(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(
-                          Icons.star,
-                          size: 31,
-                          color: Colors.white.withOpacity(0.6),
-                        ),
-                      ),
-                      Text('22' , style: TextStyle(color:Colors.white.withOpacity(0.8), ))
+                gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    stops: [
+                      0.1,
+                      0.2,
+                      0.5,
+                      0.8,
+                      0.9
                     ],
-                  ),
-                ),
-                Container(
-                  child: Column(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(
-                          Icons.person,
-                          size: 31,
-                          color: Colors.white.withOpacity(0.8),
+                    colors: [
+                      Colors.white.withOpacity(0.1),
+                      Colors.grey.withOpacity(0.4),
+                      Colors.grey.withOpacity(0.3),
+                      Colors.grey.withOpacity(0.4),
+                      Colors.white.withOpacity(0.1)
+                    ]),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    child: Column(
+                      children: <Widget>[
+                        IconButton(
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.favorite,
+                            size: 31,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
                         ),
-                      ),
-                      Text('22',style: TextStyle(color:Colors.white.withOpacity(0.8)  ))
-                    ],
+                        Text(
+                          '22',
+                          style:
+                              TextStyle(color: Colors.white.withOpacity(0.8)),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  child: Column(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(
-                          Icons.share,
-                          size: 31,
-                          color: Colors.white.withOpacity(0.8),
+                  Container(
+                    child: Column(
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(
+                            Icons.star,
+                            size: 31,
+                            color: Colors.white.withOpacity(0.6),
+                          ),
                         ),
-                      ),
-                      Text('22', style: TextStyle(color:Colors.white.withOpacity(0.8) ))
-                    ],
+                        Text('22',
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.8),
+                            ))
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  child: Column(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(
-                          MyFlutterApp.kellner_option,
-                          size: 31,
-                          color: Colors.white.withOpacity(0.8),
+                  Container(
+                    child: Column(
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(
+                            Icons.person,
+                            size: 31,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
                         ),
-                      ),
-                      Text('22' ,style: TextStyle(color:Colors.white.withOpacity(0.8) ))
-                    ],
+                        Text('22',
+                            style:
+                                TextStyle(color: Colors.white.withOpacity(0.8)))
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  child: Column(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(
-                         Icons.insert_comment,
-                          size: 31,
-                          color: Colors.white.withOpacity(0.8),
+                  Container(
+                    child: Column(
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(
+                            Icons.share,
+                            size: 31,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
                         ),
-                      ),
-                      Text('22' ,style: TextStyle(color:Colors.white.withOpacity(0.8) ))
-                    ],
+                        Text('22',
+                            style:
+                                TextStyle(color: Colors.white.withOpacity(0.8)))
+                      ],
+                    ),
                   ),
-                ),
-                
-              ],
+                  Container(
+                    child: Column(
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(
+                            MyFlutterApp.kellner_option,
+                            size: 31,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
+                        ),
+                        Text('22',
+                            style:
+                                TextStyle(color: Colors.white.withOpacity(0.8)))
+                      ],
+                    ),
+                  ),
+                  Container(
+                    child: Column(
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(
+                            Icons.insert_comment,
+                            size: 31,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
+                        ),
+                        Text('22',
+                            style:
+                                TextStyle(color: Colors.white.withOpacity(0.8)))
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-          
-
-
-          Positioned(top: 26 ,left: 5.0,right: 5.0,child: Container(child: storiesBar()),),  
-       cateogries !=null&& cateogries.length>0? Positioned(bottom:40 , child: Container(height:40 ,width: 500,child: MenuBar(items:cateogries ) )):Container(),
+          Positioned(
+            top: 26,
+            left: 5.0,
+            right: 5.0,
+            child: Container(child: storiesBar()),
+          ),
+          cateogries != null && cateogries.length > 0
+              ? Positioned(
+                  bottom: 40,
+                  child: Container(
+                      height: 40,
+                      width: 500,
+                      child: MenuBar(items: cateogries)))
+              : Container(),
         ]),
-
-
-        
       ),
     );
   }

@@ -28,6 +28,7 @@ class CustomProductWidget extends StatefulWidget {
 
 class _CustomProductWidgetState extends State<CustomProductWidget> {
   VideoPlayerController _controller;
+  bool boolInfo = false;
 
   @override
   void initState() {
@@ -117,14 +118,20 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                                     color: Colors.white,
                                     fontSize: 20,
                                     fontFamily: "SpecialElite")),
-                            Icon(
-                              Icons.info_outline,
-                              color: Colors.white,
-                              size: 24,
-                            ),
+                            IconButton(
+                                onPressed: () {
+                                  print('im pressed');
+                                  setState(() {
+                                    boolInfo = !boolInfo;
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.info_outline,
+                                  color: Colors.white,
+                                  size: 24,
+                                )),
                           ],
                         ),
-                           
                       ],
                     ),
                   ]),
@@ -203,114 +210,113 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                       Text('22',
                           style:
                               TextStyle(color: Colors.white.withOpacity(0.8)))
-
-                              
                     ],
                   ),
                 ),
               ],
             ),
           ),
+          boolInfo != false
+              ? Positioned(
+                  top: 90,
+                  right: 5,
+                  child: CustomPaint(
+                    painter: BorderPainter(),
+                    child: ClipPath(
+                        clipper: LinePathClass(),
+                        child: Container(
+                          width: 210,
+                          padding: EdgeInsets.only(top: 25, left: 10, right: 4),
+                          // margin: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 1, color: AppTheme.notWhite),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30.0),
+                                  bottomLeft: Radius.circular(30.0),
+                                  bottomRight: Radius.circular(30.0))),
 
-          Positioned( 
-            top: 90,
-            right: 5,
-            child: CustomPaint(
-                             painter: BorderPainter(),
-                          child: ClipPath(
-                            clipper: LinePathClass(),
-                            child: Container(
-                              width: 200,
-                              padding:
-                                  EdgeInsets.only(top: 25, left: 10, right: 10),
-                              // margin: EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 1, color: AppTheme.notWhite),
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(30.0),
-                                      bottomLeft: Radius.circular(30.0),
-                                      bottomRight: Radius.circular(30.0))),
-
-                              child: Column(
-                                children: <Widget>[
-                                  widget.product.content != null
-                                      ? Row(
-                                          children: <Widget>[
-                                            Container(
-                                              child: Text(
-                                                widget.product.content,
+                          child: Column(
+                            children: <Widget>[
+                              widget.product.content != null
+                                  ? Row(
+                                      children: <Widget>[
+                                        Container(
+                                          child: Text(
+                                            widget.product.content,
+                                            style: TextStyle(
+                                                color: AppTheme.notWhite,
+                                                fontSize: 15,
+                                                fontFamily: "SpecialElite"),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          width: 120,
+                                        ),
+                                        widget.product.price != null
+                                            ? Text(
+                                                widget.product.price.toString(),
                                                 style: TextStyle(
                                                     color: AppTheme.notWhite,
-                                                    fontSize: 15,
-                                                    fontFamily: "SpecialElite"),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              width: 120,
-                                            ),
-                                            widget.product.price != null
-                                                ? Text(
-                                                    widget.product.price
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        color: AppTheme.notWhite,
-                                                        fontFamily:
-                                                            "SpecialElite",
-                                                        fontSize: 15))
-                                                : SizedBox()
-                                          ],
-                                        )
-                                      : SizedBox(),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  widget.product.productExtra.length > 0
-                                      ? Container(
-                                          color: Colors.white,
-                                          height: 1,
-                                        )
-                                      : SizedBox(),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Column(
-                                    children: getExtraProduct(
-                                        widget.product.productExtra),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  )
-                                ],
+                                                    fontFamily: "SpecialElite",
+                                                    fontSize: 15))
+                                            : SizedBox()
+                                      ],
+                                    )
+                                  : SizedBox(),
+                              SizedBox(
+                                height: 5,
                               ),
-                            ),
+                              widget.product.productExtra.length > 0
+                                  ? Container(
+                                      color: Colors.white,
+                                      height: 1,
+                                    )
+                                  : SizedBox(),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Column(
+                                children: getExtraProduct(
+                                    widget.product.productExtra),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              )
+                            ],
                           ),
-                        )
-                        )
+                        )),
+                  ))
+              : Container()
         ]),
       ),
     );
   }
 
   List<Widget> getExtraProduct(List<ProductExtraDto> productExtraDto) {
-    return productExtraDto
-        .map((e) => Row(
-              children: <Widget>[
-                Text(e.name,
+    return productExtraDto.map((e) {
+      if (e.name == null) {
+        return Container();
+      } else
+        return Row(
+          children: <Widget>[
+            Text(e.name,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontFamily: "SpecialElite")),
+            SizedBox(
+              width: 5,
+            ),
+            e.price != null
+                ? Text(e.price,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 15,
-                        fontFamily: "SpecialElite")),
-                  SizedBox(width: 5,),
-                e.price != null
-                    ? Text(e.price,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontFamily: "SpecialElite"))
-                    : SizedBox()
-              ],
-            ))
-        .toList();
+                        fontFamily: "SpecialElite"))
+                : SizedBox()
+          ],
+        );
+    }).toList();
   }
 }
 
@@ -318,11 +324,11 @@ class LinePathClass extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     var path = new Path();
-    path.lineTo(size.width/1.12, 0);
+    path.lineTo(size.width / 1.12, 0);
     path.lineTo(size.width, 10);
-    path.lineTo(size.width ,size.height);
-  path.lineTo(0,size.height);
-  
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+
     return path;
   }
 
@@ -332,31 +338,28 @@ class LinePathClass extends CustomClipper<Path> {
   }
 }
 
-class BorderPainter extends CustomPainter { //         <-- CustomPainter class
+class BorderPainter extends CustomPainter {
+  //         <-- CustomPainter class
   @override
- void paint(Canvas canvas, Size size) {
-  
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint();
 
- var paint = Paint();
+    paint.color = AppTheme.notWhite;
+    paint.style = PaintingStyle.stroke;
+    paint.strokeWidth = 1;
 
-  paint.color =   AppTheme.notWhite;
-  paint.style = PaintingStyle.stroke;
-  paint.strokeWidth = 1;
+    var path = Path();
+    path.moveTo(size.width / 1.12, 0);
+    path.cubicTo(size.width, -5, size.width, -20, size.width, -15);
+    path.lineTo(size.width, 10);
 
-  var path = Path();
-  path.moveTo(size.width/1.12, 0);
-  path.cubicTo(size.width,-5,size.width,-20,size.width,-15);
-  path.lineTo(size.width, 10);
-  
-  
-  canvas.drawPath(path, paint);
-  
-  //canvas.drawPoints(pointMode, points, paint);
-}
+    canvas.drawPath(path, paint);
+
+    //canvas.drawPoints(pointMode, points, paint);
+  }
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    
     return false;
   }
 }
