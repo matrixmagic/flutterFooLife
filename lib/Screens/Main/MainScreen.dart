@@ -10,6 +10,7 @@ import 'package:foolife/Widget/custom_buttom_navigatior.dart';
 import '../../AppTheme.dart';
 
 class MainScreen extends StatelessWidget {
+
   @override
   var images = [
     'assets/images/Restaurant1.jpg',
@@ -17,53 +18,58 @@ class MainScreen extends StatelessWidget {
     'assets/images/Restaurant3.jpg'
   ];
 
-  @override
+     @override
   void initState() {
     // TODO: implement initState
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+ SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent ));
+
   }
+
 
   BuildContext _context;
 
   Widget build(BuildContext context) {
-    _context = context;
+    _context=context;
     return Scaffold(
         body: Stack(
       children: <Widget>[
         FutureBuilder<Object>(
-            future: RestaurantRepository().gatAllResturants(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData &&
-                  snapshot.connectionState == ConnectionState.done) {
-                List<RestaurantDto> restaurents = snapshot.data;
+          future:  RestaurantRepository().gatAllResturants(),
+          builder: (context, snapshot) {
+            if(snapshot.hasData && snapshot.connectionState ==ConnectionState.done){
+            List<RestaurantDto> restaurents= snapshot.data;
 
-                return Swiper(
-                  itemBuilder: (BuildContext context, int index) {
-                    return CustomMainScreenWiget(
-                      backgroundImage: restaurents[index].file.path,
-                      restauranName: restaurents[index].name,
-                      cateogries: restaurents[index].categories,
-                    );
-                  },
-                  itemCount: restaurents.length,
-                  scrollDirection: Axis.vertical,
-                  scale: 1.0,
+            return Swiper(
+              itemBuilder: (BuildContext context, int index) {
+                return CustomMainScreenWiget(
+                  backgroundImage: restaurents[index].file.path,
+                  restauranName: restaurents[index].name,
+                  cateogries: restaurents[index].categories,
                 );
-              } else {
-                return Swiper(
-                  itemBuilder: (BuildContext context, int index) {
-                    return CustomMainScreenWiget(
-                        backgroundImage:
-                            "https://www.insperry.com/Insperry/public/uploads/files/store/07_19_2020_12_40_75restaurent1.jpg",
-                        restauranName: "koko");
-                  },
-                  itemCount: 1,
-                  scrollDirection: Axis.vertical,
-                  scale: 1.0,
+              },
+              itemCount: restaurents.length,
+              scrollDirection: Axis.vertical,
+              scale: 1.0,
+            );}else{
+            return Swiper(
+              itemBuilder: (BuildContext context, int index) {
+                return CustomMainScreenWiget(
+                  backgroundImage: "https://www.insperry.com/Insperry/public/uploads/files/store/07_19_2020_12_40_75restaurent1.jpg",
+                  restauranName: "koko" 
+                  
                 );
-              }
-            }),
+              },
+              itemCount: 1, 
+              scrollDirection: Axis.vertical,
+              scale: 1.0,
+            );
+
+
+            }
+
+            }
+          
+        ),
         Positioned(
           bottom: 0,
           left: 5.0,
@@ -72,16 +78,15 @@ class MainScreen extends StatelessWidget {
             showDialog: _ParentFunction,
           ),
         ),
+        
       ],
     ));
   }
-
   _ParentFunction() async {
     print('im clickedxxxx hiiiii');
 
-    await _showSelectionDialog(_context);
+  await  _showSelectionDialog(_context);
   }
-
   Future<void> _showSelectionDialog(BuildContext context) async {
     print('im clicked hiiiii');
     return showDialog(
@@ -98,6 +103,7 @@ class MainScreen extends StatelessWidget {
                   ),
                   title: Text("Sign up"),
                   onTap: () {
+                    
                     Navigator.of(context).pushNamed('/usersignup');
                   },
                 ),
@@ -111,7 +117,7 @@ class MainScreen extends StatelessWidget {
                   ),
                   title: Text("Log in"),
                   onTap: () {
-                    Navigator.of(context).pushNamed('/signin');
+                      Navigator.of(context).pushNamed('/signin');
                   },
                 )
               ],
