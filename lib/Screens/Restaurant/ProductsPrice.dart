@@ -150,11 +150,13 @@ class PriceItem extends StatefulWidget {
 List<Widget> productincategory;
 
 class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
-  bool radiobool = false;
+  bool allchoose = false;
   HashMap map = new HashMap<int, int>();
   HashMap mapEx = new HashMap<int, int>();
   HashMap categoryMap = new HashMap<int, int>();
-
+  PriceProductBloc priceProductBloc = new PriceProductBloc();
+  List<int> choosenRadio;
+  List<bool> radiobool;
   bool mo = false;
   bool sa = false;
   bool so = false;
@@ -164,16 +166,35 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
   bool don = false;
   bool isVisible = false;
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    choosenRadio = new List();
+    radiobool = new List();
+    priceProductBloc.changeSat(0);
+    priceProductBloc.changeSon(0);
+    priceProductBloc.changeMon(0);
+    priceProductBloc.changeTus(0);
+    priceProductBloc.changeThurt(0);
+    priceProductBloc.changefri(0);
+    priceProductBloc.changeWed(0);
+    priceProductBloc.changeamount('0');
+    priceProductBloc.changeProductIds(choosenRadio);
+    priceProductBloc.changeCategoryId(widget.categories[widget.index].id);
+  }
+
+  @override
   Widget build(BuildContext context) {
     FocusScope.of(context).requestFocus(new FocusNode());
     var _priceCategorycontroller = TextEditingController();
     productincategory = new List();
-    PriceProductBloc priceProductBloc = new PriceProductBloc();
+
     int i = 0, j = 0;
 
     widget.categories[widget.index].products.forEach((pro) {
       priceProductBloc.RequestNewContentSubject();
       priceProductBloc.RequestNewPriceSubject();
+      radiobool.add(false);
 
       if (!map.containsKey(pro.id)) {
         map[pro.id] = i;
@@ -270,18 +291,39 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
               });
             },
           ),
-          Radio(
-            groupValue: true,
-            hoverColor: Colors.blue,
-            activeColor: AppTheme.primaryColor,
-            focusColor: Colors.blue,
-            value: true,
-            onChanged: (bool x) {
-              setState(() {
-                radiobool = !radiobool;
-              });
-            },
-          ),
+          radiobool[map[pro.id]]
+              ? IconButton(
+                  icon: Icon(
+                    Icons.radio_button_checked,
+                    size: 30.0,
+                    color: AppTheme.primaryColor,
+                  ),
+                  onPressed: () {
+                    if (choosenRadio.contains(pro.id)) {
+                      choosenRadio.remove(pro.id);
+                    } else
+                      choosenRadio.add(pro.id);
+                    setState(() {
+                      radiobool[map[pro.id]] = !radiobool[map[pro.id]];
+                    });
+                  },
+                )
+              : IconButton(
+                  icon: Icon(
+                    Icons.radio_button_unchecked,
+                    size: 30.0,
+                    color: AppTheme.primaryColor,
+                  ),
+                  onPressed: () {
+                    if (choosenRadio.contains(pro.id)) {
+                      choosenRadio.remove(pro.id);
+                    } else
+                      choosenRadio.add(pro.id);
+                    setState(() {
+                      radiobool[map[pro.id]] = !radiobool[map[pro.id]];
+                    });
+                  },
+                ),
           /*SizedBox(
             width: (MediaQuery.of(context).size.height / 20),
           )*/
@@ -495,92 +537,138 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
                             Column(
                               children: <Widget>[
                                 Text("Mo"),
-                                Checkbox(
-                                  value: mo,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      mo = !mo;
-                                    });
-                                  },
-                                )
+                                StreamBuilder(
+                                    stream: priceProductBloc.monStream,
+                                    builder: (context, snapshot) {
+                                      return Checkbox(
+                                        value: mo,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            mo = !mo;
+                                            priceProductBloc
+                                                .changeMon(mo == true ? 1 : 0);
+                                          });
+                                        },
+                                      );
+                                    })
                               ],
                             ),
                             Column(
                               children: <Widget>[
                                 Text("Di"),
-                                Checkbox(
-                                  value: di,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      di = !di;
-                                    });
-                                  },
-                                )
+                                StreamBuilder(
+                                    stream: priceProductBloc.tusStream,
+                                    builder: (context, snapshot) {
+                                      return Checkbox(
+                                        value: di,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            di = !di;
+                                            priceProductBloc
+                                                .changeTus(di == true ? 1 : 0);
+                                          });
+                                        },
+                                      );
+                                    })
                               ],
                             ),
                             Column(
                               children: <Widget>[
                                 Text("Mi"),
-                                Checkbox(
-                                  value: mi,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      mi = !mi;
-                                    });
-                                  },
-                                )
+                                StreamBuilder<Object>(
+                                    stream: priceProductBloc.wedStream,
+                                    builder: (context, snapshot) {
+                                      return Checkbox(
+                                        value: mi,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            mi = !mi;
+                                            priceProductBloc
+                                                .changeWed(mi == true ? 1 : 0);
+                                          });
+                                        },
+                                      );
+                                    })
                               ],
                             ),
                             Column(
                               children: <Widget>[
                                 Text("Do"),
-                                Checkbox(
-                                  value: don,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      don = !don;
-                                    });
-                                  },
-                                )
+                                StreamBuilder(
+                                    stream: priceProductBloc.thurStream,
+                                    builder: (context, snapshot) {
+                                      return StreamBuilder(
+                                          stream: priceProductBloc.thurStream,
+                                          builder: (context, snapshot) {
+                                            return Checkbox(
+                                              value: don,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  don = !don;
+                                                  priceProductBloc.changeThurt(
+                                                      don == true ? 1 : 0);
+                                                });
+                                              },
+                                            );
+                                          });
+                                    })
                               ],
                             ),
                             Column(
                               children: <Widget>[
                                 Text("Fr"),
-                                Checkbox(
-                                  value: fr,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      fr = !fr;
-                                    });
-                                  },
-                                )
+                                StreamBuilder(
+                                    stream: priceProductBloc.friStream,
+                                    builder: (context, snapshot) {
+                                      return Checkbox(
+                                        value: fr,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            priceProductBloc
+                                                .changefri(fr == true ? 1 : 0);
+                                            fr = !fr;
+                                          });
+                                        },
+                                      );
+                                    })
                               ],
                             ),
                             Column(
                               children: <Widget>[
                                 Text("Sa"),
-                                Checkbox(
-                                  value: sa,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      sa = !sa;
-                                    });
-                                  },
-                                )
+                                StreamBuilder(
+                                    stream: priceProductBloc.satStream,
+                                    builder: (context, snapshot) {
+                                      return Checkbox(
+                                        value: sa,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            sa = !sa;
+                                            priceProductBloc
+                                                .changeSat(sa == true ? 1 : 0);
+                                          });
+                                        },
+                                      );
+                                    })
                               ],
                             ),
                             Column(
                               children: <Widget>[
                                 Text("So"),
-                                Checkbox(
-                                  value: so,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      so = !so;
-                                    });
-                                  },
-                                )
+                                StreamBuilder(
+                                    stream: priceProductBloc.sonStream,
+                                    builder: (context, snapshot) {
+                                      return Checkbox(
+                                        value: so,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            so = !so;
+                                            priceProductBloc
+                                                .changeSon(so == true ? 1 : 0);
+                                          });
+                                        },
+                                      );
+                                    })
                               ],
                             )
                           ],
@@ -588,7 +676,7 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            SizedBox(width: 40),
+                            //SizedBox(width: 20),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
@@ -596,30 +684,37 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
                                     (MediaQuery.of(context).size.height / 24),
                                 width:
                                     (MediaQuery.of(context).size.height / 10),
-                                child: TextField(
-                                  // onChanged: resturantRegistertionBloc.changeResturantName,
-                                  autocorrect: true,
-                                  decoration: InputDecoration(
-                                    // contentPadding: EdgeInsets.all(5.0),
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    filled: true,
-                                    fillColor: Colors.white70,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(12.0)),
-                                      borderSide: BorderSide(
-                                          color: AppTheme.primaryColor,
-                                          width: 2),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0)),
-                                      borderSide: BorderSide(
-                                        color: AppTheme.primaryColor,
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                child: StreamBuilder(
+                                    stream: priceProductBloc.amountStream,
+                                    builder: (context, snapshot) {
+                                      return TextField(
+                                        onChanged:
+                                            priceProductBloc.changeamount,
+                                        autocorrect: true,
+                                        decoration: InputDecoration(
+                                          errorText: snapshot.error,
+                                          // contentPadding: EdgeInsets.all(5.0),
+                                          hintStyle:
+                                              TextStyle(color: Colors.grey),
+                                          filled: true,
+                                          fillColor: Colors.white70,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(12.0)),
+                                            borderSide: BorderSide(
+                                                color: AppTheme.primaryColor,
+                                                width: 2),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0)),
+                                            borderSide: BorderSide(
+                                              color: AppTheme.primaryColor,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }),
                               ),
                             ),
                             Text('von'),
@@ -630,30 +725,35 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
                                     (MediaQuery.of(context).size.height / 24),
                                 width:
                                     (MediaQuery.of(context).size.height / 10),
-                                child: TextField(
-                                  // onChanged: resturantRegistertionBloc.changeResturantName,
-                                  autocorrect: true,
-                                  decoration: InputDecoration(
-                                    //contentPadding: EdgeInsets.all(5.0),
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    filled: true,
-                                    fillColor: Colors.white70,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(12.0)),
-                                      borderSide: BorderSide(
-                                          color: AppTheme.primaryColor,
-                                          width: 2),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0)),
-                                      borderSide: BorderSide(
-                                        color: AppTheme.primaryColor,
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                child: StreamBuilder(
+                                    stream: priceProductBloc.fromStream,
+                                    builder: (context, snapshot) {
+                                      return TextField(
+                                        onChanged: priceProductBloc.changefrom,
+                                        autocorrect: true,
+                                        decoration: InputDecoration(
+                                          //contentPadding: EdgeInsets.all(5.0),
+                                          hintStyle:
+                                              TextStyle(color: Colors.grey),
+                                          filled: true,
+                                          fillColor: Colors.white70,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(12.0)),
+                                            borderSide: BorderSide(
+                                                color: AppTheme.primaryColor,
+                                                width: 2),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0)),
+                                            borderSide: BorderSide(
+                                              color: AppTheme.primaryColor,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }),
                               ),
                             ),
                             Text('bis'),
@@ -664,44 +764,118 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
                                     (MediaQuery.of(context).size.height / 24),
                                 width:
                                     (MediaQuery.of(context).size.height / 10),
-                                child: TextField(
-                                  // onChanged: resturantRegistertionBloc.changeResturantName,
-                                  autocorrect: true,
-                                  decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(5.0),
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    filled: true,
-                                    fillColor: Colors.white70,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(12.0)),
-                                      borderSide: BorderSide(
-                                          color: AppTheme.primaryColor,
-                                          width: 2),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0)),
-                                      borderSide: BorderSide(
-                                        color: AppTheme.primaryColor,
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                child: StreamBuilder(
+                                    stream: priceProductBloc.toStream,
+                                    builder: (context, snapshot) {
+                                      return TextField(
+                                        onChanged: priceProductBloc.changeTo,
+                                        autocorrect: true,
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.all(5.0),
+                                          hintStyle:
+                                              TextStyle(color: Colors.grey),
+                                          filled: true,
+                                          fillColor: Colors.white70,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(12.0)),
+                                            borderSide: BorderSide(
+                                                color: AppTheme.primaryColor,
+                                                width: 2),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0)),
+                                            borderSide: BorderSide(
+                                              color: AppTheme.primaryColor,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }),
                               ),
                             ),
-                            Radio(
-                              groupValue: true,
-                              hoverColor: Colors.blue,
-                              activeColor: AppTheme.primaryColor,
-                              focusColor: Colors.blue,
-                              value: true,
-                              onChanged: (bool x) {
-                                setState(() {
-                                  radiobool = !radiobool;
-                                });
+                            IconButton(
+                              icon: Icon(Icons.timer),
+                              onPressed: () {
+                                priceProductBloc.changeProductIds(choosenRadio);
+                                priceProductBloc.changeTimeSubmit(true);
                               },
                             ),
+                            StreamBuilder(
+                                stream: priceProductBloc.productIdsStream,
+                                builder: (context, snapshot) {
+                                  return Container();
+                                }),
+                            StreamBuilder(
+                                stream: priceProductBloc.happyTimeSubmitStream,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData &&
+                                      snapshot.connectionState ==
+                                          ConnectionState.done)
+                                    print('its okayy');
+                                  return Container();
+                                }),
+                            StreamBuilder(
+                                stream: priceProductBloc.categoryIdStream,
+                                builder: (context, snapshot) {
+                                  return Container();
+                                }),
+                            allchoose
+                                ? IconButton(
+                                    icon: Icon(
+                                      Icons.radio_button_checked,
+                                      size: 30.0,
+                                      color: AppTheme.primaryColor,
+                                    ),
+                                    onPressed: () {
+                                      if (allchoose) {
+                                        choosenRadio.clear();
+                                        radiobool = radiobool
+                                            .map((e) => e = false)
+                                            .toList();
+                                      } else {
+                                        widget.categories[widget.index].products
+                                            .map((e) {
+                                          if (!choosenRadio.contains(e.id))
+                                            choosenRadio.add(e.id);
+                                        });
+                                        radiobool = radiobool
+                                            .map((e) => e = true)
+                                            .toList();
+                                      }
+                                      setState(() {
+                                        allchoose = !allchoose;
+                                      });
+                                    },
+                                  )
+                                : IconButton(
+                                    icon: Icon(
+                                      Icons.radio_button_unchecked,
+                                      size: 30.0,
+                                      color: AppTheme.primaryColor,
+                                    ),
+                                    onPressed: () {
+                                      if (allchoose) {
+                                        choosenRadio.clear();
+                                        radiobool = radiobool
+                                            .map((e) => e = false)
+                                            .toList();
+                                      } else {
+                                        widget.categories[widget.index].products
+                                            .map((e) {
+                                          if (!choosenRadio.contains(e.id))
+                                            choosenRadio.add(e.id);
+                                        });
+                                        radiobool = radiobool
+                                            .map((e) => e = true)
+                                            .toList();
+                                      }
+                                      setState(() {
+                                        allchoose = !allchoose;
+                                      });
+                                    },
+                                  ),
                           ],
                         ),
                         Row(

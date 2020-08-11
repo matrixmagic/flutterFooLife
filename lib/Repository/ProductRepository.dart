@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:foolife/Dto/CategoryDto.dart';
 import 'package:foolife/Dto/ChangeDisplayOrderDto.dart';
+import 'package:foolife/Dto/HappyTimeDto.dart';
 import 'package:foolife/Dto/ProductChangePriceDto.dart';
 import 'package:foolife/Dto/ProductDto.dart';
 import 'package:foolife/Dto/ProductExtraDto.dart';
@@ -274,32 +275,69 @@ class ProductRepository {
     }
   }
 
+  Future<bool> AllporductCateegoryChangePrice(
+      int categoryId, String statement) async {
+    try {
+      var body = {
+        "statement": statement,
+        "category_id": categoryId,
+      };
 
+      var response = await api.post("changePriceِForAllporductCateegory", body);
 
-
-
-
-  Future<bool> AllporductCateegoryChangePrice (int categoryId ,String statement) async {
-      try {
-        var body = {
-            "statement": statement,
-            "category_id": categoryId,
-
-
-        };
-
-        var response = await api.post("changePriceِForAllporductCateegory", body);
-
-        var data = ApiResponse.fromJson(json.decode(response.body));
-        if (data.success == true) {
-          print("the all prices for category is change");
-          return true;
-        } else
-          return false;
-      } catch (e) {
-        print("ohh shit");
-        print(e.toString());
+      var data = ApiResponse.fromJson(json.decode(response.body));
+      if (data.success == true) {
+        print("the all prices for category is change");
+        return true;
+      } else
         return false;
-      }
+    } catch (e) {
+      print("ohh shit");
+      print(e.toString());
+      return false;
     }
+  }
+
+  Future<bool> addHappytime(
+      String from,
+      String to,
+      String amount,
+      int sunday,
+      int monday,
+      int tuesday,
+      int wednesday,
+      int thursday,
+      int friday,
+      int saturday,
+      List<int> productIds,
+      int categoryId) async {
+    try {
+      HappyTimeDto happyTimeDto = new HappyTimeDto();
+      happyTimeDto.from = from;
+      happyTimeDto.to = to;
+      happyTimeDto.amount = amount;
+      happyTimeDto.sunday = sunday;
+      happyTimeDto.monday = monday;
+      happyTimeDto.tuesday = tuesday;
+      happyTimeDto.wednesday = wednesday;
+      happyTimeDto.thursday = thursday;
+      happyTimeDto.friday = friday;
+      happyTimeDto.saturday = saturday;
+      happyTimeDto.productIds = productIds;
+      happyTimeDto.categoryId = categoryId;
+
+      var response = await api.post("productHappyTime", happyTimeDto);
+
+      var data = ApiResponse.fromJson(json.decode(response.body));
+      print(data.data);
+      if (data.success == true) {
+        print("the happy time is change");
+        return true;
+      } else
+        return null;
+    } catch (e) {
+      print("ohh shit");
+      print(e.toString());
+    }
+  }
 }
