@@ -49,6 +49,7 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
             child: Image(
               image: NetworkImage(widget.backgroundImage),
               height: MediaQuery.of(context).size.height,
+              width:  MediaQuery.of(context).size.width,
               fit: BoxFit.cover,
             ),
           ),
@@ -207,12 +208,12 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
                       ),
                       onPressed: closeCreatePostScreen,
                     ))),
-          Positioned(
-            top: 26,
-            left: 5.0,
-            right: 5.0,
-            child: Container(child: storiesBar()),
-          ),
+          // Positioned(
+          //   top: 26,
+          //   left: 5.0,
+          //   right: 5.0,
+          //   //child: Container(child: storiesBar()),
+          // ),
           Visibility(
             visible: mainScreenWidgetVisibility,
             child: widget.cateogries != null && widget.cateogries.length > 0

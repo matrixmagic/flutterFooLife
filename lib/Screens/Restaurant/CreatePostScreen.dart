@@ -43,8 +43,8 @@ class _CreatePostState extends State<CreatePost> {
   List fontcolor = [];
   Map<String, bool> week;
   int isEditing;
-  Color pickerColor = Color(0xff443a49);
-  Color currentColor = Color(0xff443a49);
+  Color pickerColor = Colors.white;
+  Color currentColor = Colors.white;
     TextEditingController _econtroller = TextEditingController();
 
   Timer timeprediction;
@@ -526,9 +526,10 @@ class _CreatePostState extends State<CreatePost> {
                   showDialog(
                       context: context,
                       child: AlertDialog(
-                        title: const Text('Pick a color!'),
+                        title: const Text('Pick a color!!'),
                         content: SingleChildScrollView(
                           child: ColorPicker(
+
                             pickerColor: pickerColor,
                             onColorChanged: changeColor,
                             showLabel: true,

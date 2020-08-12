@@ -19,8 +19,8 @@ SignatureController _controller =
 class _TextEditorState extends State<TextEditor> {
   
   TextEditingController name = TextEditingController();
-  Color pickerColor = Color(0xff443a49);
-  Color currentColor = Color(0xff443a49);
+  Color pickerColor = Color(0xffffffff);
+  Color currentColor = Color(0xffffffff);
 
   void changeColor(Color color) {
     setState(() => pickerColor = color);

@@ -12,7 +12,7 @@ enum PickMode {
 typedef ColorListener = void Function(int value);
 
 /// Constant color of thumb shadow
-const _kThumbShadowColor = Color(0x44000000);
+const _kThumbShadowColor = Color(0xffffffff);
 
 /// A padding used to calculate bar height(thumbRadius * 2 - kBarPadding).
 const _kBarPadding = 4;
@@ -55,7 +55,7 @@ class BarColorPicker extends StatefulWidget {
     this.width = 200,
     this.cornerRadius = 0.0,
     this.thumbRadius = 8,
-    this.initialColor = const Color(0xffff0000),
+    this.initialColor = const Color(0xffffffff),
     this.thumbColor = Colors.black,
     @required this.colorListener,
   })  : assert(pickMode != null),
@@ -230,7 +230,7 @@ class CircleColorPicker extends StatefulWidget {
   CircleColorPicker(
       {Key key,
       this.radius = 120,
-      this.initialColor = const Color(0xffff0000),
+      this.initialColor = const Color(0xffffffff),
       this.thumbColor = Colors.black,
       this.thumbRadius = 8,
       @required this.colorListener})
