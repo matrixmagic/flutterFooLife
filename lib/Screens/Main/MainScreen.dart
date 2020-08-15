@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -43,7 +45,7 @@ class MainScreen extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return CustomMainScreenWiget(
                   backgroundImage: restaurents[index].file.path,
-                  restauranName: restaurents[index].name,
+                  restauranDto: restaurents[index],
                   cateogries: restaurents[index].categories,
                 );
               },
@@ -54,9 +56,9 @@ class MainScreen extends StatelessWidget {
             return Swiper(
               itemBuilder: (BuildContext context, int index) {
                 return CustomMainScreenWiget(
-                  backgroundImage: "https://www.insperry.com/Insperry/public/uploads/files/store/07_19_2020_12_40_75restaurent1.jpg",
-                  restauranName: "koko" 
-                  
+                  backgroundImage: "https://www.insperry.com/Insperry/public/uploads/files/store/08_03_2020_23_51_78Restaurant1.jpg",
+                
+                  restauranDto: new RestaurantDto(name: "koko"),
                 );
               },
               itemCount: 1, 
@@ -78,6 +80,7 @@ class MainScreen extends StatelessWidget {
             showDialog: _ParentFunction,
           ),
         ),
+        
         
       ],
     ));

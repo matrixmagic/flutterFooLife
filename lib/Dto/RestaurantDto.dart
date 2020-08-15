@@ -1,8 +1,10 @@
 import 'dart:ffi';
 
 import 'package:foolife/Dto/CategoryDto.dart';
+import 'package:foolife/Dto/UserDto.dart';
 
 import 'FileDto.dart';
+import 'PaymentsMethod.dart';
 import 'RestaurantServicesDto.dart';
 
 class RestaurantDto {
@@ -20,11 +22,14 @@ class RestaurantDto {
   String createdAt;
   String updatedAt;
   RestaurantServicesDto services;
+
+  UserDto user;
   List<int> payments;
   List<int> currencies;
   List<int> games;
   FileDto file;
   List<CategoryDto>  categories;
+  List<PaymentsMethod> paymentsMethod;
 
   RestaurantDto(
       {this.id,
@@ -41,6 +46,7 @@ class RestaurantDto {
       this.createdAt,
       this.updatedAt,
       this.services,
+      this.paymentsMethod,
       this.file});
 
   RestaurantDto.fromJson(Map<String, dynamic> json) {
@@ -60,7 +66,9 @@ class RestaurantDto {
     services = json['services'] != null
         ? new RestaurantServicesDto.fromJson(json['services'])
         : null;
-
+    user = json['user'] != null
+        ? new UserDto.fromJson(json['user'])
+        : null;
 
  
 
@@ -76,6 +84,15 @@ class RestaurantDto {
         categories.add(new CategoryDto.fromJson(v));
       });
     }
+
+    if (json['payments_method'] != null) {
+     paymentsMethod = new List<PaymentsMethod>();
+      json['payments_method'].forEach((v) {
+        paymentsMethod.add(new PaymentsMethod.fromJson(v));
+      });
+    }
+
+    
   }
 
   Map<String, dynamic> toJson() {

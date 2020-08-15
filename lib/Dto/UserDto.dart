@@ -6,6 +6,7 @@ class UserDto {
   String createdAt;
   String updatedAt;
   String token;
+  String phoneNumber;
 
   UserDto(
       {this.id,
@@ -14,6 +15,8 @@ class UserDto {
       this.roleId,
       this.createdAt,
       this.updatedAt,
+
+      this.phoneNumber,
       this.token});
 
   UserDto.fromJson(Map<String, dynamic> json) {
@@ -24,6 +27,8 @@ class UserDto {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     token = json['token'];
+    phoneNumber = json['phoneNumber'];
+    
   }
 
   Map<String, dynamic> toJson() {
@@ -35,6 +40,7 @@ class UserDto {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['token'] = this.token;
+    data['phoneNumber']= this.phoneNumber  ;
     return data;
   }
 }

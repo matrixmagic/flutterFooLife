@@ -16,33 +16,7 @@ class _MenuBarState extends State<MenuBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        // borderRadius: BorderRadius.only(
-        // topLeft: Radius.circular(40.0),
-        //topRight: Radius.circular(40.0),
-        //),
-        gradient: LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-            stops: [
-              0.1,
-              0.2,
-              0.5,
-              0.8,
-              0.9
-            ],
-            colors: [
-              Colors.white.withOpacity(0.1),
-              Colors.grey.withOpacity(0.4),
-              Colors.grey.withOpacity(0.3),
-              Colors.grey.withOpacity(0.4),
-              Colors.white.withOpacity(0.1)
-            ]),
-        //image: new DecorationImage(
-        //image: new AssetImage('assets/images/gray.jpg'),
-        //fit: BoxFit.cover,
-        //),
-      ),
+      
       height: 60,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -51,16 +25,25 @@ class _MenuBarState extends State<MenuBar> {
           if (index == 0) {
             return GestureDetector(
               child: Container(
+               
                 padding: EdgeInsets.symmetric(horizontal: 10),
-                height: 70,
+              
                 child: Icon(
                   Icons.local_dining,
                   size: 30,
-                  color: AppTheme.notWhite.withOpacity(0.5),
+                  color: AppTheme.notWhite.withOpacity(0.7),
                 ),
               ),
             );
           }
+          else if(widget.items[index - 1].products==null) {
+             return Container();
+          }
+          else if(widget.items[index - 1].products.length<=0){
+             return Container();
+          }
+
+          
           return GestureDetector(
             onTap: () async {
               FlutterSecureStorage storage = new FlutterSecureStorage();
@@ -77,8 +60,16 @@ class _MenuBarState extends State<MenuBar> {
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
+             
                 padding: EdgeInsets.symmetric(horizontal: 5),
                 decoration: BoxDecoration(
+                  boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 15.0,
+                        spreadRadius: 1.0,
+                      ),
+                    ],
                     border: Border.all(color: Colors.white),
                     borderRadius: BorderRadius.circular(44)),
                 height: 60,

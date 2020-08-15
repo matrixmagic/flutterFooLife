@@ -29,6 +29,7 @@ class CustomProductWidget extends StatefulWidget {
 class _CustomProductWidgetState extends State<CustomProductWidget> {
   VideoPlayerController _controller;
   bool boolInfo = false;
+  bool detailsInfo=false;
 
   @override
   void initState() {
@@ -52,6 +53,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
     print(widget.product.name);
     print(widget.extention);
     return SafeArea(
+      top: false,
       child: Scaffold(
         body: Stack(children: <Widget>[
           Container(
@@ -83,9 +85,22 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
             //   ),
             // ),
           ),
+          GestureDetector(
+            onTap: (){
+         
+           setState(() {
+              detailsInfo =false;
+              boolInfo=false;
+           });  
+            },
+          child: Expanded(child: Container(
+
+         color: Colors.blue.withOpacity(0),
+          )),
+          ),
           Positioned(
               left: 20,
-              top: 10,
+              top: 30,
               child: Text(widget.product.category.name,
                   style: TextStyle(
                       fontSize: 20,
@@ -99,38 +114,75 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                     Column(
                       children: <Widget>[
-                        Text(
-                          widget.product.name,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 25,
-                              fontFamily: "SpecialElite"),
+                        Container(
+                          decoration: BoxDecoration(boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.7),
+                              blurRadius: 40.0,
+                              spreadRadius: 1.0,
+                            ),
+                          ]),
+                          child: Text(
+                            widget.product.name,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontFamily: "SpecialElite"),
+                          ),
                         ),
                         SizedBox(
                           height: 5,
                         ),
-                        Row(
-                          children: <Widget>[
-                            Text(
-                                (widget.product.price.toString() +
-                                    "\$".toString()),
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontFamily: "SpecialElite")),
-                            IconButton(
-                                onPressed: () {
-                                  print('im pressed');
-                                  setState(() {
-                                    boolInfo = !boolInfo;
-                                  });
-                                },
-                                icon: Icon(
-                                  Icons.info_outline,
-                                  color: Colors.white,
-                                  size: 24,
-                                )),
-                          ],
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.7),
+                                    blurRadius: 40.0,
+                                    spreadRadius: 1.0,
+                                  ),
+                                ]),
+                                child: Text(
+                                    (widget.product.price.toString() +
+                                        "\$".toString()),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontFamily: "SpecialElite")),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.7),
+                                    blurRadius: 40.0,
+                                    spreadRadius: 1.0,
+                                  ),
+                                ]),
+                                child: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        boolInfo = !boolInfo;
+                                        if(boolInfo)
+                                        {
+                                          detailsInfo=false;
+                                        }
+
+                                      });
+                                    },
+                                    icon: Icon(
+                                      Icons.info_outline,
+                                      color: Colors.white,
+                                      size: 24,
+                                    )),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -149,13 +201,22 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                 Container(
                   child: Column(
                     children: <Widget>[
-                      IconButton(
-                        padding: EdgeInsets.all(0),
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.favorite,
-                          size: 31,
-                          color: Colors.white.withOpacity(0.8),
+                      Container(
+                        decoration: BoxDecoration(boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.7),
+                            blurRadius: 40.0,
+                            spreadRadius: 1.0,
+                          ),
+                        ]),
+                        child: IconButton(
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.favorite,
+                            size: 31,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
                         ),
                       ),
                       Text(
@@ -166,6 +227,13 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                   ),
                 ),
                 Container(
+                  decoration: BoxDecoration(boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.7),
+                      blurRadius: 40.0,
+                      spreadRadius: 1.0,
+                    ),
+                  ]),
                   child: Column(
                     children: <Widget>[
                       IconButton(
@@ -182,6 +250,13 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                   ),
                 ),
                 Container(
+                  decoration: BoxDecoration(boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.7),
+                      blurRadius: 40.0,
+                      spreadRadius: 1.0,
+                    ),
+                  ]),
                   child: Column(
                     children: <Widget>[
                       IconButton(
@@ -198,6 +273,13 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                   ),
                 ),
                 Container(
+                  decoration: BoxDecoration(boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.7),
+                      blurRadius: 40.0,
+                      spreadRadius: 1.0,
+                    ),
+                  ]),
                   child: Column(
                     children: <Widget>[
                       IconButton(
@@ -216,77 +298,128 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
               ],
             ),
           ),
-          boolInfo != false
-              ? Positioned(
-                  top: 90,
-                  right: 5,
-                  child: CustomPaint(
-                    painter: BorderPainter(),
-                    child: ClipPath(
-                        clipper: LinePathClass(),
-                        child: Container(
-                          width: 210,
-                          padding: EdgeInsets.only(top: 25, left: 10, right: 4),
-                          // margin: EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: 1, color: AppTheme.notWhite),
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(30.0),
-                                  bottomLeft: Radius.circular(30.0),
-                                  bottomRight: Radius.circular(30.0))),
-
-                          child: Column(
-                            children: <Widget>[
-                              widget.product.content != null
-                                  ? Row(
-                                      children: <Widget>[
-                                        Container(
-                                          child: Text(
-                                            widget.product.content,
-                                            style: TextStyle(
-                                                color: AppTheme.notWhite,
-                                                fontSize: 15,
-                                                fontFamily: "SpecialElite"),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          width: 120,
-                                        ),
-                                        widget.product.price != null
-                                            ? Text(
-                                                widget.product.price.toString(),
+          boolInfo 
+              ?Padding(
+            padding:  EdgeInsets.only(left: 50,right: 50,bottom:  (MediaQuery.of(context).size.height/2 ),top:100),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                  color: Colors.black.withOpacity(0.4)),
+              child: Expanded(
+                 child: Container(
+                   margin: EdgeInsets.all(20) ,
+                   child: Column(
+                                children: <Widget>[
+                                  widget.product.content != null
+                                      ? Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Container(
+                                              child: Text(
+                                                widget.product.content,
                                                 style: TextStyle(
                                                     color: AppTheme.notWhite,
-                                                    fontFamily: "SpecialElite",
-                                                    fontSize: 15))
-                                            : SizedBox()
-                                      ],
-                                    )
-                                  : SizedBox(),
-                              SizedBox(
-                                height: 5,
+                                                    fontSize: 18,
+                                                    fontFamily: "SpecialElite"),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            width: MediaQuery.of(context).size.width/3,
+                                            ),
+                                            widget.product.price != null
+                                                ? Text(
+                                                   widget.product.price==null?" ":
+                                                    widget.product.price
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        color: AppTheme.notWhite,
+                                                        fontFamily:
+                                                            "SpecialElite",
+                                                        fontSize: 18))
+                                                : SizedBox()
+                                          ],
+                                        )
+                                      : SizedBox(),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  widget.product.productExtra.length > 0 &&
+                                          widget.product.productExtra[0].name !=
+                                              null
+                                      ? Container(
+                                          color: Colors.white,
+                                          height: 1,
+                                        )
+                                      : SizedBox(),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Column(
+                                    children: getExtraProduct(
+                                        widget.product.productExtra),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  )
+                                ],
                               ),
-                              widget.product.productExtra.length > 0
-                                  ? Container(
-                                      color: Colors.white,
-                                      height: 1,
-                                    )
-                                  : SizedBox(),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Column(
-                                children: getExtraProduct(
-                                    widget.product.productExtra),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              )
-                            ],
-                          ),
-                        )),
-                  ))
-              : Container()
+                 ),
+
+              ),
+            ),
+          ):Container(),
+          Positioned(
+            right: 5.0,
+            bottom: 90,
+            child: Container(
+              decoration: BoxDecoration(boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.7),
+                  blurRadius: 40.0,
+                  spreadRadius: 1.0,
+                ),
+              ]),
+              child: IconButton(
+                icon: Icon(
+                  Icons.info,
+                  color: AppTheme.notWhite.withOpacity(0.7),
+                ),
+                 onPressed: (){
+
+                   setState(() {
+                     detailsInfo=!detailsInfo;
+                     if(detailsInfo){
+                       boolInfo=false;
+                     }       
+
+                   });
+                 },
+              ),
+            ),
+          ),
+       detailsInfo?   Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 70),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                  color: Colors.black.withOpacity(0.4)),
+              child: Expanded(
+                child: Container(
+                  margin: EdgeInsets.all(10),
+                  height: 1200,
+                  width: 600,
+                  child: Text(
+                     widget.product.details==null?" ":
+                    widget.product.details,
+                    style: TextStyle(
+                        color: AppTheme.notWhite,
+                        fontSize: 15,
+                        fontFamily: "SpecialElite"),
+                        textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
+          ):Container()
         ]),
       ),
     );
@@ -302,7 +435,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
             Text(e.name,
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 15,
+                    fontSize: 18,
                     fontFamily: "SpecialElite")),
             SizedBox(
               width: 5,
@@ -311,7 +444,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                 ? Text(e.price,
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 15,
+                        fontSize: 18,
                         fontFamily: "SpecialElite"))
                 : SizedBox()
           ],

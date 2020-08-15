@@ -13,6 +13,7 @@ import 'Screens/Main/NotificationScreen.dart';
 import 'Screens/Main/SearchScreen.dart';
 
 import 'Screens/Restaurant/ManageMenuScreen.dart';
+import 'Screens/Restaurant/RestaurantDetailPage.dart';
 import 'Screens/Splash/VideoSplashScreen1.dart';
 
 import 'Screens/Welcome/EntreyScreen.dart';
@@ -60,6 +61,10 @@ class MyApp extends StatelessWidget {
                   new NotificationScreen(),
               '/mangemenuscreen': (BuildContext context) =>
                   new ManageMenuScreen(),
+                   '/restaurantDetail': (BuildContext context) =>
+                  new RestaurantDetail(),
+
+                  
 
               /* '/root': (BuildContext context) => new RootScreen(),
             '/signin': (BuildContext context) => new SignInScreen(),

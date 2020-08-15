@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:foolife/Dto/ProductDto.dart';
 import 'package:foolife/Dto/RestaurantDto.dart';
@@ -13,10 +14,16 @@ class CategoriesScreen extends StatelessWidget {
   int restaurantid;
   int categoryId;
 
-  CategoriesScreen({this.categoryId,this.restaurantid});
+  CategoriesScreen({this.categoryId,this.restaurantid}){
+     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent ));
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
 
      body : FutureBuilder(

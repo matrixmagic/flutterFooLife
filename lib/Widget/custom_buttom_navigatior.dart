@@ -24,37 +24,18 @@ class CustomButtomNavigatior extends StatelessWidget {
               lastButtonPreesed = 1;
             }
             return Container(
-              decoration: BoxDecoration(
-                // borderRadius: BorderRadius.only(
-                // topLeft: Radius.circular(40.0),
-                //topRight: Radius.circular(40.0),
-                // ),
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: [
-                      0.1,
-                      0.2,
-                      0.5,
-                      0.8,
-                      0.9
-                    ],
-                    colors: [
-                      Colors.white.withOpacity(0.1),
-                      Colors.grey.withOpacity(0.4),
-                      Colors.grey.withOpacity(0.3),
-                      Colors.grey.withOpacity(0.4),
-                      Colors.white.withOpacity(0.1)
-                    ]),
-                //image: new DecorationImage(
-                //image: new AssetImage('assets/images/gray.jpg'),
-                //fit: BoxFit.cover,
-                //),
-              ),
+             
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   Container(
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.7),
+                        blurRadius: 40.0,
+                        spreadRadius: 1.0,
+                      ),
+                    ]),
                       child: IconButton(
                           icon: Icon(
                             Icons.home,
@@ -69,6 +50,13 @@ class CustomButtomNavigatior extends StatelessWidget {
                                 .pushReplacementNamed('/mainscreen');
                           })),
                   Container(
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.7),
+                        blurRadius: 40.0,
+                        spreadRadius: 1.0,
+                      ),
+                    ]),
                       child: IconButton(
                     icon: Icon(Icons.search,
                         color: AppTheme.notWhite
@@ -82,6 +70,13 @@ class CustomButtomNavigatior extends StatelessWidget {
                     },
                   )),
                   Container(
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.7),
+                        blurRadius: 40.0,
+                        spreadRadius: 1.0,
+                      ),
+                    ]),
                       child: IconButton(
                     icon: Icon(Icons.create,
                         color: AppTheme.notWhite
@@ -95,6 +90,13 @@ class CustomButtomNavigatior extends StatelessWidget {
                     },
                   )),
                   Container(
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.7),
+                        blurRadius: 40.0,
+                        spreadRadius: 1.0,
+                      ),
+                    ]),
                       child: IconButton(
                     icon: Icon(Icons.favorite,
                         color: AppTheme.notWhite
@@ -108,6 +110,13 @@ class CustomButtomNavigatior extends StatelessWidget {
                     },
                   )),
                   Container(
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.7),
+                        blurRadius: 40.0,
+                        spreadRadius: 1.0,
+                      ),
+                    ]),
                       child: IconButton(
                     icon: Icon(
                       Icons.person_outline,
@@ -120,7 +129,7 @@ class CustomButtomNavigatior extends StatelessWidget {
                       var validUser = await AuthRepository().CheckToken();
                       if (validUser == true) {
                         Navigator.of(context)
-                            .pushReplacementNamed('/mangemenuscreen');
+                            .pushReplacementNamed('/restaurantDetail');
                       } else
                         showDialog();
                     },

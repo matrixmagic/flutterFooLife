@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foolife/Dto/CategoryDto.dart';
+import 'package:foolife/Dto/RestaurantDto.dart';
 import 'package:foolife/Screens/Restaurant/CreatePostScreen.dart';
 import 'package:foolife/Widget/MenuBar.dart';
 import 'package:foolife/Widget/my_flutter_app_icons.dart';
@@ -8,20 +10,23 @@ import 'package:foolife/Widget/my_flutter_app_icons.dart';
 import 'package:foolife/Widget/stories_bar.dart';
 
 import '../AppTheme.dart';
+import 'my_flutter_app_icons3.dart';
+import 'qrcode1.dart';
 
 class CustomMainScreenWiget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _CustomMainScreenWiget();
   CustomMainScreenWiget(
-      {this.backgroundImage, this.restauranName, this.cateogries});
+      {this.backgroundImage, this.restauranDto, this.cateogries});
   String backgroundImage;
-  String restauranName;
+  RestaurantDto restauranDto;
   List<CategoryDto> cateogries;
 }
 
 class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
   bool mainScreenWidgetVisibility = true;
   bool postScreenWidgetVisibility = false;
+  bool info = false;
 
   void openCreatePostScreen() {
     setState(() {
@@ -36,6 +41,18 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
       postScreenWidgetVisibility = false;
     });
   }
+
+  List<String> images = [
+    'assets/images/Restaurant1.jpg',
+    'assets/images/Restaurant2.jpg',
+    'assets/images/Restaurant3.jpg',
+    'assets/images/Restaurant1.jpg',
+    'assets/images/Restaurant2.jpg',
+    'assets/images/Restaurant3.jpg',
+    'assets/images/Restaurant1.jpg',
+    'assets/images/Restaurant2.jpg',
+    'assets/images/Restaurant3.jpg',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +78,18 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
               children: <Widget>[
                 Padding(
                   child: Center(
-                    child: Text(
-                      widget.restauranName,
-                      style: TextStyle(color: Colors.white, fontSize: 22),
+                    child: Container(
+                      decoration: BoxDecoration(boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.7),
+                          blurRadius: 40.0,
+                          spreadRadius: 1.0,
+                        ),
+                      ]),
+                      child: Text(
+                        widget.restauranDto.name,
+                        style: TextStyle(color: Colors.white, fontSize: 22),
+                      ),
                     ),
                   ),
                   padding: EdgeInsets.only(
@@ -84,13 +110,22 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
                   Container(
                     child: Column(
                       children: <Widget>[
-                        IconButton(
-                          padding: EdgeInsets.all(0),
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.favorite,
-                            size: 31,
-                            color: Colors.white.withOpacity(0.8),
+                        Container(
+                          decoration: BoxDecoration(boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.7),
+                              blurRadius: 40.0,
+                              spreadRadius: 1.0,
+                            ),
+                          ]),
+                          child: IconButton(
+                            padding: EdgeInsets.all(0),
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.favorite,
+                              size: 31,
+                              color: Colors.white.withOpacity(0.8),
+                            ),
                           ),
                         ),
                         Text(
@@ -104,83 +139,120 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
                   Container(
                     child: Column(
                       children: <Widget>[
-                        IconButton(
-                          icon: Icon(
-                            Icons.star,
-                            size: 31,
-                            color: Colors.white.withOpacity(0.6),
+                        Container(
+                          decoration: BoxDecoration(boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.7),
+                              blurRadius: 40.0,
+                              spreadRadius: 1.0,
+                            ),
+                          ]),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.star,
+                              size: 31,
+                              color: Colors.white.withOpacity(0.8),
+                            ),
                           ),
                         ),
                         Text('22',
                             style: TextStyle(
-                              color: Colors.white.withOpacity(0.8),
+                              color: Colors.white.withOpacity(1),
                             ))
                       ],
                     ),
                   ),
-                  Container(
-                    child: Column(
-                      children: <Widget>[
-                        IconButton(
+                  Column(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.7),
+                            blurRadius: 40.0,
+                            spreadRadius: 1.0,
+                          ),
+                        ]),
+                        child: IconButton(
                           icon: Icon(
                             Icons.person,
                             size: 31,
                             color: Colors.white.withOpacity(0.8),
                           ),
                         ),
-                        Text('22',
-                            style:
-                                TextStyle(color: Colors.white.withOpacity(0.8)))
-                      ],
-                    ),
+                      ),
+                      Text('22',
+                          style:
+                              TextStyle(color: Colors.white.withOpacity(0.8)))
+                    ],
                   ),
-                  Container(
-                    child: Column(
-                      children: <Widget>[
-                        IconButton(
+                  Column(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.7),
+                            blurRadius: 40.0,
+                            spreadRadius: 1.0,
+                          ),
+                        ]),
+                        child: IconButton(
                           icon: Icon(
                             Icons.share,
                             size: 31,
                             color: Colors.white.withOpacity(0.8),
                           ),
                         ),
-                        Text('22',
-                            style:
-                                TextStyle(color: Colors.white.withOpacity(0.8)))
-                      ],
-                    ),
+                      ),
+                      Text('22',
+                          style:
+                              TextStyle(color: Colors.white.withOpacity(0.8)))
+                    ],
                   ),
-                  Container(
-                    child: Column(
-                      children: <Widget>[
-                        IconButton(
+                  Column(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.7),
+                            blurRadius: 40.0,
+                            spreadRadius: 1.0,
+                          ),
+                        ]),
+                        child: IconButton(
                           icon: Icon(
                             MyFlutterApp.kellner_option,
                             size: 31,
                             color: Colors.white.withOpacity(0.8),
                           ),
                         ),
-                        Text('22',
-                            style:
-                                TextStyle(color: Colors.white.withOpacity(0.8)))
-                      ],
-                    ),
+                      ),
+                      Text('22',
+                          style:
+                              TextStyle(color: Colors.white.withOpacity(0.8)))
+                    ],
                   ),
-                  Container(
-                    child: Column(
-                      children: <Widget>[
-                        IconButton(
+                  Column(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.7),
+                            blurRadius: 40.0,
+                            spreadRadius: 1.0,
+                          ),
+                        ]),
+                        child: IconButton(
                           icon: Icon(
                             Icons.insert_comment,
                             size: 31,
                             color: Colors.white.withOpacity(0.8),
                           ),
                         ),
-                        Text('22',
-                            style:
-                                TextStyle(color: Colors.white.withOpacity(0.8)))
-                      ],
-                    ),
+                      ),
+                      Text('22',
+                          style:
+                              TextStyle(color: Colors.white.withOpacity(0.8)))
+                    ],
                   ),
                 ],
               ),
@@ -188,15 +260,79 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
           ),
           Positioned(
               right: 5.0,
-              bottom: 67,
+              bottom: 90,
               child: mainScreenWidgetVisibility
                   ? Container(
-                      child: IconButton(
-                      icon: Icon(
-                        Icons.edit,
-                        color: AppTheme.notWhite,
-                      ),
-                      onPressed: openCreatePostScreen,
+                      child: Column(
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.7),
+                              blurRadius: 40.0,
+                              spreadRadius: 1.0,
+                            ),
+                          ]),
+                          child: IconButton(
+                            icon: Icon(
+                              qrcode1.ddd__1_,
+                              color: AppTheme.notWhite.withOpacity(0.7),
+                            ),
+                            onPressed: openCreatePostScreen,
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.7),
+                              blurRadius: 40.0,
+                              spreadRadius: 1.0,
+                            ),
+                          ]),
+                          child: IconButton(
+                            icon: Icon(
+                              StoryICons.burning_meteor,
+                              color: AppTheme.notWhite.withOpacity(0.7),
+                            ),
+                            onPressed: openCreatePostScreen,
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.7),
+                              blurRadius: 40.0,
+                              spreadRadius: 1.0,
+                            ),
+                          ]),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.edit,
+                              color: AppTheme.notWhite.withOpacity(0.7),
+                            ),
+                            onPressed: openCreatePostScreen,
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.7),
+                              blurRadius: 40.0,
+                              spreadRadius: 1.0,
+                            ),
+                          ]),
+                          child: IconButton(
+                              icon: Icon(
+                                Icons.info,
+                                color: AppTheme.notWhite.withOpacity(0.7),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  info = !info;
+                                });
+                              }),
+                        )
+                      ],
                     ))
                   : Container(
                       child: IconButton(
@@ -207,12 +343,6 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
                       ),
                       onPressed: closeCreatePostScreen,
                     ))),
-          Positioned(
-            top: 26,
-            left: 5.0,
-            right: 5.0,
-            child: Container(child: storiesBar()),
-          ),
           Visibility(
             visible: mainScreenWidgetVisibility,
             child: widget.cateogries != null && widget.cateogries.length > 0
@@ -223,9 +353,186 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
                         width: 500,
                         child: MenuBar(items: widget.cateogries)))
                 : Container(),
-          )
+          ),
+          info
+              ? Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 70),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                        gradient: LinearGradient(colors: [Colors.green.withOpacity(0.4),Colors.pinkAccent.withOpacity(0.4)]),
+                      ),
+                    child: Expanded(
+                      child: Container(
+                        margin: EdgeInsets.all(10),
+                        height: 1200,
+                        width: 400,
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                                    
+                                    child: Text(widget.restauranDto.name
+                                      ,textAlign: TextAlign.start,
+                                      style: AppTheme.insperryTheme,
+                                    ),
+                                  ),
+                             Container(
+                                    
+                                    child: Text("United Kingdom"
+                                      ,textAlign: TextAlign.start,
+                                      style: AppTheme.insperryTheme,
+                                    ),
+                                  ),
+                           
+                           
+                              
+                            Text(
+                              widget.restauranDto.city +", "+ widget.restauranDto.street,
+                              style: AppTheme.insperryTheme,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(width: 50,),
+                                Container(
+                                  width: 120,
+                                  child: Text(
+                                    "telephon:",textAlign: TextAlign.start,
+                                    style: AppTheme.insperryTheme,
+                                  ),
+                                ),
+                                Text(
+                                  widget.restauranDto.user.phoneNumber  ,
+                                  style: AppTheme.insperryTheme,
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(width: 50,),
+                                Container(
+                                  width: 120,
+                                  child: Text(
+                                    "fax:",
+                                    style: AppTheme.insperryTheme,
+                                  ),
+                                ),
+                                Text(
+                                  widget.restauranDto.fax,
+                                  style: AppTheme.insperryTheme,
+                                )
+                              ],
+                            ),
+                             Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(width: 50,),
+                                Container(
+                                  width: 120,
+                                  child: Text(
+                                    "Email:",textAlign: TextAlign.start,
+                                    style: AppTheme.insperryTheme,
+                                  ),
+                                ),
+                                Text(
+                                  widget.restauranDto.user.email  ,
+                                  style: AppTheme.insperryTheme,
+                                )
+                              ],
+                            ),
+                           
+                            Container(
+                              width: 120,
+                              child: Text(
+                                "openingtime:",
+                                style: AppTheme.insperryTheme,
+                              ),
+                            ),
+                             Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(width:50),
+                                Container(
+                                  width:120,
+                                  child: Text(
+                                    "opentime:",
+                                    style: AppTheme.insperryTheme,
+                                  ),
+                                ),
+                                Text(
+                                  widget.restauranDto.openTime,
+                                  style: AppTheme.insperryTheme,
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(width:50),
+                                Container(
+                                  width:120,
+                                  child: Text(
+                                    "closetime:",
+                                    style: AppTheme.insperryTheme,
+                                  ),
+                                ),
+                                Text(
+                                  widget.restauranDto.closeTime,
+                                  style: AppTheme.insperryTheme,
+                                )
+                              ],
+                            ),
+                             Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(width:50),
+                                Container(
+                                  width:120,
+                                  child: Text(
+                                    "Payment Method:",
+                                    style: AppTheme.insperryTheme,
+                                  ),
+                                ),
+                                Wrap(children: getPaymentMethod(),)
+                               
+
+                              ],
+                            ),
+                            Wrap(
+                              alignment: WrapAlignment.center,
+                              children: <Widget>[
+                        
+                              Container(margin: EdgeInsets.all(8), child: widget.restauranDto.services.gamepad == 1? Icon(  FontAwesomeIcons.gamepad ,color: AppTheme.primaryColor ,size: 35,):Container()),
+                              Container(margin: EdgeInsets.all(8),child: widget.restauranDto.services.accessible == 1? Icon( Icons.accessible ,color: AppTheme.primaryColor,size: 35,):Container()),
+                              Container(margin: EdgeInsets.all(8),child: widget.restauranDto.services.childfriendly == 1? Icon( Icons.child_friendly ,color: AppTheme.primaryColor,size: 35,):Container()),
+                              Container(margin: EdgeInsets.all(8),child: widget.restauranDto.services.wifi == 1? Icon( Icons.wifi ,color: AppTheme.primaryColor,size: 35,):Container()),
+                              Container(margin: EdgeInsets.all(8),child: widget.restauranDto.services.power == 1? Icon( Icons.power ,color: AppTheme.primaryColor,size: 35,):Container()),
+                              Container(margin: EdgeInsets.all(8),child: widget.restauranDto.services.pets == 1? Icon( Icons.pets ,color: AppTheme.primaryColor,size: 35,):Container()),
+                            ],) 
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              : Container()
         ]),
       ),
     );
+  }
+
+  List<Widget> getPaymentMethod(){
+    bool isfirst = true;
+    return widget.restauranDto.paymentsMethod.map((e) {
+      print(e.name);
+      var text= Text( isfirst?"":" , "+ e.name ,style: AppTheme.insperryTheme,);
+    isfirst = false;
+    return text;
+    }
+    ).toList();
+
+
   }
 }

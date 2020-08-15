@@ -420,7 +420,13 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                     child: Image.asset("assets/images/Icon awesome-user-friends.png",width: 30,height: 30,)
                 ),
                 SizedBox(width: 25,),
-                Image.asset("assets/images/Icon feather-settings.png",width: 30,height: 30,),
+               
+                InkWell(
+                  onTap: (){
+                     Navigator.pushNamed(context, '/mangemenuscreen');
+                  },
+                  child:  Image.asset("assets/images/Icon feather-settings.png",width: 30,height: 30,),
+                )
               ],
             ),
           )

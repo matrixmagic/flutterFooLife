@@ -16,9 +16,6 @@ class _ManageMenuScreenState extends State<ManageMenuScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    
-    SystemChrome.setEnabledSystemUIOverlays([]);
-
   }
   @override
   Widget build(BuildContext context) {

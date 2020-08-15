@@ -21,6 +21,11 @@ class AppTheme {
   static const Color redText = Color(0xFFff3840);
   static const String fontName = 'WorkSans';
 
+  static const TextStyle insperryTheme = TextStyle(
+                        color: AppTheme.notWhite,
+                        fontSize: 17,
+                        fontFamily: "SpecialElite");
+
   static const TextTheme textTheme = TextTheme(
     display1: display1,
     headline: headline,
