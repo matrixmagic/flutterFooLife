@@ -7,11 +7,15 @@ import 'package:foolife/Dto/CategorySearchDto.dart';
 import 'package:foolife/Dto/ProductDto.dart';
 import 'package:foolife/Dto/RestaurantDto.dart';
 import 'package:foolife/Dto/RestaurantServicesDto.dart';
+import 'package:foolife/Dto/StatisticDto.dart';
 
 import 'package:foolife/Dto/UserDto.dart';
 
 import 'package:foolife/Models/ApiResponse.dart';
 import 'package:foolife/Network/ApiProvider.dart';
+
+import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class RestaurantRepository {
   ApiProvider api = new ApiProvider();
@@ -94,31 +98,38 @@ Future<List<ProductDto>> getAllProductInCatgory(int categoryId,int restaurantId 
       print(e.toString());
     }
   }
-Future<List<RestaurantDto>>  gatAllResturants() async {
-  try{
- var response = await api.get("gatAllResturants");
 
-      var data = ApiResponse.fromJson(json.decode(response.body));
-  
-      if (data.success == true) {
-        print("waka waka");
-        List<RestaurantDto> lst = new List<RestaurantDto>();
-        data.data.forEach((v) {
-          lst.add(new RestaurantDto.fromJson(v));
-        });
-        
+  Future<List<RestaurantDto>>  gatAllResturants() async {
 
-        print("biiila");
-        return lst;
-      } else
-        return null;
-    } catch (e) {
-      print("ohh shit");
-      print(e.toString());
-    }
+    try{
+     var response = await api.get("gatAllResturants");
+
+     print("status code" +response.statusCode.toString());
+     var data = ApiResponse.fromJson(json.decode(response.body));
+
+          if (data.success == true) {
+            print("waka waka");
+            List<RestaurantDto> lst = new List<RestaurantDto>();
+            data.data.forEach((v) {
+              lst.add(new RestaurantDto.fromJson(v));
+            });
+
+
+            print("biiila");
+            return lst;
+          } else
+            print("get nothing");
+            return null;
+        } catch (e) {
+          print("ohh shit");
+          print(e.toString());
+        }
 
 
 }
+
+
+
 Future<List<CategoryDto>>  getRestrantCategory(int restauratId) async {
   try{
 
@@ -146,6 +157,43 @@ Future<List<CategoryDto>>  getRestrantCategory(int restauratId) async {
 
 
 }
+
+  Future<List<StatisticDto>>  getRestaurantStatistic(String chart_id,DateTime date,String time) async {
+
+    var dt = date;
+    var newFormat = DateFormat("yyyy-MM-dd");
+    String updatedDt = newFormat.format(dt);
+
+    try{
+      var map = new Map<String, dynamic>();
+      map['chart_id'] = chart_id;
+      map['date'] = updatedDt;
+      map['time'] = time;
+
+      var response = await api.post("getResturantStatistic",map);
+
+      print(response.body);
+
+      var data = ApiResponse.fromJson(json.decode(response.body));
+
+      if (data.success == true) {
+        print("Well done");
+        List<StatisticDto> staticList = new List<StatisticDto>();
+        data.data.forEach((v) {
+          staticList.add(new StatisticDto.fromJson(v));
+        });
+        return staticList;
+      } else
+        return null;
+    } catch (e) {
+      print("something wrong in getResturantStatistic");
+      print(e.toString());
+      return e;
+    }
+
+
+  }
+
 
 }
 
