@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foolife/Screens/Restaurant/ExplorerScreen.dart';
+import 'package:foolife/Widget/custom_buttom_navigatior.dart';
 
 import 'ProductsPrice.dart';
 
@@ -10,57 +11,57 @@ class ManageMenuScreen extends StatefulWidget {
 }
 
 class _ManageMenuScreenState extends State<ManageMenuScreen> {
-
-
-    @override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: DefaultTabController(
-        length: 3,
-        child: Scaffold(
-            
-            body: Column(
+        child: DefaultTabController(
+            length: 3,
+            child: Scaffold(
+                body: Stack(
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.fromLTRB(10.0, 10, 10, 10),
-                  child: Card(
-                    child: Column(
-                      children: <Widget>[
-                        TabBar(tabs: [
-            Tab(text: 'Category',
-              
-            ),
-            Tab( text: 'Price',
-            
-            ),
-            Tab( text: 'Time',
-              
-            ),
-          
-          
-              ]),
-              
-                        
-                      ],
+                Column(children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(10.0, 10, 10, 10),
+                    child: Card(
+                      child: Column(
+                        children: <Widget>[
+                          TabBar(tabs: [
+                            Tab(
+                              text: 'Category',
+                            ),
+                            Tab(
+                              text: 'Price',
+                            ),
+                            Tab(
+                              text: 'Time',
+                            ),
+                          ]),
+                        ],
+                      ),
                     ),
                   ),
+                  Expanded(
+                      child: TabBarView(
+                    children: <Widget>[
+                      ExplorerScreen(title: "beka beka", path: "/mobile/ddd"),
+                      PorductPrice(),
+                      ExplorerScreen(title: "beka beka", path: "/mobile/ddd")
+                    ],
+                  )),
+                ]),
+                Positioned(
+                  bottom: 0,
+                  left: 5.0,
+                  right: 5.0,
+                  child: CustomButtomNavigatior(),
                 ),
-                Expanded( child: 
-             TabBarView(children: <Widget>[
-            ExplorerScreen(title: "beka beka", path: "/mobile/ddd"),
-            PorductPrice(),
-            ExplorerScreen(title: "beka beka", path: "/mobile/ddd")
-
-
-                
               ],
-            )),
-      
-               ] ))));
+            ))));
   }
 }

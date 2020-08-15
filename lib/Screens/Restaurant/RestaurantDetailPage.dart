@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:foolife/Dto/StatisticDto.dart';
 import 'package:foolife/Repository/RestaurantRepository.dart';
+import 'package:foolife/Widget/custom_buttom_navigatior.dart';
 import 'package:foolife/Widget/dateTimeChart.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -25,7 +26,6 @@ class RestaurantDetail extends StatefulWidget {
 }
 
 class _RestaurantDetailState extends State<RestaurantDetail> {
-
   GlobalKey globalKey = GlobalKey();
   List<String> images = [
     'assets/images/Restaurant1.jpg',
@@ -38,13 +38,13 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
     'assets/images/Restaurant2.jpg',
     'assets/images/Restaurant3.jpg',
   ];
-  Map<int,bool> appear= new Map<int,bool>();
+  Map<int, bool> appear = new Map<int, bool>();
   int index = 0;
-  var date = DateTime(2019,11,1);
-  String time ='1';
-  String chartId='1';
+  var date = DateTime(2019, 11, 1);
+  String time = '1';
+  String chartId = '1';
 
-  addStory(String img){
+  addStory(String img) {
     List<String> newList = [];
     newList.add(img);
     newList.addAll(images);
@@ -52,19 +52,19 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
     return newList;
   }
 
-  addBool(){
-    Map<int,bool> NewAppear= new Map<int,bool>();
-    NewAppear[0]=true;
-    for(int i =0; i<appear.length;i++){
-      NewAppear[i+1]=appear[i];
+  addBool() {
+    Map<int, bool> NewAppear = new Map<int, bool>();
+    NewAppear[0] = true;
+    for (int i = 0; i < appear.length; i++) {
+      NewAppear[i + 1] = appear[i];
     }
     return NewAppear;
   }
 
-
   Future<void> _getQrCodeBytes() async {
-    try{
-      RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
+    try {
+      RenderRepaintBoundary boundary =
+          globalKey.currentContext.findRenderObject();
       final image = await boundary.toImage(pixelRatio: 10.0);
       ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
       Uint8List pngBytes = byteData.buffer.asUint8List();
@@ -72,65 +72,64 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
       var _image = MemoryImage(pngBytes);
       final doc = pw.Document();
 
-      final PdfImage imagePdf = await pdfImageFromImageProvider(pdf: doc.document, image: _image);
+      final PdfImage imagePdf =
+          await pdfImageFromImageProvider(pdf: doc.document, image: _image);
 
-      doc.addPage(pw.Page(
-          build: (pw.Context context) {
-            return pw.Container(
-              color: PdfColors.white,
-              child: pw.Center(
-                child: pw.Image(imagePdf,fit:pw.BoxFit.contain),
-              )
-            ); // Center
-          }));
+      doc.addPage(pw.Page(build: (pw.Context context) {
+        return pw.Container(
+            color: PdfColors.white,
+            child: pw.Center(
+              child: pw.Image(imagePdf, fit: pw.BoxFit.contain),
+            )); // Center
+      }));
       await Printing.layoutPdf(
           onLayout: (PdfPageFormat format) async => doc.save());
-    }catch(e){
-      print("excption:"+e);
+    } catch (e) {
+      print("excption:" + e);
     }
   }
 
   Future<void> shareQrCode() async {
-    try{
-      RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
+    try {
+      RenderRepaintBoundary boundary =
+          globalKey.currentContext.findRenderObject();
       final image = await boundary.toImage(pixelRatio: 10.0);
       ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
       Uint8List pngBytes = byteData.buffer.asUint8List();
-      await Share.file('QrCode', 'QrCode.png', pngBytes.buffer.asUint8List(), 'qrcode/png', text: 'This is the image of generated QrCode...');
-
-    }catch(e){
-      print("excption:"+e);
+      await Share.file(
+          'QrCode', 'QrCode.png', pngBytes.buffer.asUint8List(), 'qrcode/png',
+          text: 'This is the image of generated QrCode...');
+    } catch (e) {
+      print("excption:" + e);
     }
   }
 
-  printQrCode() async{
+  printQrCode() async {
     final doc = pw.Document();
     const imageProvider = const AssetImage('assets/images/burger.jpeg');
-    final PdfImage image = await pdfImageFromImageProvider(pdf: doc.document, image: imageProvider);
+    final PdfImage image = await pdfImageFromImageProvider(
+        pdf: doc.document, image: imageProvider);
 
-    doc.addPage(pw.Page(
-        build: (pw.Context context) {
-          return pw.Center(
-            child: pw.Image(image),
-          ); // Center
-        }
-        )
-    );
+    doc.addPage(pw.Page(build: (pw.Context context) {
+      return pw.Center(
+        child: pw.Image(image),
+      ); // Center
+    }));
     final output = await getTemporaryDirectory();
     final file = File("${output.path}/example.pdf");
     await file.writeAsBytes(doc.save());
     print(output.path);
 
-    await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => doc.save());
-
+    await Printing.layoutPdf(
+        onLayout: (PdfPageFormat format) async => doc.save());
   }
 
   @override
   void initState() {
     // TODO: implement initState
-    for(int i =0;i<images.length;i++){
+    for (int i = 0; i < images.length; i++) {
       setState(() {
-        appear[i]=true;
+        appear[i] = true;
       });
     }
     super.initState();
@@ -139,18 +138,16 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:ListView(
-        padding: EdgeInsets.all(0),
+        body: Stack(children: <Widget>[
+      Column(
         children: <Widget>[
           //title
           Padding(
-            padding: EdgeInsets.only(top:20,bottom: 5),
+            padding: EdgeInsets.only(top: 10, bottom: 5),
             child: Center(
               child: Text(
                 "Extrablatt am Schillerplatz",
-                style: TextStyle(
-                  fontSize: 18
-                ),
+                style: TextStyle(fontSize: 17),
               ),
             ),
           ),
@@ -166,12 +163,12 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
+                        width: 70,
+                        height: 70,
+                        decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color:Color.fromRGBO(112, 112, 112, 1.0),
-                      ),
+                          color: Color.fromRGBO(112, 112, 112, 1.0),
+                        ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -185,9 +182,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                               ),
                             ),
                           ],
-
-                        )
-                    ),
+                        )),
                   ],
                 ),
                 //logo image
@@ -195,14 +190,13 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      width: 80,
-                      height: 80,
+                      width: 70,
+                      height: 70,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
                             image: AssetImage('assets/images/NoPath.png'),
-                            fit: BoxFit.fill
-                        ),
+                            fit: BoxFit.fill),
                       ),
                     ),
                   ],
@@ -213,28 +207,28 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
 
           //sharing and printing qrcode
           Padding(
-              padding: const EdgeInsets.only(left: 80,top:7,bottom:7),
-            child:Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                //print QrCode in pdf format
-                InkWell(
-                  onTap:(){
-                    _getQrCodeBytes();
-                  },
-                    child: Image.asset("assets/images/Icon feather-printer.png")
-                ),
-                SizedBox(width:15),
+              padding: const EdgeInsets.only(left: 80, top: 7, bottom: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  //print QrCode in pdf format
+                  InkWell(
+                      onTap: () {
+                        _getQrCodeBytes();
+                      },
+                      child: Image.asset(
+                          "assets/images/Icon feather-printer.png")),
+                  SizedBox(width: 15),
 
-                //sharing qrcode
-                InkWell(
-                  onTap: () async{
-                    shareQrCode();
-                  },
-                    child: Image.asset("assets/images/Icon feather-share-3.png")),
-              ],
-            )
-          ),
+                  //sharing qrcode
+                  InkWell(
+                      onTap: () async {
+                        shareQrCode();
+                      },
+                      child: Image.asset(
+                          "assets/images/Icon feather-share-3.png")),
+                ],
+              )),
 
           //spacer
           Padding(
@@ -246,40 +240,39 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
           ),
 
           //stories list
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            child: storiesBar(images:images,appear: appear,),
+          storiesBar(
+            images: images,
+            appear: appear,
           ),
 
           //Allgemeine statistik
           Padding(
-            padding: const EdgeInsets.only(bottom: 20),
+            padding: const EdgeInsets.only(bottom: 5),
             child: Container(
-              height: 36,
+              height: 24,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(25),
-                    bottomRight: Radius.circular(25)
-                ),
+                    bottomRight: Radius.circular(25)),
                 boxShadow: [
                   BoxShadow(
-                    color: Color.fromRGBO(0, 0, 0, 0.16),
-                    offset: Offset(0, 3),
-                    blurRadius: 6// changes position of shadow
-                  ),
+                      color: Color.fromRGBO(0, 0, 0, 0.16),
+                      offset: Offset(0, 3),
+                      blurRadius: 6 // changes position of shadow
+                      ),
                 ],
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                      "Allgemeine Statistik",
-                    style: TextStyle(
-                      fontSize: 15
-                    ),
+                    "Allgemeine Statistik",
+                    style: TextStyle(fontSize: 15),
                   ),
-                  SizedBox(width: 6,),
+                  SizedBox(
+                    width: 6,
+                  ),
                   Image.asset("assets/images/Icon open-graph.png")
                 ],
               ),
@@ -294,26 +287,29 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
 
           //graph
           FutureBuilder<Object>(
-              future:  RestaurantRepository().getRestaurantStatistic(chartId,date,time),
+              future: RestaurantRepository()
+                  .getRestaurantStatistic(chartId, date, time),
               builder: (context, snapshot) {
                 if (snapshot.hasData &&
                     snapshot.connectionState == ConnectionState.done) {
                   List<StatisticDto> statistics = snapshot.data;
                   print(statistics.length);
-                  List<charts.Series<TimeSeriesSales, DateTime>> _createSampleData() {
-
+                  List<charts.Series<TimeSeriesSales, DateTime>>
+                      _createSampleData() {
                     List<TimeSeriesSales> tableSalesData = [];
 
-                    for (int i =1;i<statistics.length;i++){
+                    for (int i = 1; i < statistics.length; i++) {
                       DateTime todayDate = DateTime.parse(statistics[i].date);
                       print(todayDate);
-                      tableSalesData.add(new TimeSeriesSales(todayDate, statistics[i].count));
+                      tableSalesData.add(
+                          new TimeSeriesSales(todayDate, statistics[i].count));
                     }
 
                     return [
                       new charts.Series<TimeSeriesSales, DateTime>(
                         id: 'Tablet',
-                        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+                        colorFn: (_, __) =>
+                            charts.MaterialPalette.blue.shadeDefault,
                         domainFn: (TimeSeriesSales sales, _) => sales.time,
                         measureFn: (TimeSeriesSales sales, _) => sales.sales,
                         measureUpperBoundFn: (datum, index) => 100,
@@ -322,69 +318,69 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                       )
                     ];
                   }
-                  List<charts.Series> series=_createSampleData();
+
+                  List<charts.Series> series = _createSampleData();
                   return SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Container(
-                      height: 200,width: 2800,
+                      height: (MediaQuery.of(context).size.height / 4.40),
+                      width: 2800,
                       child: DateTimeComboLinePointChart(series),
                     ),
                   );
-
-                }else if (snapshot.connectionState == ConnectionState.waiting){
+                } else if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
                   return Container(
-                      height:200,
+                      height: (MediaQuery.of(context).size.height / 4.35),
                       child: Center(
-                          child: CircularProgressIndicator(backgroundColor: Colors.blue,)
-                      )
-                  );
-                }else{
+                          child: CircularProgressIndicator(
+                        backgroundColor: Colors.blue,
+                      )));
+                } else {
                   return Container(
-                    height:200,
+                    height: (MediaQuery.of(context).size.height / 4.35),
                   );
                 }
-              }
-          ),
+              }),
 
           //determine day or month or year
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 InkWell(
-                  onTap:(){
+                  onTap: () {
                     setState(() {
-                      time='1';
+                      time = '1';
                     });
                   },
                   child: Text(
-                      "Day",
-                    style: TextStyle(
-                      fontSize: 15
-                    ),
+                    "Day",
+                    style: TextStyle(fontSize: 15),
                   ),
                 ),
-
                 InkWell(
-                  onTap:(){
+                  onTap: () {
                     setState(() {
-                      time='2';
+                      time = '2';
                     });
                   },
-                  child:Text("Month",style: TextStyle(
-                      fontSize: 15
-                  ),),
+                  child: Text(
+                    "Month",
+                    style: TextStyle(fontSize: 15),
+                  ),
                 ),
                 InkWell(
-                  onTap:(){
+                  onTap: () {
                     setState(() {
-                      time='3';
+                      time = '3';
                     });
                   },
-                  child: Text("Year",style: TextStyle(
-                      fontSize: 15
-                  ),),
+                  child: Text(
+                    "Year",
+                    style: TextStyle(fontSize: 15),
+                  ),
                 ),
               ],
             ),
@@ -392,50 +388,71 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
 
           //buttons
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 17,vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 4),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 InkWell(
-                  onTap:(){
-                    setState(() {
-                      images = addStory("assets/images/burger.jpeg");
-                      appear = addBool();
-                    });
-                  },
-                    child: Image.asset("assets/images/Story Plus.png",)
+                    onTap: () {
+                      setState(() {
+                        images = addStory("assets/images/burger.jpeg");
+                        appear = addBool();
+                      });
+                    },
+                    child: Image.asset(
+                      "assets/images/Story Plus.png",
+                    )),
+                SizedBox(
+                  width: 25,
                 ),
-                SizedBox(width: 25,),
-                Image.asset("assets/images/Icon simple-producthunt.png",width: 30,height: 30,),
-                SizedBox(width: 25,),
-                InkWell(
-                  onTap: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => FriendPage()
-                      ),
-                    );
-                  },
-                    child: Image.asset("assets/images/Icon awesome-user-friends.png",width: 30,height: 30,)
+                Image.asset(
+                  "assets/images/Icon simple-producthunt.png",
+                  width: 30,
+                  height: 30,
                 ),
-                SizedBox(width: 25,),
-               
+                SizedBox(
+                  width: 25,
+                ),
                 InkWell(
-                  onTap: (){
-                     Navigator.pushNamed(context, '/mangemenuscreen');
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => FriendPage()),
+                      );
+                    },
+                    child: Image.asset(
+                      "assets/images/Icon awesome-user-friends.png",
+                      width: 30,
+                      height: 30,
+                    )),
+                SizedBox(
+                  width: 25,
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/mangemenuscreen');
                   },
-                  child:  Image.asset("assets/images/Icon feather-settings.png",width: 30,height: 30,),
+                  child: Image.asset(
+                    "assets/images/Icon feather-settings.png",
+                    width: 30,
+                    height: 30,
+                  ),
                 )
               ],
             ),
           )
-
         ],
-      )
-    );
+      ),
+      Positioned(
+        bottom: 0,
+        left: 5.0,
+        right: 5.0,
+        child: CustomButtomNavigatior(),
+      ),
+    ]));
   }
-  Container createListView(){
+
+  Container createListView() {
     return Container(
       height: 100,
       child: ListView(
@@ -443,9 +460,9 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
         scrollDirection: Axis.horizontal,
         children: <Widget>[
           InkWell(
-            onTap: (){
+            onTap: () {
               setState(() {
-                chartId='0';
+                chartId = '0';
               });
             },
             child: Padding(
@@ -453,7 +470,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    width:30,height:30,
+                    width: 30,
+                    height: 30,
                     child: new DecoratedBox(
                       decoration: new BoxDecoration(
                         image: new DecorationImage(
@@ -463,18 +481,22 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 2,),
+                  SizedBox(
+                    height: 2,
+                  ),
                   Text("Sesucher"),
-                  SizedBox(height: 2,),
+                  SizedBox(
+                    height: 2,
+                  ),
                   Text("268K")
                 ],
               ),
             ),
           ),
           InkWell(
-            onTap: (){
+            onTap: () {
               setState(() {
-                chartId='1';
+                chartId = '1';
               });
             },
             child: Padding(
@@ -482,7 +504,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    width:30,height:30,
+                    width: 30,
+                    height: 30,
                     child: new DecoratedBox(
                       decoration: new BoxDecoration(
                         image: new DecorationImage(
@@ -499,9 +522,9 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
             ),
           ),
           InkWell(
-            onTap: (){
+            onTap: () {
               setState(() {
-                chartId='2';
+                chartId = '2';
               });
             },
             child: Padding(
@@ -509,7 +532,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    width:30,height:30,
+                    width: 30,
+                    height: 30,
                     child: new DecoratedBox(
                       decoration: new BoxDecoration(
                         image: new DecorationImage(
@@ -526,9 +550,9 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
             ),
           ),
           InkWell(
-            onTap: (){
+            onTap: () {
               setState(() {
-                chartId='3';
+                chartId = '3';
               });
             },
             child: Padding(
@@ -536,7 +560,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    width:30,height:30,
+                    width: 30,
+                    height: 30,
                     child: new DecoratedBox(
                       decoration: new BoxDecoration(
                         image: new DecorationImage(
@@ -553,9 +578,9 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
             ),
           ),
           InkWell(
-            onTap: (){
+            onTap: () {
               setState(() {
-                chartId='4';
+                chartId = '4';
               });
             },
             child: Padding(
@@ -563,7 +588,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    width:30,height:30,
+                    width: 30,
+                    height: 30,
                     child: new DecoratedBox(
                       decoration: new BoxDecoration(
                         image: new DecorationImage(
@@ -580,9 +606,9 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
             ),
           ),
           InkWell(
-            onTap: (){
+            onTap: () {
               setState(() {
-                chartId='5';
+                chartId = '5';
               });
             },
             child: Padding(
@@ -590,7 +616,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    width:30,height:30,
+                    width: 30,
+                    height: 30,
                     child: new DecoratedBox(
                       decoration: new BoxDecoration(
                         image: new DecorationImage(
@@ -607,9 +634,9 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
             ),
           ),
           InkWell(
-            onTap: (){
+            onTap: () {
               setState(() {
-                chartId='6';
+                chartId = '6';
               });
             },
             child: Padding(
@@ -617,11 +644,13 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    width:30,height:30,
+                    width: 30,
+                    height: 30,
                     child: new DecoratedBox(
                       decoration: new BoxDecoration(
                         image: new DecorationImage(
-                          image: new AssetImage("assets/images/Service Beschwerden.png"),
+                          image: new AssetImage(
+                              "assets/images/Service Beschwerden.png"),
                           fit: BoxFit.contain,
                         ),
                       ),
@@ -634,21 +663,23 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
             ),
           ),
           InkWell(
-            onTap: (){
+            onTap: () {
               setState(() {
-                chartId='7';
+                chartId = '7';
               });
             },
-            child:Padding(
+            child: Padding(
               padding: const EdgeInsets.all(5.0),
               child: Column(
                 children: <Widget>[
                   Container(
-                    width:30,height:30,
+                    width: 30,
+                    height: 30,
                     child: new DecoratedBox(
                       decoration: new BoxDecoration(
                         image: new DecorationImage(
-                          image: new AssetImage("assets/images/servicelike.png"),
+                          image:
+                              new AssetImage("assets/images/servicelike.png"),
                           fit: BoxFit.contain,
                         ),
                       ),
@@ -665,9 +696,9 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
     );
   }
 
-  Padding createTitle(){
+  Padding createTitle() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 4.5,vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
       child: Row(
         children: <Widget>[
           Spacer(),
@@ -678,7 +709,6 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
       ),
     );
   }
-
 
   /*Stack createGraph(){
     return Stack(
@@ -747,6 +777,3 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
     );
   }*/
 }
-
-
-

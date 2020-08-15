@@ -415,18 +415,24 @@ class _ExplorerScreenState extends State<ExplorerScreen>
         ]),
 
         floatingActionButton: parentCategoryId == null
-            ? FloatingActionButton(
-                heroTag: "btn2",
-                onPressed: () => addCategoryDialog(context, path),
-                child: Icon(Feather.folder_plus),
-                tooltip: "Add Folder",
+            ? Padding(
+                padding: const EdgeInsets.only(bottom: 35),
+                child: FloatingActionButton(
+                  heroTag: "btn2",
+                  onPressed: () => addCategoryDialog(context, path),
+                  child: Icon(Feather.folder_plus),
+                  tooltip: "Add Folder",
+                ),
               )
-            : FloatingActionButton(
-                heroTag: "btn1",
-                onPressed: () => addProductDialog(context, path),
-                child: Icon(Icons.fastfood),
-                tooltip: "Add Folder",
-                backgroundColor: Colors.lightBlue,
+            : Padding(
+                padding: const EdgeInsets.only(bottom: 35),
+                child: FloatingActionButton(
+                  heroTag: "btn1",
+                  onPressed: () => addProductDialog(context, path),
+                  child: Icon(Icons.fastfood),
+                  tooltip: "Add Folder",
+                  backgroundColor: Colors.lightBlue,
+                ),
               ),
       ),
     );
