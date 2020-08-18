@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:foolife/Bloc/Product/add/AddProductBloc.dart';
+import 'package:foolife/Bloc/Restaurant/ChangeBackgroundBloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_trimmer/storage_dir.dart';
 import 'package:video_trimmer/video_trimmer.dart';
@@ -15,8 +16,9 @@ import 'package:video_trimmer/video_viewer.dart';
 class TrimmerView extends StatefulWidget {
   final Trimmer _trimmer;
   final AddProductBloc addProductBloc;
+  ChangeBackgroundBloc changeBackgroundBloc;
   File video;
-  TrimmerView(this._trimmer, this.addProductBloc, this.video);
+  TrimmerView(this._trimmer, {this.addProductBloc, this.video,this.changeBackgroundBloc});
   @override
   _TrimmerViewState createState() => _TrimmerViewState();
 }
@@ -97,7 +99,10 @@ String  _miliSecoundToString(double time){
 
                               final snackBar = SnackBar(
                                   content: Text('Video Saved successfully'));
+                                  if(widget.addProductBloc != null)
                               widget.addProductBloc.changeFile(video);
+                              if(widget.changeBackgroundBloc != null)
+                              widget.changeBackgroundBloc.changeFile(video);
                               Scaffold.of(context).showSnackBar(snackBar);
                               SchedulerBinding.instance
                                   .addPostFrameCallback((_) {

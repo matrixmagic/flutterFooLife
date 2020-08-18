@@ -44,7 +44,7 @@ class MainScreen extends StatelessWidget {
             return Swiper(
               itemBuilder: (BuildContext context, int index) {
                 return CustomMainScreenWiget(
-                  backgroundImage: restaurents[index].file.path,
+
                   restauranDto: restaurents[index],
                   cateogries: restaurents[index].categories,
                 );
@@ -53,19 +53,7 @@ class MainScreen extends StatelessWidget {
               scrollDirection: Axis.vertical,
               scale: 1.0,
             );}else{
-            return Swiper(
-              itemBuilder: (BuildContext context, int index) {
-                return CustomMainScreenWiget(
-                  backgroundImage: "https://www.insperry.com/Insperry/public/uploads/files/store/08_03_2020_23_51_78Restaurant1.jpg",
-                
-                  restauranDto: new RestaurantDto(name: "koko"),
-                );
-              },
-              itemCount: 1, 
-              scrollDirection: Axis.vertical,
-              scale: 1.0,
-            );
-
+            return Container();
 
             }
 

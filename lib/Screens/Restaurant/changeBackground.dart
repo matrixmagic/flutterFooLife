@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:foolife/AppTheme.dart';
 import 'package:foolife/Bloc/Product/add/AddProductBloc.dart';
+import 'package:foolife/Bloc/Restaurant/ChangeBackgroundBloc.dart';
 import 'package:foolife/Screens/Restaurant/TrimmerView.dart';
 import 'package:foolife/Screens/Restaurant/VedioProduct.dart';
 import 'package:foolife/Screens/Restaurant/addProductDetails.dart';
@@ -13,21 +14,15 @@ import 'package:multi_media_picker/multi_media_picker.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
 
-class AddProduct extends StatelessWidget {
-  int categoryId;
-  Function updateExplorer;
+class changeBackground extends StatelessWidget {
+ 
 
-  AddProduct({this.categoryId,this.updateExplorer});
-AddProductBloc addProductBloc =new AddProductBloc();
+
+ChangeBackgroundBloc changeBackgroundBloc =new ChangeBackgroundBloc();
  final Trimmer _trimmer = Trimmer();
   @override
   Widget build(BuildContext context) {
 
-    
-
-    addProductBloc.changeCategoryId(categoryId);
-    addProductBloc.chageDetails(" ");
-    addProductBloc.changeProductName(" ");
 
 
 
@@ -35,7 +30,7 @@ AddProductBloc addProductBloc =new AddProductBloc();
           body: Stack(
         children: <Widget>[
           StreamBuilder<Object>(
-            stream: addProductBloc.fileStream,
+            stream: changeBackgroundBloc.fileStream,
             builder: (context, snapshot) {
 
               if(snapshot.hasData ){
@@ -50,11 +45,11 @@ AddProductBloc addProductBloc =new AddProductBloc();
              
   
                 return Container(
-                
                 height: MediaQuery.of(context).size.height,
                 width:  MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   image: DecorationImage( 
+                    
                     image:  FileImage(snapshot.data),
                     fit: BoxFit.fitHeight,
                     
@@ -74,9 +69,11 @@ AddProductBloc addProductBloc =new AddProductBloc();
               }else{
               return Container(
                 
+                height: MediaQuery.of(context).size.height,
+                width:  MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   image: DecorationImage( 
-                    image: AssetImage("assets/images/backgound.jpg",),
+                    image: AssetImage("assets/images/Restaurant1.jpg",),
                     fit: BoxFit.fitHeight,
                     
                   ),
@@ -123,15 +120,15 @@ AddProductBloc addProductBloc =new AddProductBloc();
           Positioned(child: Padding( 
               padding : EdgeInsets.fromLTRB(200, 20, 0, 0) ,
                child: StreamBuilder(
-                 stream: addProductBloc.productNameStream,
+                // stream: addProductBloc.productNameStream,
                  builder: (context, snapshot) {
                    return TextField( style: TextStyle(color: Colors.white),
-                  onChanged:addProductBloc.changeProductName,
+                //  onChanged:addProductBloc.changeProductName,
                      decoration: InputDecoration(
                    
                    labelStyle:
                        TextStyle(color: Colors.white, fontSize: 16.0),
-                    labelText: 'add a name of product',
+                    labelText: 'restaurant name',
               
                     //hintStyle: TextStyle(color: Colors.white),
                     
@@ -144,27 +141,27 @@ AddProductBloc addProductBloc =new AddProductBloc();
                  }
                ), )),
           StreamBuilder<Object>(
-            stream: addProductBloc.fileStream,
+            stream: changeBackgroundBloc.fileStream,
             builder: (context, snapshot) {
 
               if(snapshot.hasData)
               return Center(child: Container(
                 child: Column(mainAxisAlignment: MainAxisAlignment.center,children:[ 
-                  Text("Great!!! you uploaded your Product" ,style: TextStyle(fontSize: 20,color: Colors.white ),),
-                  IconButton( icon: Icon( Icons.autorenew, size: 40,color:  AppTheme.notWhite,), onPressed: (){ _settingModalBottomSheet(context,addProductBloc);},)],),
+                  Text("you have select a new background" ,style: TextStyle(fontSize: 20,color: Colors.white ),),
+                  IconButton( icon: Icon( Icons.autorenew, size: 40,color:  AppTheme.notWhite,), onPressed: (){ _settingModalBottomSheet(context,changeBackgroundBloc);},)],),
               ));
               else{
                    return Center(child: Container(
                 child: Column(mainAxisAlignment: MainAxisAlignment.center,children:[ 
-                  Text("add photo or video of your product" ,style: TextStyle(fontSize: 20,color: Colors.white ),),
-                  IconButton( icon: Icon( Icons.add, size: 40,color:  AppTheme.notWhite,), onPressed: (){ _settingModalBottomSheet(context,addProductBloc);},)],),
+                  Text("add a background" ,style: TextStyle(fontSize: 20,color: Colors.white ),),
+                  IconButton( icon: Icon( Icons.add, size: 40,color:  AppTheme.notWhite,), onPressed: (){ _settingModalBottomSheet(context,changeBackgroundBloc);},)],),
               ));
 
               }
             }
           ),
            StreamBuilder(
-                stream: addProductBloc.submitRegisterStream,
+                stream: changeBackgroundBloc.submitStream,
                 builder: (context, snapshot2) {
                     print(snapshot2);
                   if (snapshot2.hasData) {
@@ -172,12 +169,12 @@ AddProductBloc addProductBloc =new AddProductBloc();
                     if (snapshot2.data == true) {
                   
                         print("Navigator goo go");
-                         updateExplorer.call();
+                        
                         SchedulerBinding.instance.addPostFrameCallback((_) {
                                      // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
                       
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
+                           Navigator.pushNamed(context, '/restaurantDetail');
+                          
                              
                         });
                       }
@@ -201,15 +198,11 @@ AddProductBloc addProductBloc =new AddProductBloc();
             bottom: 40,
             child: Column( 
             children: <Widget>[
-              IconButton(icon:Icon( Icons.info,size: 30,color: Colors.black, ),onPressed:(){Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => addProductDetails( addProductBloc:addProductBloc)
-              ),);} ,),         
+                     
               IconButton(icon:Icon( Icons.check_circle,size: 30, color: Colors.green, ),onPressed: (){
                 print("addd product");
                   Dialogs.showLoadingDialog(context);
-                addProductBloc.addRegister(true);
+                changeBackgroundBloc.changeSubmit(true);
 
               },), 
               IconButton(icon:Icon( Icons.cancel,size: 30, color: Colors.red, ),onPressed: (){
@@ -228,7 +221,7 @@ AddProductBloc addProductBloc =new AddProductBloc();
 
 
 
- void _settingModalBottomSheet(context,AddProductBloc addProductBloc){
+ void _settingModalBottomSheet(context,ChangeBackgroundBloc changeBackgroundBloc){
     showModalBottomSheet(
       context: context,
       builder: (BuildContext bc){
@@ -243,7 +236,7 @@ new ListTile(
 var  picture = await MultiMediaPicker.pickImages(
                         source: ImageSource.gallery);
                     if(picture!=null && picture.length>0)    
-                   addProductBloc.changeFile(picture[0]);
+                   changeBackgroundBloc.changeFile(picture[0]);
                     Navigator.of(bc).pop();
 
             }          
@@ -260,7 +253,7 @@ var  picture = await MultiMediaPicker.pickImages(
                                   
                  Navigator.of(bc)
                     .push(MaterialPageRoute(builder: (context) {
-                  return TrimmerView(_trimmer ,addProductBloc:  addProductBloc,video:  video);
+                  return TrimmerView(_trimmer ,changeBackgroundBloc:  changeBackgroundBloc,video:  video);
                 }));
                   //    addProductBloc.changeFile(video);
                 print(video.path);

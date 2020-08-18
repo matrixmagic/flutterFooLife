@@ -13,6 +13,7 @@ import 'package:foolife/Dto/UserDto.dart';
 
 import 'package:foolife/Models/ApiResponse.dart';
 import 'package:foolife/Network/ApiProvider.dart';
+import 'package:foolife/Screens/Restaurant/changeBackground.dart';
 
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -157,6 +158,27 @@ Future<List<CategoryDto>>  getRestrantCategory(int restauratId) async {
 
 
 }
+
+ Future<bool> changeBackground(int fileId) async {
+    try {
+      
+    var body ={
+      "file_id": fileId,
+    };
+
+      var response = await api.post("restaurantChangeBackground", body);
+
+      var data = ApiResponse.fromJson(json.decode(response.body));
+      if (data.success == true) {
+        print("the background is changed");
+        return true;
+      } else
+        return false;
+    } catch (e) {
+      print("ohh shit");
+      print(e.toString());
+    }
+  }
 
   Future<List<StatisticDto>>  getRestaurantStatistic(String chart_id,DateTime date,String time) async {
 

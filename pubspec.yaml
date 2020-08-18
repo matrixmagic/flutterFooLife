@@ -114,7 +114,10 @@ flutter:
         - asset: assets/fonts/story.ttf
     - family: qrcode
       fonts:
-        - asset: assets/fonts/qrcode.ttf        
+        - asset: assets/fonts/qrcode.ttf  
+    - family: topBar
+      fonts:
+        - asset: assets/fonts/topBar.ttf               
   # fonts:
   #   - family: Schyler
   #     fonts:

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,6 +9,7 @@ import 'package:foolife/Widget/MenuBar.dart';
 import 'package:foolife/Widget/my_flutter_app_icons.dart';
 
 import 'package:foolife/Widget/stories_bar.dart';
+import 'package:video_player/video_player.dart';
 
 import '../AppTheme.dart';
 import 'my_flutter_app_icons3.dart';
@@ -17,8 +19,8 @@ class CustomMainScreenWiget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _CustomMainScreenWiget();
   CustomMainScreenWiget(
-      {this.backgroundImage, this.restauranDto, this.cateogries});
-  String backgroundImage;
+      { this.restauranDto, this.cateogries});
+
   RestaurantDto restauranDto;
   List<CategoryDto> cateogries;
 }
@@ -27,7 +29,26 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
   bool mainScreenWidgetVisibility = true;
   bool postScreenWidgetVisibility = false;
   bool info = false;
+    VideoPlayerController _controller;
 
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+     if (widget.restauranDto.file.extension == "mp4") {
+      print(widget.restauranDto.file.path);
+      _controller = VideoPlayerController.network(widget.restauranDto.file.path)
+        ..initialize().then((_) {
+          // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+          setState(() {});
+        });
+_controller.setLooping(true);
+      _controller.setVolume(0.0);
+      _controller.play();
+    }
+
+  }
   void openCreatePostScreen() {
     setState(() {
       mainScreenWidgetVisibility = false;
@@ -63,15 +84,46 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
         backgroundColor: Colors.grey,
         body: Stack(children: <Widget>[
           Container(
+            child: widget.restauranDto.file.extension != "mp4"
+                ? CachedNetworkImage(
+                    imageUrl: (widget.restauranDto==null||widget.restauranDto.file==null||widget.restauranDto.file.path==null)?"https://www.insperry.com/Insperry/public/uploads/files/store/08_03_2020_23_51_78Restaurant1.jpg":widget.restauranDto.file.path,
+                    height: MediaQuery.of(context).size.height,
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => Center(
+                            child: CircularProgressIndicator(
+                                value: downloadProgress.progress)),
+                    fit: BoxFit.cover,
+                  )
+                : Center(
+                    child: _controller != null
+                        ? VideoPlayer(_controller)
+                        : Container(),
+                  ),
+            // floatingActionButton: FloatingActionButton(
+            //   onPressed: () {
+            //     setState(() {
+            //       _controller.value.isPlaying
+            //           ? _controller.pause()
+            //           : _controller.play();
+            //     });
+            //   },
+            //   child: Icon(
+            //     _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+            //   ),
+            // ),
+          ),
+          
+        widget.restauranDto.post != null? Container(
             child: Image(
-              image: NetworkImage(widget.backgroundImage),
+              image: NetworkImage(widget.restauranDto.post.file.path),
               height: MediaQuery.of(context).size.height,
+              width:MediaQuery.of(context).size.width ,
               fit: BoxFit.cover,
             ),
-          ),
+          ):Container(),
           Visibility(
             visible: postScreenWidgetVisibility,
-            child: Container(child: CreatePost()),
+            child: Container(child: CreatePost(close_it: closeCreatePostScreen ,)),
           ),
           Container(
             child: Column(
@@ -527,7 +579,7 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
     bool isfirst = true;
     return widget.restauranDto.paymentsMethod.map((e) {
       print(e.name);
-      var text= Text( isfirst?"":" , "+ e.name ,style: AppTheme.insperryTheme,);
+      var text= Text( isfirst?" ":" , "+ e.name ,style: AppTheme.insperryTheme,);
     isfirst = false;
     return text;
     }

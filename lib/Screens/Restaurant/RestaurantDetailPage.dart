@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:foolife/Dto/StatisticDto.dart';
 import 'package:foolife/Repository/RestaurantRepository.dart';
+import 'package:foolife/Screens/Restaurant/changeBackground.dart';
 import 'package:foolife/Widget/custom_buttom_navigatior.dart';
 import 'package:foolife/Widget/dateTimeChart.dart';
 import 'package:path_provider/path_provider.dart';
@@ -405,10 +406,15 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                 SizedBox(
                   width: 25,
                 ),
-                Image.asset(
-                  "assets/images/Icon simple-producthunt.png",
-                  width: 30,
-                  height: 30,
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/mangemenuscreen');
+                  },
+                  child: Image.asset(
+                    "assets/images/Icon simple-producthunt.png",
+                    width: 30,
+                    height: 30,
+                  ),
                 ),
                 SizedBox(
                   width: 25,
@@ -430,7 +436,10 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.pushNamed(context, '/mangemenuscreen');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => changeBackground()),
+                      );
                   },
                   child: Image.asset(
                     "assets/images/Icon feather-settings.png",

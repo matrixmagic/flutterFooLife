@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:foolife/Bloc/post/PostBloc.dart';
+import 'package:foolife/Dto/PostDto.dart';
 import 'package:foolife/Models/all_emojies.dart';
 import 'package:foolife/Models/colors_picker.dart';
 import 'package:foolife/Models/emoji.dart';
@@ -19,6 +22,9 @@ import 'package:signature/signature.dart';
 import '../../AppTheme.dart';
 
 class CreatePost extends StatefulWidget {
+
+  Function close_it;
+  CreatePost({this.close_it});
   @override
   _CreatePostState createState() => _CreatePostState();
 }
@@ -43,13 +49,14 @@ class _CreatePostState extends State<CreatePost> {
   List fontcolor = [];
   Map<String, bool> week;
   int isEditing;
-  Color pickerColor = Color(0xff443a49);
-  Color currentColor = Color(0xff443a49);
+  Color pickerColor = Color(0xffffffff);
+  Color currentColor = Color(0xffffffff);
     TextEditingController _econtroller = TextEditingController();
 
   Timer timeprediction;
   TimeOfDay fromDate;
   TimeOfDay toDate;
+  PostBloc postBloc ;
   void timers() {
     Timer.periodic(Duration(milliseconds: 10), (tim) {
       setState(() {});
@@ -67,6 +74,17 @@ class _CreatePostState extends State<CreatePost> {
 
   @override
   void initState() {
+    postBloc=new PostBloc(close_it: widget.close_it);
+    postBloc.changeSat(0);
+    postBloc.changeSon(0);
+    postBloc.changeMon(0);
+    postBloc.changeTus(0);
+    postBloc.changeThurt(0);
+    postBloc.changeWed(0);
+    postBloc.changefri(0);
+    postBloc.changeName(null);
+    postBloc.changeTo(null);
+    postBloc.changefrom(null);
     timers();
     timingVisibility = false;
     _controller.clear();
@@ -111,6 +129,32 @@ class _CreatePostState extends State<CreatePost> {
                 child: Stack(
                   children: <Widget>[
                     //////// the body
+                  StreamBuilder<Object>(
+                    stream: postBloc.imageStream,
+                    builder: (context, snapshot) {
+                      return Container();
+                    }
+                  ),
+                    StreamBuilder<Object>(
+                    stream: postBloc.fromStream,
+                    builder: (context, snapshot) {
+                      return Container();
+                    }
+                  ),
+                    StreamBuilder<Object>(
+                    stream: postBloc.toStream,
+                    builder: (context, snapshot) {
+                      return Container();
+                    }
+                  ),
+                    StreamBuilder<Object>(
+                    stream: postBloc.submitStream,
+                    builder: (context, snapshot) {
+   
+                      
+                      return Container();
+                    }
+                  ),
                     Center(
                       child: Screenshot(
                         controller: screenshotController,
@@ -243,7 +287,12 @@ class _CreatePostState extends State<CreatePost> {
                                                 context: context,
                                                 
                                               ).then(
-                                                  (value) => fromDate = value);
+                                                  (value) {
+                                                    fromDate = value;
+                                                    postBloc.changefrom(value);
+
+                                                  } 
+                                          );
                                             },
                                           ),
                                           Text(
@@ -263,7 +312,11 @@ class _CreatePostState extends State<CreatePost> {
                                               showTimePicker(
                                                 initialTime: TimeOfDay.now(),
                                                 context: context,
-                                              ).then((value) => toDate = value);
+                                              ).then(    (value) {
+                                                    toDate = value;
+                                                    postBloc.changeTo(value);
+
+                                                  } );
                                             },
                                           ),
                                         ],
@@ -282,9 +335,13 @@ class _CreatePostState extends State<CreatePost> {
                                           Container(
                                                  width: 100,
                                                  height: 20,
-                                                 child: TextField(
-                                                   style: TextStyle(color: AppTheme.notWhite),
-                                                   decoration: InputDecoration(
+                                                 child: StreamBuilder(
+                                                   stream: postBloc.nameStream,
+                                                   builder: (context, snapshot) {
+                                                     return TextField(
+                                                       onChanged: postBloc.changeName,
+                                                       style: TextStyle(color: AppTheme.notWhite),
+                                                       decoration: InputDecoration(
                   hintText: "Post name",
                   hintStyle: TextStyle(color: Colors.white),
                   fillColor: Colors.grey[600].withOpacity(0.2),
@@ -293,6 +350,8 @@ class _CreatePostState extends State<CreatePost> {
                   contentPadding: EdgeInsets.only(left:5 ,bottom: 10),
                   alignLabelWithHint: true,
                 ),
+                                                     );
+                                                   }
                                                  ),
                                                ),
                                                multiwidget.length == 0
@@ -413,25 +472,30 @@ class _CreatePostState extends State<CreatePost> {
                                           color: AppTheme.notWhite,
                                         ),
                                         onPressed: () {
-                                          // File _imageFile;
-                                          // _imageFile = null;
-                                          // screenshotController
-                                          //     .capture(
-                                          //         delay: Duration(milliseconds: 500), pixelRatio: 1.5)
-                                          //     .then((File image) async {
-                                          //   //print("Capture Done");
-                                          //   setState(() {
-                                          //     _imageFile = image;
-                                          //   });
-                                          //   final paths = await getExternalStorageDirectory();
-                                          //   image.copy(paths.path +
-                                          //       '/' +
-                                          //       DateTime.now().millisecondsSinceEpoch.toString() +
-                                          //       '.png');
-                                          //   Navigator.pop(context, image);
-                                          // }).catchError((onError) {
-                                          //   print(onError);
-                                          // });
+                                          File _imageFile;
+                                          _imageFile = null;
+                                          screenshotController
+                                              .capture(
+                                                  delay: Duration(milliseconds: 500), pixelRatio: 1.5)
+                                              .then((File image) async {
+
+                                                postBloc.changeImage(image);
+                                                postBloc.changeSubmit(true);
+                                            //print("Capture Done");
+                                            setState(() {
+                                              _imageFile = image;
+                                            });
+                                           // final paths = await getExternalStorageDirectory();
+                                            //image.copy(paths.path +
+                                              //  '/' +
+                                                //DateTime.now().millisecondsSinceEpoch.toString() +
+                                                //'.png');
+
+
+                                          //  Navigator.pop(context, image);
+                                          }).catchError((onError) {
+                                            print(onError);
+                                          });
                                         },
                                       ),
                                     ),
@@ -572,14 +636,46 @@ class _CreatePostState extends State<CreatePost> {
         ),
         Theme(
             data: ThemeData(unselectedWidgetColor: Colors.white),
-            child: Checkbox(
-              value: boolValue,
-              focusColor: AppTheme.notWhite,
-              onChanged: (bool value) {
-                setState(() {
-                  week[title] = value;
-                });
-              },
+            child: StreamBuilder(
+              stream: title=='Mo.'? postBloc.monStream:
+              title=='Tu.'? postBloc.tusStream:
+              title=='We.'? postBloc.wedStream:
+              title=='Wi.'? postBloc.sonStream:
+              title=='Th.'? postBloc.thurStream:
+              title=='Fi'? postBloc.friStream:
+              postBloc.satStream
+              ,
+              builder: (context, snapshot) {
+                return Checkbox(
+                  value: boolValue,
+                  focusColor: AppTheme.notWhite,
+                  onChanged: (bool value) {
+                    setState(() {
+                      week[title] = value;
+                      if(title=='Mo.'){
+                        postBloc.changeMon(value?1:0);
+                      }
+                      else if (title=='Tu.'){
+                        postBloc.changeTus(value?1:0);
+                      }
+                       else if (title=='Wi.'){
+                        postBloc.changeSon(value?1:0);
+                      }
+                       else if (title=='We.'){
+                        postBloc.changeWed(value?1:0);
+                      }
+                       else if (title=='Th.'){
+                        postBloc.changeThurt(value?1:0);
+                      }
+                       else if (title=='Fi.'){
+                        postBloc.changefri(value?1:0);
+                      }
+                      else postBloc.changeSat(value?1:0);
+                      
+                    });
+                  },
+                );
+              }
             ))
       ],
     );
