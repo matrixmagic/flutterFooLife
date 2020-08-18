@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -8,11 +6,11 @@ import 'package:foolife/Dto/RestaurantDto.dart';
 import 'package:foolife/Repository/RestaurantRepository.dart';
 import 'package:foolife/Widget/CustomMainScreenWiget.dart';
 import 'package:foolife/Widget/custom_buttom_navigatior.dart';
+import 'package:foolife/Widget/top_channel_bar.dart';
 
 import '../../AppTheme.dart';
 
 class MainScreen extends StatelessWidget {
-
   @override
   var images = [
     'assets/images/Restaurant1.jpg',
@@ -20,46 +18,42 @@ class MainScreen extends StatelessWidget {
     'assets/images/Restaurant3.jpg'
   ];
 
-     @override
+  @override
   void initState() {
     // TODO: implement initState
- SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent ));
-
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   }
-
 
   BuildContext _context;
 
   Widget build(BuildContext context) {
-    _context=context;
+    _context = context;
     return Scaffold(
         body: Stack(
       children: <Widget>[
         FutureBuilder<Object>(
-          future:  RestaurantRepository().gatAllResturants(),
-          builder: (context, snapshot) {
-            if(snapshot.hasData && snapshot.connectionState ==ConnectionState.done){
-            List<RestaurantDto> restaurents= snapshot.data;
+            future: RestaurantRepository().gatAllResturants(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData &&
+                  snapshot.connectionState == ConnectionState.done) {
+                List<RestaurantDto> restaurents = snapshot.data;
 
-            return Swiper(
-              itemBuilder: (BuildContext context, int index) {
-                return CustomMainScreenWiget(
-
-                  restauranDto: restaurents[index],
-                  cateogries: restaurents[index].categories,
+                return Swiper(
+                  itemBuilder: (BuildContext context, int index) {
+                    return CustomMainScreenWiget(
+                      restauranDto: restaurents[index],
+                      cateogries: restaurents[index].categories,
+                    );
+                  },
+                  itemCount: restaurents.length,
+                  scrollDirection: Axis.vertical,
+                  scale: 1.0,
                 );
-              },
-              itemCount: restaurents.length,
-              scrollDirection: Axis.vertical,
-              scale: 1.0,
-            );}else{
-            return Container();
-
-            }
-
-            }
-          
-        ),
+              } else {
+                return Container();
+              }
+            }),
         Positioned(
           bottom: 0,
           left: 5.0,
@@ -68,16 +62,17 @@ class MainScreen extends StatelessWidget {
             showDialog: _ParentFunction,
           ),
         ),
-        
-        
+        Positioned(top: 50, left: 5.0, right: 5.0, child: Top_channel_bar()),
       ],
     ));
   }
+
   _ParentFunction() async {
     print('im clickedxxxx hiiiii');
 
-  await  _showSelectionDialog(_context);
+    await _showSelectionDialog(_context);
   }
+
   Future<void> _showSelectionDialog(BuildContext context) async {
     print('im clicked hiiiii');
     return showDialog(
@@ -94,7 +89,6 @@ class MainScreen extends StatelessWidget {
                   ),
                   title: Text("Sign up"),
                   onTap: () {
-                    
                     Navigator.of(context).pushNamed('/usersignup');
                   },
                 ),
@@ -108,7 +102,7 @@ class MainScreen extends StatelessWidget {
                   ),
                   title: Text("Log in"),
                   onTap: () {
-                      Navigator.of(context).pushNamed('/signin');
+                    Navigator.of(context).pushNamed('/signin');
                   },
                 )
               ],
