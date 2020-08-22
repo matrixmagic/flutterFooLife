@@ -164,8 +164,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                        width: 70,
-                        height: 70,
+                        width: 50,
+                        height: 50,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Color.fromRGBO(112, 112, 112, 1.0),
@@ -177,7 +177,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                               key: this.globalKey,
                               child: QrImage(
                                 data: widget.id.toString(),
-                                size: 60,
+                                size: 40,
                                 backgroundColor: Colors.white24,
                                 foregroundColor: Colors.black,
                               ),
@@ -191,8 +191,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      width: 70,
-                      height: 70,
+                      width: 50,
+                      height: 50,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
@@ -208,7 +208,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
 
           //sharing and printing qrcode
           Padding(
-              padding: const EdgeInsets.only(left: 80, top: 7, bottom: 5),
+              padding: const EdgeInsets.only(left: 80, top: 5, bottom: 2),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
@@ -248,7 +248,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
 
           //Allgemeine statistik
           Padding(
-            padding: const EdgeInsets.only(bottom: 5),
+            padding: const EdgeInsets.only(bottom: 2),
             child: Container(
               height: 24,
               decoration: BoxDecoration(
@@ -346,7 +346,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
 
           //determine day or month or year
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -463,7 +463,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
 
   Container createListView() {
     return Container(
-      height: 100,
+      height: 90,
       child: ListView(
         // This next line does the trick.
         scrollDirection: Axis.horizontal,

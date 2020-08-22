@@ -1,3 +1,4 @@
+import 'package:better_player/better_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -8,8 +9,6 @@ import 'package:foolife/Screens/Restaurant/CreatePostScreen.dart';
 import 'package:foolife/Widget/MenuBar.dart';
 import 'package:foolife/Widget/my_flutter_app_icons.dart';
 
-import 'package:foolife/Widget/stories_bar.dart';
-import 'package:video_player/video_player.dart';
 
 import '../AppTheme.dart';
 import 'my_flutter_app_icons3.dart';
@@ -29,26 +28,40 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
   bool mainScreenWidgetVisibility = true;
   bool postScreenWidgetVisibility = false;
   bool info = false;
-    VideoPlayerController _controller;
+  BetterPlayerController _betterPlayerController;
 
-
+@override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+if (_betterPlayerController!=null)
+ _betterPlayerController.dispose();
+  }
 @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    
      if (widget.restauranDto.file.extension == "mp4") {
       print(widget.restauranDto.file.path);
-      _controller = VideoPlayerController.network(widget.restauranDto.file.path)
-        ..initialize().then((_) {
-          // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-          setState(() {});
-        });
-_controller.setLooping(true);
-      _controller.setVolume(0.0);
-      _controller.play();
+     BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
+        BetterPlayerDataSourceType.NETWORK,
+    
+        widget.restauranDto.file.path, liveStream: true,);
+    _betterPlayerController = BetterPlayerController(
+        BetterPlayerConfiguration(autoPlay: true,looping: true,) ,
+        betterPlayerDataSource: betterPlayerDataSource);
+  
+    
+  
+
+     
+     }
+    
     }
 
-  }
+  
   void openCreatePostScreen() {
     setState(() {
       mainScreenWidgetVisibility = false;
@@ -88,17 +101,22 @@ _controller.setLooping(true);
                 ? CachedNetworkImage(
                     imageUrl: (widget.restauranDto==null||widget.restauranDto.file==null||widget.restauranDto.file.path==null)?"https://www.insperry.com/Insperry/public/uploads/files/store/08_03_2020_23_51_78Restaurant1.jpg":widget.restauranDto.file.path,
                     height: MediaQuery.of(context).size.height,
+                     width:MediaQuery.of(context).size.width ,
                     progressIndicatorBuilder:
                         (context, url, downloadProgress) => Center(
                             child: CircularProgressIndicator(
                                 value: downloadProgress.progress)),
                     fit: BoxFit.cover,
                   )
-                : Center(
-                    child: _controller != null
-                        ? VideoPlayer(_controller)
-                        : Container(),
-                  ),
+                : _betterPlayerController != null
+                    ?  Container(
+                      color: Colors.blue,
+                                          child: BetterPlayer( controller: _betterPlayerController,
+                  
+                 
+                   ),
+                    )
+                    : Container(),
             // floatingActionButton: FloatingActionButton(
             //   onPressed: () {
             //     setState(() {
@@ -409,7 +427,7 @@ _controller.setLooping(true);
           info
               ? Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 50, vertical: 70),
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 90),
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -488,9 +506,13 @@ _controller.setLooping(true);
                                     style: AppTheme.insperryTheme,
                                   ),
                                 ),
-                                Text(
-                                  widget.restauranDto.user.email  ,
-                                  style: AppTheme.insperryTheme,
+                                Container(
+                                  width: 70,
+                                  child: Text(
+                                    
+                                    widget.restauranDto.user.email  ,
+                                    style: AppTheme.insperryTheme,
+                                  ),
                                 )
                               ],
                             ),
@@ -547,22 +569,29 @@ _controller.setLooping(true);
                                     style: AppTheme.insperryTheme,
                                   ),
                                 ),
-                                Wrap(children: getPaymentMethod(),)
+                                Container(
+                                  width: 70,
+                                  child: Wrap(children: getPaymentMethod(),))
                                
 
                               ],
                             ),
-                            Wrap(
-                              alignment: WrapAlignment.center,
-                              children: <Widget>[
+                            Container(
+                            
+                              width: 200,
+                              child: Wrap(
+                                
+                                alignment: WrapAlignment.center,
+                                children: <Widget>[
                         
-                              Container(margin: EdgeInsets.all(8), child: widget.restauranDto.services.gamepad == 1? Icon(  FontAwesomeIcons.gamepad ,color: AppTheme.primaryColor ,size: 35,):Container()),
-                              Container(margin: EdgeInsets.all(8),child: widget.restauranDto.services.accessible == 1? Icon( Icons.accessible ,color: AppTheme.primaryColor,size: 35,):Container()),
-                              Container(margin: EdgeInsets.all(8),child: widget.restauranDto.services.childfriendly == 1? Icon( Icons.child_friendly ,color: AppTheme.primaryColor,size: 35,):Container()),
-                              Container(margin: EdgeInsets.all(8),child: widget.restauranDto.services.wifi == 1? Icon( Icons.wifi ,color: AppTheme.primaryColor,size: 35,):Container()),
-                              Container(margin: EdgeInsets.all(8),child: widget.restauranDto.services.power == 1? Icon( Icons.power ,color: AppTheme.primaryColor,size: 35,):Container()),
-                              Container(margin: EdgeInsets.all(8),child: widget.restauranDto.services.pets == 1? Icon( Icons.pets ,color: AppTheme.primaryColor,size: 35,):Container()),
-                            ],) 
+                                Container(padding: EdgeInsets.all(7), child: widget.restauranDto.services.gamepad == 1? Icon(  FontAwesomeIcons.gamepad ,color: AppTheme.primaryColor ,size: 34,):Container()),
+                                Container(padding: EdgeInsets.all(7),child: widget.restauranDto.services.accessible == 1? Icon( Icons.accessible ,color: AppTheme.primaryColor,size: 34,):Container()),
+                                Container(padding: EdgeInsets.all(7),child: widget.restauranDto.services.childfriendly == 1? Icon( Icons.child_friendly ,color: AppTheme.primaryColor,size: 34,):Container()),
+                                Container(padding: EdgeInsets.all(7),child: widget.restauranDto.services.wifi == 1? Icon( Icons.wifi ,color: AppTheme.primaryColor,size: 34,):Container()),
+                                Container(padding: EdgeInsets.all(7),child: widget.restauranDto.services.power == 1? Icon( Icons.power ,color: AppTheme.primaryColor,size: 34,):Container()),
+                                Container(padding: EdgeInsets.all(7),child: widget.restauranDto.services.pets == 1? Icon( Icons.pets ,color: AppTheme.primaryColor,size: 34,):Container()),
+                              ],),
+                            ) 
                           ],
                         ),
                       ),
@@ -579,7 +608,7 @@ _controller.setLooping(true);
     bool isfirst = true;
     return widget.restauranDto.paymentsMethod.map((e) {
       print(e.name);
-      var text= Text( isfirst?" ":" , "+ e.name ,style: AppTheme.insperryTheme,);
+      var text= Text( e.name ,style: AppTheme.insperryTheme,);
     isfirst = false;
     return text;
     }

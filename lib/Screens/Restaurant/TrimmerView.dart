@@ -91,7 +91,7 @@ String  _miliSecoundToString(double time){
                           _flutterFFmpeg
                               .execute("-i " +
                                   widget.video.path +
-                                  " -ss "+_miliSecoundToString(_startValue) +" -t "+ ((_endValue - _startValue) >= (15*1000) ?"00:00:15":_miliSecoundToString(_endValue - _startValue))+ " -c:v copy -c:a copy  " +
+                                  " -ss "+_miliSecoundToString(_startValue) +" -t "+ ((_endValue - _startValue) >= (15*1000) ?"00:00:15":_miliSecoundToString(_endValue - _startValue))+ " -c:v mpeg4   " +
                                   outputPath)
                               .then((rc) {
                             if (rc == 0) {

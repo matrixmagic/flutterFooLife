@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:foolife/AppTheme.dart';
 import 'package:foolife/Bloc/Product/add/AddProductBloc.dart';
 import 'package:foolife/Screens/Restaurant/TrimmerView.dart';
@@ -9,6 +11,7 @@ import 'package:foolife/Screens/Restaurant/VedioProduct.dart';
 import 'package:foolife/Screens/Restaurant/addProductDetails.dart';
 import 'package:foolife/Screens/Welcome/UserSignup.dart';
 import 'package:multi_media_picker/multi_media_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:video_trimmer/video_trimmer.dart';
 
@@ -258,8 +261,22 @@ class AddProduct extends StatelessWidget {
                     onTap: () async {
                       var picture = await MultiMediaPicker.pickImages(
                           source: ImageSource.gallery);
-                      if (picture != null && picture.length > 0)
-                        addProductBloc.changeFile(picture[0]);
+                      if (picture != null && picture.length > 0){
+
+                          Directory appDocumentDir =
+                              await getExternalStorageDirectory();
+
+                          String rawDocumentPath = appDocumentDir.path;
+                          print(rawDocumentPath);
+
+                          var _random = new Random();
+                          var _rand = _random.nextInt(9999999) + 1;
+                          String outputPath =
+                              rawDocumentPath + "/" + _rand.toString() +"."+picture[0].path.substring( picture[0].path.length-3) ;
+print("fileeeeeeeeeeeeeeee:"+outputPath);
+addProductBloc.changeFile(await testCompressAndGetFile(picture[0],outputPath));
+                      }
+                        
                       Navigator.of(bc).pop();
                     }),
                 new ListTile(
@@ -288,4 +305,19 @@ class AddProduct extends StatelessWidget {
           );
         });
   }
+
+   Future<File> testCompressAndGetFile(File file, String targetPath) async {
+    var result = await FlutterImageCompress.compressAndGetFile(
+        file.absolute.path, targetPath,
+        quality: 70,
+       
+      );
+
+    print(file.lengthSync());
+    print(result.lengthSync());
+
+    return result;
+  }
+ 
+
 }

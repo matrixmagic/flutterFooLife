@@ -23,7 +23,7 @@ class AppTheme {
 
   static const TextStyle insperryTheme = TextStyle(
                         color: AppTheme.notWhite,
-                        fontSize: 17,
+                        fontSize: 15,
                         fontFamily: "SpecialElite");
 
   static const TextTheme textTheme = TextTheme(

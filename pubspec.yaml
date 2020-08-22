@@ -57,7 +57,9 @@ dependencies:
   printing: ^3.5.0
   esys_flutter_share: ^1.0.2
   intl: ^0.16.1
-
+  flutter_vlc_player: ^3.0.6
+  flutter_image_compress: ^0.7.0
+  better_player: ^0.0.13
 
 
 
