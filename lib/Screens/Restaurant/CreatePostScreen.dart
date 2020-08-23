@@ -9,7 +9,7 @@ import 'package:foolife/Models/colors_picker.dart';
 import 'package:foolife/Models/emoji.dart';
 import 'package:foolife/Models/text.dart';
 import 'package:foolife/Models/textview.dart';
-import 'package:infinite_listview/infinite_listview.dart';
+
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:flutter/cupertino.dart';

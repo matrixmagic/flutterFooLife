@@ -1,6 +1,7 @@
 import 'package:better_player/better_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foolife/Dto/CategoryDto.dart';
@@ -8,6 +9,7 @@ import 'package:foolife/Dto/RestaurantDto.dart';
 import 'package:foolife/Screens/Restaurant/CreatePostScreen.dart';
 import 'package:foolife/Widget/MenuBar.dart';
 import 'package:foolife/Widget/my_flutter_app_icons.dart';
+import 'package:pedantic/pedantic.dart';
 
 
 import '../AppTheme.dart';
@@ -27,6 +29,7 @@ class CustomMainScreenWiget extends StatefulWidget {
 class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
   bool mainScreenWidgetVisibility = true;
   bool postScreenWidgetVisibility = false;
+  DefaultCacheManager _cacheManager;
   bool info = false;
   BetterPlayerController _betterPlayerController;
 
@@ -34,31 +37,34 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-if (_betterPlayerController!=null)
- _betterPlayerController.dispose();
+
   }
 @override
-  void initState() {
+  Future<void> initState()  {
     // TODO: implement initState
     super.initState();
 
-    
+    _cacheManager= DefaultCacheManager();
      if (widget.restauranDto.file.extension == "mp4") {
       print(widget.restauranDto.file.path);
-     BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
-        BetterPlayerDataSourceType.NETWORK,
-    
-        widget.restauranDto.file.path, liveStream: true,);
-    _betterPlayerController = BetterPlayerController(
-        BetterPlayerConfiguration(autoPlay: true,looping: true,) ,
-        betterPlayerDataSource: betterPlayerDataSource);
-  
-    
-  
 
+  
+      
+
+getVideoController();
      
      }
     
+    }
+
+ void     getVideoController() async {
+   double _screenWidth = WidgetsBinding.instance.window.physicalSize.width;
+double _screenHeight = WidgetsBinding.instance.window.physicalSize.height;
+var x= await getControllerForVideo(widget.restauranDto.file.path,_screenWidth,_screenHeight);
+setState(()  {
+  _betterPlayerController  =x;
+});
+ 
     }
 
   
@@ -76,21 +82,59 @@ if (_betterPlayerController!=null)
     });
   }
 
-  List<String> images = [
-    'assets/images/Restaurant1.jpg',
-    'assets/images/Restaurant2.jpg',
-    'assets/images/Restaurant3.jpg',
-    'assets/images/Restaurant1.jpg',
-    'assets/images/Restaurant2.jpg',
-    'assets/images/Restaurant3.jpg',
-    'assets/images/Restaurant1.jpg',
-    'assets/images/Restaurant2.jpg',
-    'assets/images/Restaurant3.jpg',
-  ];
+    Future<BetterPlayerController> getControllerForVideo(String  videoUrl,double _screenWidth,double _screenHeight) async {
+    final fileInfo = await _cacheManager.getFileFromCache(videoUrl);
+
+    if (fileInfo == null || fileInfo.file == null) {
+      print('[VideoControllerService]: No video in cache');
+
+      print('[VideoControllerService]: Saving video to cache');
+      unawaited(_cacheManager.downloadFile(videoUrl));
+
+
+        
+     BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
+        BetterPlayerDataSourceType.NETWORK,
+    
+        videoUrl, liveStream: true,);
+    _betterPlayerController = BetterPlayerController(
+        BetterPlayerConfiguration(autoPlay: true,looping: true, aspectRatio: _screenWidth/_screenHeight,controlsConfiguration: BetterPlayerControlsConfiguration(
+        liveText:  "",
+        showControls: false
+      ),) ,
+        betterPlayerDataSource: betterPlayerDataSource,
+        );
+  
+    
+  _betterPlayerController.setVolume(0.0);
+
+      return _betterPlayerController;
+    } else {
+      print('[VideoControllerService]: Loading video from cache');
+
+           BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
+        BetterPlayerDataSourceType.FILE,
+    
+        fileInfo.file.path, liveStream: true,);
+    _betterPlayerController = BetterPlayerController(
+        BetterPlayerConfiguration(autoPlay: true,looping: true, aspectRatio: _screenWidth/_screenHeight,controlsConfiguration: BetterPlayerControlsConfiguration(
+        liveText:  "",
+        showControls: false
+      ),) ,
+        betterPlayerDataSource: betterPlayerDataSource,
+        );
+  
+    
+  _betterPlayerController.setVolume(0.0);
+      return _betterPlayerController;
+    }
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size.height / 7);
+    
     return SafeArea(
       top: false,
       child: Scaffold(
@@ -110,7 +154,7 @@ if (_betterPlayerController!=null)
                   )
                 : _betterPlayerController != null
                     ?  Container(
-                      color: Colors.blue,
+                    
                                           child: BetterPlayer( controller: _betterPlayerController,
                   
                  
@@ -163,7 +207,7 @@ if (_betterPlayerController!=null)
                     ),
                   ),
                   padding: EdgeInsets.only(
-                    top: 2,
+                    top: 15,
                   ),
                 )
               ],
