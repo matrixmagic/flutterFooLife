@@ -1,5 +1,7 @@
+import 'package:better_player/better_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:foolife/AppTheme.dart';
 import 'package:foolife/Dto/CategoryDto.dart';
@@ -7,7 +9,7 @@ import 'package:foolife/Dto/ProductDto.dart';
 import 'package:foolife/Dto/ProductExtraDto.dart';
 import 'package:foolife/Repository/RestaurantRepository.dart';
 import 'package:foolife/Widget/MenuBar.dart';
-
+import 'package:pedantic/pedantic.dart';
 import 'package:foolife/Widget/stories_bar.dart';
 import 'package:video_player/video_player.dart';
 
@@ -27,23 +29,89 @@ class CustomProductWidget extends StatefulWidget {
 }
 
 class _CustomProductWidgetState extends State<CustomProductWidget> {
-  VideoPlayerController _controller;
+  // VideoPlayerController _controller;
+  BetterPlayerController _betterPlayerController;
   bool boolInfo = false;
-  bool detailsInfo=false;
-
+  bool detailsInfo = false;
+  DefaultCacheManager _cacheManager;
   @override
-  void initState() {
+  Future<void> initState() {
     super.initState();
+    _cacheManager = DefaultCacheManager();
     if (widget.extention == "mp4") {
       print(widget.backgroundImage);
-      _controller = VideoPlayerController.network(widget.backgroundImage)
+      getVideoController();
+      /*   _controller = VideoPlayerController.network(widget.backgroundImage)
         ..initialize().then((_) {
           // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
           setState(() {});
         });
-_controller.setLooping(true);
+      _controller.setLooping(true);
       _controller.setVolume(0.0);
-      _controller.play();
+      _controller.play();*/
+    }
+  }
+
+  void getVideoController() async {
+    double _screenWidth = WidgetsBinding.instance.window.physicalSize.width;
+    double _screenHeight = WidgetsBinding.instance.window.physicalSize.height;
+    var x = await getControllerForVideo(
+        widget.product.file.path, _screenWidth, _screenHeight);
+    setState(() {
+      _betterPlayerController = x;
+    });
+  }
+
+  Future<BetterPlayerController> getControllerForVideo(
+      String videoUrl, double _screenWidth, double _screenHeight) async {
+    final fileInfo = await _cacheManager.getFileFromCache(videoUrl);
+
+    if (fileInfo == null || fileInfo.file == null) {
+      print('[VideoControllerService]: No video in cache');
+
+      print('[VideoControllerService]: Saving video to cache');
+      unawaited(_cacheManager.downloadFile(videoUrl));
+
+      BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
+        BetterPlayerDataSourceType.NETWORK,
+        videoUrl,
+        liveStream: true,
+      );
+      _betterPlayerController = BetterPlayerController(
+        BetterPlayerConfiguration(
+          autoPlay: true,
+          looping: true,
+          aspectRatio: _screenWidth / _screenHeight,
+          controlsConfiguration: BetterPlayerControlsConfiguration(
+              liveText: "", showControls: false),
+        ),
+        betterPlayerDataSource: betterPlayerDataSource,
+      );
+
+      _betterPlayerController.setVolume(0.0);
+
+      return _betterPlayerController;
+    } else {
+      print('[VideoControllerService]: Loading video from cache');
+
+      BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
+        BetterPlayerDataSourceType.FILE,
+        fileInfo.file.path,
+        liveStream: true,
+      );
+      _betterPlayerController = BetterPlayerController(
+        BetterPlayerConfiguration(
+          autoPlay: true,
+          looping: true,
+          aspectRatio: _screenWidth / _screenHeight,
+          controlsConfiguration: BetterPlayerControlsConfiguration(
+              liveText: "", showControls: false),
+        ),
+        betterPlayerDataSource: betterPlayerDataSource,
+      );
+
+      _betterPlayerController.setVolume(0.0);
+      return _betterPlayerController;
     }
   }
 
@@ -67,11 +135,13 @@ _controller.setLooping(true);
                                 value: downloadProgress.progress)),
                     fit: BoxFit.cover,
                   )
-                : Center(
-                    child: _controller != null
-                        ? VideoPlayer(_controller)
-                        : Container(),
-                  ),
+                : _betterPlayerController != null
+                    ? Container(
+                        child: BetterPlayer(
+                          controller: _betterPlayerController,
+                        ),
+                      )
+                    : Container(),
             // floatingActionButton: FloatingActionButton(
             //   onPressed: () {
             //     setState(() {
@@ -86,17 +156,16 @@ _controller.setLooping(true);
             // ),
           ),
           GestureDetector(
-            onTap: (){
-         
-           setState(() {
-              detailsInfo =false;
-              boolInfo=false;
-           });  
+            onTap: () {
+              setState(() {
+                detailsInfo = false;
+                boolInfo = false;
+              });
             },
-          child: Expanded(child: Container(
-
-         color: Colors.blue.withOpacity(0),
-          )),
+            child: Expanded(
+                child: Container(
+              color: Colors.blue.withOpacity(0),
+            )),
           ),
           Positioned(
               left: 20,
@@ -168,11 +237,9 @@ _controller.setLooping(true);
                                     onPressed: () {
                                       setState(() {
                                         boolInfo = !boolInfo;
-                                        if(boolInfo)
-                                        {
-                                          detailsInfo=false;
+                                        if (boolInfo) {
+                                          detailsInfo = false;
                                         }
-
                                       });
                                     },
                                     icon: Icon(
@@ -298,75 +365,81 @@ _controller.setLooping(true);
               ],
             ),
           ),
-          boolInfo 
-              ?Padding(
-            padding:  EdgeInsets.only(left: 50,right: 50,bottom:  (MediaQuery.of(context).size.height/2 ),top:100),
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                  color: Colors.black.withOpacity(0.4)),
-              child: Expanded(
-                 child: Container(
-                   margin: EdgeInsets.all(20) ,
-                   child: Column(
-                                children: <Widget>[
-                                  widget.product.content != null
-                                      ? Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Container(
-                                              child: Text(
-                                                widget.product.content,
-                                                style: TextStyle(
-                                                    color: AppTheme.notWhite,
-                                                    fontSize: 18,
-                                                    fontFamily: "SpecialElite"),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            width: MediaQuery.of(context).size.width/3,
-                                            ),
-                                            widget.product.price != null
-                                                ? Text(
-                                                   widget.product.price==null?" ":
-                                                    widget.product.price
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        color: AppTheme.notWhite,
-                                                        fontFamily:
-                                                            "SpecialElite",
-                                                        fontSize: 18))
-                                                : SizedBox()
-                                          ],
-                                        )
-                                      : SizedBox(),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  widget.product.productExtra.length > 0 &&
-                                          widget.product.productExtra[0].name !=
-                                              null
-                                      ? Container(
-                                          color: Colors.white,
-                                          height: 1,
-                                        )
-                                      : SizedBox(),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Column(
-                                    children: getExtraProduct(
-                                        widget.product.productExtra),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
+          boolInfo
+              ? Padding(
+                  padding: EdgeInsets.only(
+                      left: 50,
+                      right: 50,
+                      bottom: (MediaQuery.of(context).size.height / 2),
+                      top: 100),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                        color: Colors.black.withOpacity(0.4)),
+                    child: Expanded(
+                      child: Container(
+                        margin: EdgeInsets.all(20),
+                        child: Column(
+                          children: <Widget>[
+                            widget.product.content != null
+                                ? Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Container(
+                                        child: Text(
+                                          widget.product.content,
+                                          style: TextStyle(
+                                              color: AppTheme.notWhite,
+                                              fontSize: 18,
+                                              fontFamily: "SpecialElite"),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                3,
+                                      ),
+                                      widget.product.price != null
+                                          ? Text(
+                                              widget.product.price == null
+                                                  ? " "
+                                                  : widget.product.price
+                                                      .toString(),
+                                              style: TextStyle(
+                                                  color: AppTheme.notWhite,
+                                                  fontFamily: "SpecialElite",
+                                                  fontSize: 18))
+                                          : SizedBox()
+                                    ],
                                   )
-                                ],
-                              ),
-                 ),
-
-              ),
-            ),
-          ):Container(),
+                                : SizedBox(),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            widget.product.productExtra.length > 0 &&
+                                    widget.product.productExtra[0].name != null
+                                ? Container(
+                                    color: Colors.white,
+                                    height: 1,
+                                  )
+                                : SizedBox(),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Column(
+                              children:
+                                  getExtraProduct(widget.product.productExtra),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              : Container(),
           Positioned(
             right: 5.0,
             bottom: 90,
@@ -383,43 +456,45 @@ _controller.setLooping(true);
                   Icons.info,
                   color: AppTheme.notWhite.withOpacity(0.7),
                 ),
-                 onPressed: (){
-
-                   setState(() {
-                     detailsInfo=!detailsInfo;
-                     if(detailsInfo){
-                       boolInfo=false;
-                     }       
-
-                   });
-                 },
+                onPressed: () {
+                  setState(() {
+                    detailsInfo = !detailsInfo;
+                    if (detailsInfo) {
+                      boolInfo = false;
+                    }
+                  });
+                },
               ),
             ),
           ),
-       detailsInfo?   Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 70),
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                  color: Colors.black.withOpacity(0.4)),
-              child: Expanded(
-                child: Container(
-                  margin: EdgeInsets.all(10),
-                  height: 1200,
-                  width: 600,
-                  child: Text(
-                     widget.product.details==null?" ":
-                    widget.product.details,
-                    style: TextStyle(
-                        color: AppTheme.notWhite,
-                        fontSize: 15,
-                        fontFamily: "SpecialElite"),
-                        textAlign: TextAlign.center,
+          detailsInfo
+              ? Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 70),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                        color: Colors.black.withOpacity(0.4)),
+                    child: Expanded(
+                      child: Container(
+                        margin: EdgeInsets.all(10),
+                        height: 1200,
+                        width: 600,
+                        child: Text(
+                          widget.product.details == null
+                              ? " "
+                              : widget.product.details,
+                          style: TextStyle(
+                              color: AppTheme.notWhite,
+                              fontSize: 15,
+                              fontFamily: "SpecialElite"),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
-          ):Container()
+                )
+              : Container()
         ]),
       ),
     );
