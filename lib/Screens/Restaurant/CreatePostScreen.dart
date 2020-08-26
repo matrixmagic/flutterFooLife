@@ -22,7 +22,6 @@ import 'package:signature/signature.dart';
 import '../../AppTheme.dart';
 
 class CreatePost extends StatefulWidget {
-
   Function close_it;
   CreatePost({this.close_it});
   @override
@@ -51,12 +50,12 @@ class _CreatePostState extends State<CreatePost> {
   int isEditing;
   Color pickerColor = Color(0xffffffff);
   Color currentColor = Color(0xffffffff);
-    TextEditingController _econtroller = TextEditingController();
-
+  TextEditingController _econtroller = TextEditingController();
+  int size;
   Timer timeprediction;
   TimeOfDay fromDate;
   TimeOfDay toDate;
-  PostBloc postBloc ;
+  PostBloc postBloc;
   void timers() {
     Timer.periodic(Duration(milliseconds: 10), (tim) {
       setState(() {});
@@ -74,7 +73,7 @@ class _CreatePostState extends State<CreatePost> {
 
   @override
   void initState() {
-    postBloc=new PostBloc(close_it: widget.close_it);
+    postBloc = new PostBloc(close_it: widget.close_it);
     postBloc.changeSat(0);
     postBloc.changeSon(0);
     postBloc.changeMon(0);
@@ -129,32 +128,26 @@ class _CreatePostState extends State<CreatePost> {
                 child: Stack(
                   children: <Widget>[
                     //////// the body
-                  StreamBuilder<Object>(
-                    stream: postBloc.imageStream,
-                    builder: (context, snapshot) {
-                      return Container();
-                    }
-                  ),
                     StreamBuilder<Object>(
-                    stream: postBloc.fromStream,
-                    builder: (context, snapshot) {
-                      return Container();
-                    }
-                  ),
+                        stream: postBloc.imageStream,
+                        builder: (context, snapshot) {
+                          return Container();
+                        }),
                     StreamBuilder<Object>(
-                    stream: postBloc.toStream,
-                    builder: (context, snapshot) {
-                      return Container();
-                    }
-                  ),
+                        stream: postBloc.fromStream,
+                        builder: (context, snapshot) {
+                          return Container();
+                        }),
                     StreamBuilder<Object>(
-                    stream: postBloc.submitStream,
-                    builder: (context, snapshot) {
-   
-                      
-                      return Container();
-                    }
-                  ),
+                        stream: postBloc.toStream,
+                        builder: (context, snapshot) {
+                          return Container();
+                        }),
+                    StreamBuilder<Object>(
+                        stream: postBloc.submitStream,
+                        builder: (context, snapshot) {
+                          return Container();
+                        }),
                     Center(
                       child: Screenshot(
                         controller: screenshotController,
@@ -177,13 +170,14 @@ class _CreatePostState extends State<CreatePost> {
                                                 showDialog(
                                                     context: context,
                                                     child: AlertDialog(
-                                                        content:
-                                                            SingleChildScrollView(
+                                                        content: Container()
+                                                        /* SingleChildScrollView(
                                                                 child: Sliders(
                                                       size: f.key,
                                                       sizevalue: fontsize[f.key]
                                                           .toDouble(),
-                                                    ))));
+                                                    ))*/
+                                                        ));
                                               },
                                               value: f.value.toString(),
                                               fontsize:
@@ -207,18 +201,22 @@ class _CreatePostState extends State<CreatePost> {
                                                             context: context,
                                                             child: AlertDialog(
                                                                 content:
-                                                                    SingleChildScrollView(
+                                                                    Container()
+                                                                /*        SingleChildScrollView(
                                                                         child:
                                                                             Sliders(
                                                               size: f.key,
                                                               sizevalue: fontsize[
                                                                       f.key]
                                                                   .toDouble(),
-                                                            ))));
+                                                            ))*/
+                                                                ));
                                                       },
                                                       onlongpress: () async {
                                                         setState(() {
-                                                          _econtroller.text = multiwidget[f.key];
+                                                          _econtroller.text =
+                                                              multiwidget[
+                                                                  f.key];
 
                                                           isEditing = f.key;
                                                         });
@@ -285,14 +283,10 @@ class _CreatePostState extends State<CreatePost> {
                                               showTimePicker(
                                                 initialTime: TimeOfDay.now(),
                                                 context: context,
-                                                
-                                              ).then(
-                                                  (value) {
-                                                    fromDate = value;
-                                                    postBloc.changefrom(value);
-
-                                                  } 
-                                          );
+                                              ).then((value) {
+                                                fromDate = value;
+                                                postBloc.changefrom(value);
+                                              });
                                             },
                                           ),
                                           Text(
@@ -312,11 +306,10 @@ class _CreatePostState extends State<CreatePost> {
                                               showTimePicker(
                                                 initialTime: TimeOfDay.now(),
                                                 context: context,
-                                              ).then(    (value) {
-                                                    toDate = value;
-                                                    postBloc.changeTo(value);
-
-                                                  } );
+                                              ).then((value) {
+                                                toDate = value;
+                                                postBloc.changeTo(value);
+                                              });
                                             },
                                           ),
                                         ],
@@ -333,28 +326,35 @@ class _CreatePostState extends State<CreatePost> {
                                             MainAxisAlignment.spaceAround,
                                         children: <Widget>[
                                           Container(
-                                                 width: 100,
-                                                 height: 20,
-                                                 child: StreamBuilder(
-                                                   stream: postBloc.nameStream,
-                                                   builder: (context, snapshot) {
-                                                     return TextField(
-                                                       onChanged: postBloc.changeName,
-                                                       style: TextStyle(color: AppTheme.notWhite),
-                                                       decoration: InputDecoration(
-                  hintText: "Post name",
-                  hintStyle: TextStyle(color: Colors.white),
-                  fillColor: Colors.grey[600].withOpacity(0.2),
-                  filled: true,
-                  
-                  contentPadding: EdgeInsets.only(left:5 ,bottom: 10),
-                  alignLabelWithHint: true,
-                ),
-                                                     );
-                                                   }
-                                                 ),
-                                               ),
-                                               multiwidget.length == 0
+                                            width: 100,
+                                            height: 20,
+                                            child: StreamBuilder(
+                                                stream: postBloc.nameStream,
+                                                builder: (context, snapshot) {
+                                                  return TextField(
+                                                    onChanged:
+                                                        postBloc.changeName,
+                                                    style: TextStyle(
+                                                        color:
+                                                            AppTheme.notWhite),
+                                                    decoration: InputDecoration(
+                                                      hintText: "Post name",
+                                                      hintStyle: TextStyle(
+                                                          color: Colors.white),
+                                                      fillColor: Colors
+                                                          .grey[600]
+                                                          .withOpacity(0.2),
+                                                      filled: true,
+                                                      contentPadding:
+                                                          EdgeInsets.only(
+                                                              left: 5,
+                                                              bottom: 10),
+                                                      alignLabelWithHint: true,
+                                                    ),
+                                                  );
+                                                }),
+                                          ),
+                                          multiwidget.length == 0
                                               ? Container()
                                               : DragTarget(
                                                   builder: (context,
@@ -389,8 +389,10 @@ class _CreatePostState extends State<CreatePost> {
                                                       }
                                                     });
                                                   },
-                                                )
-                                                ,SizedBox(width: 20,)
+                                                ),
+                                          SizedBox(
+                                            width: 20,
+                                          )
                                         ])),
                                 Row(
                                   mainAxisAlignment:
@@ -476,23 +478,23 @@ class _CreatePostState extends State<CreatePost> {
                                           _imageFile = null;
                                           screenshotController
                                               .capture(
-                                                  delay: Duration(milliseconds: 500), pixelRatio: 1.5)
+                                                  delay: Duration(
+                                                      milliseconds: 500),
+                                                  pixelRatio: 1.5)
                                               .then((File image) async {
-
-                                                postBloc.changeImage(image);
-                                                postBloc.changeSubmit(true);
+                                            postBloc.changeImage(image);
+                                            postBloc.changeSubmit(true);
                                             //print("Capture Done");
                                             setState(() {
                                               _imageFile = image;
                                             });
-                                           // final paths = await getExternalStorageDirectory();
+                                            // final paths = await getExternalStorageDirectory();
                                             //image.copy(paths.path +
-                                              //  '/' +
-                                                //DateTime.now().millisecondsSinceEpoch.toString() +
-                                                //'.png');
+                                            //  '/' +
+                                            //DateTime.now().millisecondsSinceEpoch.toString() +
+                                            //'.png');
 
-
-                                          //  Navigator.pop(context, image);
+                                            //  Navigator.pop(context, image);
                                           }).catchError((onError) {
                                             print(onError);
                                           });
@@ -500,8 +502,9 @@ class _CreatePostState extends State<CreatePost> {
                                       ),
                                     ),
                                     Container(
-                                      child: SizedBox(width: 20,)
-                                    ),
+                                        child: SizedBox(
+                                      width: 20,
+                                    )),
                                   ],
                                 ),
                               ],
@@ -543,24 +546,38 @@ class _CreatePostState extends State<CreatePost> {
             child: Container(
               width: 150,
               height: 50,
-              child: TextField(
-                controller: _econtroller,
-                decoration: InputDecoration(hintText: "type here"),
-                autofocus: true,
-                cursorColor: color,
-                focusNode: FocusNode(),
-                // onChanged: (newValue) {
-                //  multiwidget[f] = newValue;
-                // },
-                onSubmitted: (newValue) {
+              child: GestureDetector(
+                onScaleUpdate: (details) {
                   setState(() {
-                    multiwidget[f] = newValue;
-                    isEditing = -1;
+                    print('ssssssssssssssssssssssssssssssssssssssssssssss');
+                    fontsize = fontsize + (9 * (details.scale * .35));
                   });
                 },
-                style: TextStyle(
+                onScaleEnd: (ScaleEndDetails details) {
+                  setState(() {
+                    //   _initTextSize =  fontsize[0] ;
+                  });
+                },
+                child: TextField(
+                  controller: _econtroller,
+                  decoration: InputDecoration(hintText: "type here"),
+                  autofocus: true,
+                  cursorColor: color,
+                  focusNode: FocusNode(),
+                  // onChanged: (newValue) {
+                  //  multiwidget[f] = newValue;
+                  // },
+                  onSubmitted: (newValue) {
+                    setState(() {
+                      multiwidget[f] = newValue;
+                      isEditing = -1;
+                    });
+                  },
+                  style: TextStyle(
                     color: color,
-                    fontSize: fontsize,),
+                    fontSize: fontsize,
+                  ),
+                ),
               ),
             )),
         Positioned(
@@ -637,46 +654,44 @@ class _CreatePostState extends State<CreatePost> {
         Theme(
             data: ThemeData(unselectedWidgetColor: Colors.white),
             child: StreamBuilder(
-              stream: title=='Mo.'? postBloc.monStream:
-              title=='Tu.'? postBloc.tusStream:
-              title=='We.'? postBloc.wedStream:
-              title=='Wi.'? postBloc.sonStream:
-              title=='Th.'? postBloc.thurStream:
-              title=='Fi'? postBloc.friStream:
-              postBloc.satStream
-              ,
-              builder: (context, snapshot) {
-                return Checkbox(
-                  value: boolValue,
-                  focusColor: AppTheme.notWhite,
-                  onChanged: (bool value) {
-                    setState(() {
-                      week[title] = value;
-                      if(title=='Mo.'){
-                        postBloc.changeMon(value?1:0);
-                      }
-                      else if (title=='Tu.'){
-                        postBloc.changeTus(value?1:0);
-                      }
-                       else if (title=='Wi.'){
-                        postBloc.changeSon(value?1:0);
-                      }
-                       else if (title=='We.'){
-                        postBloc.changeWed(value?1:0);
-                      }
-                       else if (title=='Th.'){
-                        postBloc.changeThurt(value?1:0);
-                      }
-                       else if (title=='Fi.'){
-                        postBloc.changefri(value?1:0);
-                      }
-                      else postBloc.changeSat(value?1:0);
-                      
-                    });
-                  },
-                );
-              }
-            ))
+                stream: title == 'Mo.'
+                    ? postBloc.monStream
+                    : title == 'Tu.'
+                        ? postBloc.tusStream
+                        : title == 'We.'
+                            ? postBloc.wedStream
+                            : title == 'Wi.'
+                                ? postBloc.sonStream
+                                : title == 'Th.'
+                                    ? postBloc.thurStream
+                                    : title == 'Fi'
+                                        ? postBloc.friStream
+                                        : postBloc.satStream,
+                builder: (context, snapshot) {
+                  return Checkbox(
+                    value: boolValue,
+                    focusColor: AppTheme.notWhite,
+                    onChanged: (bool value) {
+                      setState(() {
+                        week[title] = value;
+                        if (title == 'Mo.') {
+                          postBloc.changeMon(value ? 1 : 0);
+                        } else if (title == 'Tu.') {
+                          postBloc.changeTus(value ? 1 : 0);
+                        } else if (title == 'Wi.') {
+                          postBloc.changeSon(value ? 1 : 0);
+                        } else if (title == 'We.') {
+                          postBloc.changeWed(value ? 1 : 0);
+                        } else if (title == 'Th.') {
+                          postBloc.changeThurt(value ? 1 : 0);
+                        } else if (title == 'Fi.') {
+                          postBloc.changefri(value ? 1 : 0);
+                        } else
+                          postBloc.changeSat(value ? 1 : 0);
+                      });
+                    },
+                  );
+                }))
       ],
     );
   }

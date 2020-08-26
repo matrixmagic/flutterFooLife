@@ -5,6 +5,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:foolife/Dto/RestaurantDto.dart';
 import 'package:foolife/Dto/StatisticDto.dart';
 import 'package:foolife/Repository/RestaurantRepository.dart';
 import 'package:foolife/Screens/Restaurant/changeBackground.dart';
@@ -21,12 +22,14 @@ import 'FriendsPage.dart';
 
 class RestaurantDetail extends StatefulWidget {
   final dynamic id;
+  RestaurantDto restaurantDto;
   RestaurantDetail({this.id});
   @override
   _RestaurantDetailState createState() => _RestaurantDetailState();
 }
 
 class _RestaurantDetailState extends State<RestaurantDetail> {
+  RestaurantDto myRestaurant;
   GlobalKey globalKey = GlobalKey();
   List<String> images = [
     'assets/images/Restaurant1.jpg',
@@ -105,6 +108,13 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
     }
   }
 
+  getRestaurant() async {
+    RestaurantDto restaurantDto = await RestaurantRepository().getMyResturant();
+    setState(() {
+      myRestaurant = restaurantDto;
+    });
+  }
+
   printQrCode() async {
     final doc = pw.Document();
     const imageProvider = const AssetImage('assets/images/burger.jpeg');
@@ -127,6 +137,8 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
 
   @override
   void initState() {
+    getRestaurant();
+
     // TODO: implement initState
     for (int i = 0; i < images.length; i++) {
       setState(() {
@@ -147,7 +159,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
             padding: EdgeInsets.only(top: 10, bottom: 5),
             child: Center(
               child: Text(
-                "Extrablatt am Schillerplatz",
+                myRestaurant == null ? "" : myRestaurant.name,
                 style: TextStyle(fontSize: 17),
               ),
             ),
@@ -241,10 +253,10 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
           ),
 
           //stories list
-          storiesBar(
+          /*storiesBar(
             images: images,
             appear: appear,
-          ),
+          ),*/
 
           //Allgemeine statistik
           Padding(
@@ -388,69 +400,71 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
           ),
 
           //buttons
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 4),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                InkWell(
-                    onTap: () {
-                      setState(() {
-                        images = addStory("assets/images/burger.jpeg");
-                        appear = addBool();
-                      });
-                    },
-                    child: Image.asset(
-                      "assets/images/Story Plus.png",
-                    )),
-                SizedBox(
-                  width: 25,
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/mangemenuscreen');
-                  },
-                  child: Image.asset(
-                    "assets/images/Icon simple-producthunt.png",
-                    width: 30,
-                    height: 30,
-                  ),
-                ),
-                SizedBox(
-                  width: 25,
-                ),
-                InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => FriendPage()),
-                      );
-                    },
-                    child: Image.asset(
-                      "assets/images/Icon awesome-user-friends.png",
-                      width: 30,
-                      height: 30,
-                    )),
-                SizedBox(
-                  width: 25,
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => changeBackground()),
-                      );
-                  },
-                  child: Image.asset(
-                    "assets/images/Icon feather-settings.png",
-                    width: 30,
-                    height: 30,
-                  ),
-                )
-              ],
-            ),
-          )
         ],
+      ),
+      Positioned(
+        bottom: MediaQuery.of(context).size.height / 12,
+        left: 5.0,
+        right: 15,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            InkWell(
+                onTap: () {
+                  setState(() {
+                    images = addStory("assets/images/burger.jpeg");
+                    appear = addBool();
+                  });
+                },
+                child: Image.asset(
+                  "assets/images/Story Plus.png",
+                )),
+            SizedBox(
+              width: 25,
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/mangemenuscreen');
+              },
+              child: Image.asset(
+                "assets/images/Icon simple-producthunt.png",
+                width: 30,
+                height: 30,
+              ),
+            ),
+            SizedBox(
+              width: 25,
+            ),
+            InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FriendPage()),
+                  );
+                },
+                child: Image.asset(
+                  "assets/images/Icon awesome-user-friends.png",
+                  width: 30,
+                  height: 30,
+                )),
+            SizedBox(
+              width: 25,
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => changeBackground()),
+                );
+              },
+              child: Image.asset(
+                "assets/images/Icon feather-settings.png",
+                width: 30,
+                height: 30,
+              ),
+            )
+          ],
+        ),
       ),
       Positioned(
         bottom: 0,

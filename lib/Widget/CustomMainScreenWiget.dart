@@ -11,7 +11,6 @@ import 'package:foolife/Widget/MenuBar.dart';
 import 'package:foolife/Widget/my_flutter_app_icons.dart';
 import 'package:pedantic/pedantic.dart';
 
-
 import '../AppTheme.dart';
 import 'my_flutter_app_icons3.dart';
 import 'qrcode1.dart';
@@ -19,8 +18,7 @@ import 'qrcode1.dart';
 class CustomMainScreenWiget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _CustomMainScreenWiget();
-  CustomMainScreenWiget(
-      { this.restauranDto, this.cateogries});
+  CustomMainScreenWiget({this.restauranDto, this.cateogries});
 
   RestaurantDto restauranDto;
   List<CategoryDto> cateogries;
@@ -33,41 +31,35 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
   bool info = false;
   BetterPlayerController _betterPlayerController;
 
-@override
+  @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-
   }
-@override
-  Future<void> initState()  {
+
+  @override
+  Future<void> initState() {
     // TODO: implement initState
     super.initState();
 
-    _cacheManager= DefaultCacheManager();
-     if (widget.restauranDto.file.extension == "mp4") {
+    _cacheManager = DefaultCacheManager();
+    if (widget.restauranDto.file.extension == "mp4") {
       print(widget.restauranDto.file.path);
 
-  
-      
-
-getVideoController();
-     
-     }
-    
+      getVideoController();
     }
+  }
 
- void     getVideoController() async {
-   double _screenWidth = WidgetsBinding.instance.window.physicalSize.width;
-double _screenHeight = WidgetsBinding.instance.window.physicalSize.height;
-var x= await getControllerForVideo(widget.restauranDto.file.path,_screenWidth,_screenHeight);
-setState(()  {
-  _betterPlayerController  =x;
-});
- 
-    }
+  void getVideoController() async {
+    double _screenWidth = WidgetsBinding.instance.window.physicalSize.width;
+    double _screenHeight = WidgetsBinding.instance.window.physicalSize.height;
+    var x = await getControllerForVideo(
+        widget.restauranDto.file.path, _screenWidth, _screenHeight);
+    setState(() {
+      _betterPlayerController = x;
+    });
+  }
 
-  
   void openCreatePostScreen() {
     setState(() {
       mainScreenWidgetVisibility = false;
@@ -82,7 +74,8 @@ setState(()  {
     });
   }
 
-    Future<BetterPlayerController> getControllerForVideo(String  videoUrl,double _screenWidth,double _screenHeight) async {
+  Future<BetterPlayerController> getControllerForVideo(
+      String videoUrl, double _screenWidth, double _screenHeight) async {
     final fileInfo = await _cacheManager.getFileFromCache(videoUrl);
 
     if (fileInfo == null || fileInfo.file == null) {
@@ -91,50 +84,51 @@ setState(()  {
       print('[VideoControllerService]: Saving video to cache');
       unawaited(_cacheManager.downloadFile(videoUrl));
 
-
-        
-     BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
+      BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
         BetterPlayerDataSourceType.NETWORK,
-    
-        videoUrl, liveStream: true,);
-    _betterPlayerController = BetterPlayerController(
-        BetterPlayerConfiguration(autoPlay: true,looping: true, aspectRatio: _screenWidth/_screenHeight,controlsConfiguration: BetterPlayerControlsConfiguration(
-        liveText:  "",
-        showControls: false
-      ),) ,
+        videoUrl,
+        liveStream: true,
+      );
+      _betterPlayerController = BetterPlayerController(
+        BetterPlayerConfiguration(
+          autoPlay: true,
+          looping: true,
+          aspectRatio: _screenWidth / _screenHeight,
+          controlsConfiguration: BetterPlayerControlsConfiguration(
+              liveText: "", showControls: false),
+        ),
         betterPlayerDataSource: betterPlayerDataSource,
-        );
-  
-    
-  _betterPlayerController.setVolume(0.0);
+      );
+
+      _betterPlayerController.setVolume(0.0);
 
       return _betterPlayerController;
     } else {
       print('[VideoControllerService]: Loading video from cache');
 
-           BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
+      BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
         BetterPlayerDataSourceType.FILE,
-    
-        fileInfo.file.path, liveStream: true,);
-    _betterPlayerController = BetterPlayerController(
-        BetterPlayerConfiguration(autoPlay: true,looping: true, aspectRatio: _screenWidth/_screenHeight,controlsConfiguration: BetterPlayerControlsConfiguration(
-        liveText:  "",
-        showControls: false
-      ),) ,
+        fileInfo.file.path,
+        liveStream: true,
+      );
+      _betterPlayerController = BetterPlayerController(
+        BetterPlayerConfiguration(
+          autoPlay: true,
+          looping: true,
+          aspectRatio: _screenWidth / _screenHeight,
+          controlsConfiguration: BetterPlayerControlsConfiguration(
+              liveText: "", showControls: false),
+        ),
         betterPlayerDataSource: betterPlayerDataSource,
-        );
-  
-    
-  _betterPlayerController.setVolume(0.0);
+      );
+
+      _betterPlayerController.setVolume(0.0);
       return _betterPlayerController;
     }
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
-    
     return SafeArea(
       top: false,
       child: Scaffold(
@@ -143,9 +137,13 @@ setState(()  {
           Container(
             child: widget.restauranDto.file.extension != "mp4"
                 ? CachedNetworkImage(
-                    imageUrl: (widget.restauranDto==null||widget.restauranDto.file==null||widget.restauranDto.file.path==null)?"https://www.insperry.com/Insperry/public/uploads/files/store/08_03_2020_23_51_78Restaurant1.jpg":widget.restauranDto.file.path,
+                    imageUrl: (widget.restauranDto == null ||
+                            widget.restauranDto.file == null ||
+                            widget.restauranDto.file.path == null)
+                        ? "https://www.insperry.com/Insperry/public/uploads/files/store/08_03_2020_23_51_78Restaurant1.jpg"
+                        : widget.restauranDto.file.path,
                     height: MediaQuery.of(context).size.height,
-                     width:MediaQuery.of(context).size.width ,
+                    width: MediaQuery.of(context).size.width,
                     progressIndicatorBuilder:
                         (context, url, downloadProgress) => Center(
                             child: CircularProgressIndicator(
@@ -153,13 +151,11 @@ setState(()  {
                     fit: BoxFit.cover,
                   )
                 : _betterPlayerController != null
-                    ?  Container(
-                    
-                                          child: BetterPlayer( controller: _betterPlayerController,
-                  
-                 
-                   ),
-                    )
+                    ? Container(
+                        child: BetterPlayer(
+                          controller: _betterPlayerController,
+                        ),
+                      )
                     : Container(),
             // floatingActionButton: FloatingActionButton(
             //   onPressed: () {
@@ -174,18 +170,22 @@ setState(()  {
             //   ),
             // ),
           ),
-          
-        widget.restauranDto.post != null? Container(
-            child: Image(
-              image: NetworkImage(widget.restauranDto.post.file.path),
-              height: MediaQuery.of(context).size.height,
-              width:MediaQuery.of(context).size.width ,
-              fit: BoxFit.cover,
-            ),
-          ):Container(),
+          widget.restauranDto.post != null
+              ? Container(
+                  child: Image(
+                    image: NetworkImage(widget.restauranDto.post.file.path),
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.cover,
+                  ),
+                )
+              : Container(),
           Visibility(
             visible: postScreenWidgetVisibility,
-            child: Container(child: CreatePost(close_it: closeCreatePostScreen ,)),
+            child: Container(
+                child: CreatePost(
+              close_it: closeCreatePostScreen,
+            )),
           ),
           Container(
             child: Column(
@@ -237,7 +237,7 @@ setState(()  {
                             onPressed: () {},
                             icon: Icon(
                               Icons.favorite,
-                              size: 31,
+                              size: MediaQuery.of(context).size.height / 21,
                               color: Colors.white.withOpacity(0.8),
                             ),
                           ),
@@ -264,7 +264,7 @@ setState(()  {
                           child: IconButton(
                             icon: Icon(
                               Icons.star,
-                              size: 31,
+                              size: MediaQuery.of(context).size.height / 21,
                               color: Colors.white.withOpacity(0.8),
                             ),
                           ),
@@ -289,7 +289,7 @@ setState(()  {
                         child: IconButton(
                           icon: Icon(
                             Icons.person,
-                            size: 31,
+                            size: MediaQuery.of(context).size.height / 21,
                             color: Colors.white.withOpacity(0.8),
                           ),
                         ),
@@ -312,7 +312,7 @@ setState(()  {
                         child: IconButton(
                           icon: Icon(
                             Icons.share,
-                            size: 31,
+                            size: MediaQuery.of(context).size.height / 21,
                             color: Colors.white.withOpacity(0.8),
                           ),
                         ),
@@ -335,7 +335,7 @@ setState(()  {
                         child: IconButton(
                           icon: Icon(
                             MyFlutterApp.kellner_option,
-                            size: 31,
+                            size: MediaQuery.of(context).size.height / 21,
                             color: Colors.white.withOpacity(0.8),
                           ),
                         ),
@@ -358,7 +358,7 @@ setState(()  {
                         child: IconButton(
                           icon: Icon(
                             Icons.insert_comment,
-                            size: 31,
+                            size: MediaQuery.of(context).size.height / 21,
                             color: Colors.white.withOpacity(0.8),
                           ),
                         ),
@@ -474,9 +474,12 @@ setState(()  {
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 90),
                   child: Container(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(30)),
-                        gradient: LinearGradient(colors: [Colors.green.withOpacity(0.4),Colors.pinkAccent.withOpacity(0.4)]),
-                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                      gradient: LinearGradient(colors: [
+                        Colors.green.withOpacity(0.4),
+                        Colors.pinkAccent.withOpacity(0.4)
+                      ]),
+                    ),
                     child: Expanded(
                       child: Container(
                         margin: EdgeInsets.all(10),
@@ -485,39 +488,41 @@ setState(()  {
                         child: Column(
                           children: <Widget>[
                             Container(
-                                    
-                                    child: Text(widget.restauranDto.name
-                                      ,textAlign: TextAlign.start,
-                                      style: AppTheme.insperryTheme,
-                                    ),
-                                  ),
-                             Container(
-                                    
-                                    child: Text("United Kingdom"
-                                      ,textAlign: TextAlign.start,
-                                      style: AppTheme.insperryTheme,
-                                    ),
-                                  ),
-                           
-                           
-                              
+                              child: Text(
+                                widget.restauranDto.name,
+                                textAlign: TextAlign.start,
+                                style: AppTheme.insperryTheme,
+                              ),
+                            ),
+                            Container(
+                              child: Text(
+                                "United Kingdom",
+                                textAlign: TextAlign.start,
+                                style: AppTheme.insperryTheme,
+                              ),
+                            ),
                             Text(
-                              widget.restauranDto.city +", "+ widget.restauranDto.street,
+                              widget.restauranDto.city +
+                                  ", " +
+                                  widget.restauranDto.street,
                               style: AppTheme.insperryTheme,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(width: 50,),
+                                SizedBox(
+                                  width: 50,
+                                ),
                                 Container(
                                   width: 120,
                                   child: Text(
-                                    "telephon:",textAlign: TextAlign.start,
+                                    "telephon:",
+                                    textAlign: TextAlign.start,
                                     style: AppTheme.insperryTheme,
                                   ),
                                 ),
                                 Text(
-                                  widget.restauranDto.user.phoneNumber  ,
+                                  widget.restauranDto.user.phoneNumber,
                                   style: AppTheme.insperryTheme,
                                 )
                               ],
@@ -525,7 +530,9 @@ setState(()  {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(width: 50,),
+                                SizedBox(
+                                  width: 50,
+                                ),
                                 Container(
                                   width: 120,
                                   child: Text(
@@ -539,28 +546,29 @@ setState(()  {
                                 )
                               ],
                             ),
-                             Row(
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(width: 50,),
+                                SizedBox(
+                                  width: 50,
+                                ),
                                 Container(
                                   width: 120,
                                   child: Text(
-                                    "Email:",textAlign: TextAlign.start,
+                                    "Email:",
+                                    textAlign: TextAlign.start,
                                     style: AppTheme.insperryTheme,
                                   ),
                                 ),
                                 Container(
                                   width: 70,
                                   child: Text(
-                                    
-                                    widget.restauranDto.user.email  ,
+                                    widget.restauranDto.user.email,
                                     style: AppTheme.insperryTheme,
                                   ),
                                 )
                               ],
                             ),
-                           
                             Container(
                               width: 120,
                               child: Text(
@@ -568,12 +576,12 @@ setState(()  {
                                 style: AppTheme.insperryTheme,
                               ),
                             ),
-                             Row(
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(width:50),
+                                SizedBox(width: 50),
                                 Container(
-                                  width:120,
+                                  width: 120,
                                   child: Text(
                                     "opentime:",
                                     style: AppTheme.insperryTheme,
@@ -588,9 +596,9 @@ setState(()  {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(width:50),
+                                SizedBox(width: 50),
                                 Container(
-                                  width:120,
+                                  width: 120,
                                   child: Text(
                                     "closetime:",
                                     style: AppTheme.insperryTheme,
@@ -602,40 +610,96 @@ setState(()  {
                                 )
                               ],
                             ),
-                             Row(
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(width:50),
+                                SizedBox(width: 50),
                                 Container(
-                                  width:120,
+                                  width: 120,
                                   child: Text(
                                     "Payment Method:",
                                     style: AppTheme.insperryTheme,
                                   ),
                                 ),
                                 Container(
-                                  width: 70,
-                                  child: Wrap(children: getPaymentMethod(),))
-                               
-
+                                    width: 70,
+                                    child: Wrap(
+                                      children: getPaymentMethod(),
+                                    ))
                               ],
                             ),
                             Container(
-                            
                               width: 200,
                               child: Wrap(
-                                
                                 alignment: WrapAlignment.center,
                                 children: <Widget>[
-                        
-                                Container(padding: EdgeInsets.all(7), child: widget.restauranDto.services.gamepad == 1? Icon(  FontAwesomeIcons.gamepad ,color: AppTheme.primaryColor ,size: 34,):Container()),
-                                Container(padding: EdgeInsets.all(7),child: widget.restauranDto.services.accessible == 1? Icon( Icons.accessible ,color: AppTheme.primaryColor,size: 34,):Container()),
-                                Container(padding: EdgeInsets.all(7),child: widget.restauranDto.services.childfriendly == 1? Icon( Icons.child_friendly ,color: AppTheme.primaryColor,size: 34,):Container()),
-                                Container(padding: EdgeInsets.all(7),child: widget.restauranDto.services.wifi == 1? Icon( Icons.wifi ,color: AppTheme.primaryColor,size: 34,):Container()),
-                                Container(padding: EdgeInsets.all(7),child: widget.restauranDto.services.power == 1? Icon( Icons.power ,color: AppTheme.primaryColor,size: 34,):Container()),
-                                Container(padding: EdgeInsets.all(7),child: widget.restauranDto.services.pets == 1? Icon( Icons.pets ,color: AppTheme.primaryColor,size: 34,):Container()),
-                              ],),
-                            ) 
+                                  Container(
+                                      padding: EdgeInsets.all(7),
+                                      child: widget.restauranDto.services
+                                                  .gamepad ==
+                                              1
+                                          ? Icon(
+                                              FontAwesomeIcons.gamepad,
+                                              color: AppTheme.primaryColor,
+                                              size: 34,
+                                            )
+                                          : Container()),
+                                  Container(
+                                      padding: EdgeInsets.all(7),
+                                      child: widget.restauranDto.services
+                                                  .accessible ==
+                                              1
+                                          ? Icon(
+                                              Icons.accessible,
+                                              color: AppTheme.primaryColor,
+                                              size: 34,
+                                            )
+                                          : Container()),
+                                  Container(
+                                      padding: EdgeInsets.all(7),
+                                      child: widget.restauranDto.services
+                                                  .childfriendly ==
+                                              1
+                                          ? Icon(
+                                              Icons.child_friendly,
+                                              color: AppTheme.primaryColor,
+                                              size: 34,
+                                            )
+                                          : Container()),
+                                  Container(
+                                      padding: EdgeInsets.all(7),
+                                      child:
+                                          widget.restauranDto.services.wifi == 1
+                                              ? Icon(
+                                                  Icons.wifi,
+                                                  color: AppTheme.primaryColor,
+                                                  size: 34,
+                                                )
+                                              : Container()),
+                                  Container(
+                                      padding: EdgeInsets.all(7),
+                                      child:
+                                          widget.restauranDto.services.power ==
+                                                  1
+                                              ? Icon(
+                                                  Icons.power,
+                                                  color: AppTheme.primaryColor,
+                                                  size: 34,
+                                                )
+                                              : Container()),
+                                  Container(
+                                      padding: EdgeInsets.all(7),
+                                      child:
+                                          widget.restauranDto.services.pets == 1
+                                              ? Icon(
+                                                  Icons.pets,
+                                                  color: AppTheme.primaryColor,
+                                                  size: 34,
+                                                )
+                                              : Container()),
+                                ],
+                              ),
+                            )
                           ],
                         ),
                       ),
@@ -648,16 +712,16 @@ setState(()  {
     );
   }
 
-  List<Widget> getPaymentMethod(){
+  List<Widget> getPaymentMethod() {
     bool isfirst = true;
     return widget.restauranDto.paymentsMethod.map((e) {
       print(e.name);
-      var text= Text( e.name ,style: AppTheme.insperryTheme,);
-    isfirst = false;
-    return text;
-    }
-    ).toList();
-
-
+      var text = Text(
+        e.name,
+        style: AppTheme.insperryTheme,
+      );
+      isfirst = false;
+      return text;
+    }).toList();
   }
 }
