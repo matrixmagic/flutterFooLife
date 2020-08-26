@@ -16,7 +16,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:intl/intl.dart';
+import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:signature/signature.dart';
 import '../../AppTheme.dart';
@@ -112,9 +112,10 @@ class _CreatePostState extends State<CreatePost> {
       timingVisibility ? timingVisibility = false : timingVisibility = true;
     });
   }
-
+ double scale = 0.0;
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       backgroundColor: Colors.transparent,
       key: scaf,
@@ -538,26 +539,25 @@ class _CreatePostState extends State<CreatePost> {
 
   Widget putEditMode(int f, String value, Color color, double fontsize,
       double left, double top) {
+         final ValueNotifier<Matrix4> notifier = ValueNotifier(Matrix4.identity());
     return Stack(
       children: <Widget>[
         Positioned(
             left: left,
             top: top,
-            child: Container(
-              width: 150,
-              height: 50,
-              child: GestureDetector(
-                onScaleUpdate: (details) {
-                  setState(() {
-                    print('ssssssssssssssssssssssssssssssssssssssssssssss');
-                    fontsize = fontsize + (9 * (details.scale * .35));
-                  });
-                },
-                onScaleEnd: (ScaleEndDetails details) {
-                  setState(() {
-                    //   _initTextSize =  fontsize[0] ;
-                  });
-                },
+            child: MatrixGestureDetector(
+              onMatrixUpdate: (m, tm, sm, rm) {
+              notifier.value = m;
+            },
+              child: AnimatedBuilder(
+              animation: notifier,
+              builder: (ctx, child) {
+                print('xxxxxxxxxxxxxx');
+                return Transform(
+                  transform: notifier.value,
+                  child: Container(
+                width: 150,
+                height: 50,
                 child: TextField(
                   controller: _econtroller,
                   decoration: InputDecoration(hintText: "type here"),
@@ -579,7 +579,8 @@ class _CreatePostState extends State<CreatePost> {
                   ),
                 ),
               ),
-            )),
+                        );}
+            )),),
         Positioned(
           left: 5.0,
           bottom: 90,
