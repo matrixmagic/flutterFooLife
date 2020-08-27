@@ -112,10 +112,10 @@ class _CreatePostState extends State<CreatePost> {
       timingVisibility ? timingVisibility = false : timingVisibility = true;
     });
   }
- double scale = 0.0;
+
+  double scale = 0.0;
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
       backgroundColor: Colors.transparent,
       key: scaf,
@@ -246,270 +246,266 @@ class _CreatePostState extends State<CreatePost> {
                             bottom: 40,
                             left: 5.0,
                             right: 5.0,
-                            child: Column(
-                              children: <Widget>[
-                                Visibility(
-                                  visible: timingVisibility,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                            child: Stack(children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  Container(
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: <Widget>[
+                                        Container(
+                                          width: 100,
+                                          height: 20,
+                                          child: StreamBuilder(
+                                              stream: postBloc.nameStream,
+                                              builder: (context, snapshot) {
+                                                return TextField(
+                                                  onChanged:
+                                                      postBloc.changeName,
+                                                  style: TextStyle(
+                                                      color: AppTheme.notWhite),
+                                                  decoration: InputDecoration(
+                                                    hintText: "Post name",
+                                                    hintStyle: TextStyle(
+                                                        color: Colors.white),
+                                                    fillColor: Colors.grey[600]
+                                                        .withOpacity(0.2),
+                                                    filled: true,
+                                                    contentPadding:
+                                                        EdgeInsets.only(
+                                                            left: 5,
+                                                            bottom: 10),
+                                                    alignLabelWithHint: true,
+                                                  ),
+                                                );
+                                              }),
+                                        ),
+                                        multiwidget.length == 0
+                                            ? Container()
+                                            : DragTarget(
+                                                builder: (context,
+                                                    List<int> candidateData,
+                                                    rejectedData) {
+                                                  return Icon(
+                                                    Icons.delete,
+                                                    color: AppTheme.notWhite,
+                                                  );
+                                                },
+                                                onWillAccept: (data) {
+                                                  return true;
+                                                },
+                                                onAccept: (data) {
+                                                  setState(() {
+                                                    if (type[data] == 1) {
+                                                      multiwidget
+                                                          .removeAt(data);
+                                                      type.removeAt(data);
+                                                      offsets.removeAt(data);
+                                                      fontsize.removeAt(data);
+                                                      howmuchwidgetis--;
+                                                    } else {
+                                                      type.removeAt(data);
+                                                      fontsize.removeAt(data);
+                                                      offsets.removeAt(data);
+                                                      multiwidget
+                                                          .removeAt(data);
+                                                      fontcolor.removeAt(data);
+                                                      howmuchwidgetis--;
+                                                    }
+                                                  });
+                                                },
+                                              ),
+                                        SizedBox(
+                                          width: 20,
+                                        )
+                                      ])),
+                                  Visibility(
+                                    visible: timingVisibility,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: week.entries.map((day) {
+                                            return checkbox(day.key, day.value);
+                                          }).toList(),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Text(
+                                              "From:",
+                                              style: TextStyle(
+                                                  color: AppTheme.notWhite),
+                                            ),
+                                            FlatButton(
+                                              child: Text(
+                                                fromDate == null
+                                                    ? "Click"
+                                                    : fromDate.format(context),
+                                                style: TextStyle(
+                                                    color: Colors.green),
+                                              ),
+                                              onPressed: () {
+                                                showTimePicker(
+                                                  initialTime: TimeOfDay.now(),
+                                                  context: context,
+                                                ).then((value) {
+                                                  fromDate = value;
+                                                  postBloc.changefrom(value);
+                                                });
+                                              },
+                                            ),
+                                            Text(
+                                              "To:",
+                                              style: TextStyle(
+                                                  color: AppTheme.notWhite),
+                                            ),
+                                            FlatButton(
+                                              child: Text(
+                                                toDate == null
+                                                    ? "Click"
+                                                    : toDate.format(context),
+                                                style: TextStyle(
+                                                    color: Colors.green),
+                                              ),
+                                              onPressed: () {
+                                                showTimePicker(
+                                                  initialTime: TimeOfDay.now(),
+                                                  context: context,
+                                                ).then((value) {
+                                                  toDate = value;
+                                                  postBloc.changeTo(value);
+                                                });
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: <Widget>[
-                                      Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: week.entries.map((day) {
-                                          return checkbox(day.key, day.value);
-                                        }).toList(),
+                                      Container(
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.text_fields,
+                                            color: AppTheme.notWhite,
+                                          ),
+                                          onPressed: () async {
+                                            type.add(2);
+                                            fontsize.add(22);
+                                            offsets.add(Offset(150, 250));
+                                            multiwidget.add("Type Here");
+                                            fontcolor.add(Color(0xff443a49));
+                                            isEditing = howmuchwidgetis;
+                                            howmuchwidgetis++;
+                                          },
+                                        ),
                                       ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          Text(
-                                            "From:",
-                                            style: TextStyle(
-                                                color: AppTheme.notWhite),
+                                      Container(
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.layers_clear,
+                                            color: AppTheme.notWhite,
+                                            size: 35,
                                           ),
-                                          FlatButton(
-                                            child: Text(
-                                              fromDate == null
-                                                  ? "Click"
-                                                  : fromDate.format(context),
-                                              style: TextStyle(
-                                                  color: Colors.green),
-                                            ),
-                                            onPressed: () {
-                                              showTimePicker(
-                                                initialTime: TimeOfDay.now(),
-                                                context: context,
-                                              ).then((value) {
-                                                fromDate = value;
-                                                postBloc.changefrom(value);
-                                              });
-                                            },
-                                          ),
-                                          Text(
-                                            "To:",
-                                            style: TextStyle(
-                                                color: AppTheme.notWhite),
-                                          ),
-                                          FlatButton(
-                                            child: Text(
-                                              toDate == null
-                                                  ? "Click"
-                                                  : toDate.format(context),
-                                              style: TextStyle(
-                                                  color: Colors.green),
-                                            ),
-                                            onPressed: () {
-                                              showTimePicker(
-                                                initialTime: TimeOfDay.now(),
-                                                context: context,
-                                              ).then((value) {
-                                                toDate = value;
-                                                postBloc.changeTo(value);
-                                              });
-                                            },
-                                          ),
-                                        ],
+                                          onPressed: () {
+                                            _controller.clear();
+                                            type.clear();
+                                            fontsize.clear();
+                                            offsets.clear();
+                                            multiwidget.clear();
+                                            howmuchwidgetis = 0;
+                                          },
+                                        ),
                                       ),
+                                      Container(
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.face,
+                                            color: AppTheme.notWhite,
+                                          ),
+                                          onPressed: () {
+                                            Future getemojis =
+                                                showModalBottomSheet(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return Emojies();
+                                                    });
+                                            getemojis.then((value) {
+                                              if (value != null) {
+                                                type.add(1);
+                                                fontsize.add(20);
+                                                offsets.add(Offset(150, 250));
+                                                multiwidget.add(value);
+                                                howmuchwidgetis++;
+                                              }
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      Container(
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.visibility,
+                                            color: AppTheme.notWhite,
+                                          ),
+                                          onPressed: toggeltimingVisibility,
+                                        ),
+                                      ),
+                                      Container(
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.done,
+                                            color: AppTheme.notWhite,
+                                          ),
+                                          onPressed: () {
+                                            File _imageFile;
+                                            _imageFile = null;
+                                            screenshotController
+                                                .capture(
+                                                    delay: Duration(
+                                                        milliseconds: 500),
+                                                    pixelRatio: 1.5)
+                                                .then((File image) async {
+                                              postBloc.changeImage(image);
+                                              postBloc.changeSubmit(true);
+                                              //print("Capture Done");
+                                              setState(() {
+                                                _imageFile = image;
+                                              });
+                                              // final paths = await getExternalStorageDirectory();
+                                              //image.copy(paths.path +
+                                              //  '/' +
+                                              //DateTime.now().millisecondsSinceEpoch.toString() +
+                                              //'.png');
+
+                                              //  Navigator.pop(context, image);
+                                            }).catchError((onError) {
+                                              print(onError);
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      Container(
+                                          child: SizedBox(
+                                        width: 20,
+                                      )),
                                     ],
                                   ),
-                                ),
-                                Positioned(
-                                    width: double.infinity,
-                                    left: 5,
-                                    bottom: 90,
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: <Widget>[
-                                          Container(
-                                            width: 100,
-                                            height: 20,
-                                            child: StreamBuilder(
-                                                stream: postBloc.nameStream,
-                                                builder: (context, snapshot) {
-                                                  return TextField(
-                                                    onChanged:
-                                                        postBloc.changeName,
-                                                    style: TextStyle(
-                                                        color:
-                                                            AppTheme.notWhite),
-                                                    decoration: InputDecoration(
-                                                      hintText: "Post name",
-                                                      hintStyle: TextStyle(
-                                                          color: Colors.white),
-                                                      fillColor: Colors
-                                                          .grey[600]
-                                                          .withOpacity(0.2),
-                                                      filled: true,
-                                                      contentPadding:
-                                                          EdgeInsets.only(
-                                                              left: 5,
-                                                              bottom: 10),
-                                                      alignLabelWithHint: true,
-                                                    ),
-                                                  );
-                                                }),
-                                          ),
-                                          multiwidget.length == 0
-                                              ? Container()
-                                              : DragTarget(
-                                                  builder: (context,
-                                                      List<int> candidateData,
-                                                      rejectedData) {
-                                                    return Icon(
-                                                      Icons.delete,
-                                                      color: AppTheme.notWhite,
-                                                    );
-                                                  },
-                                                  onWillAccept: (data) {
-                                                    return true;
-                                                  },
-                                                  onAccept: (data) {
-                                                    setState(() {
-                                                      if (type[data] == 1) {
-                                                        multiwidget
-                                                            .removeAt(data);
-                                                        type.removeAt(data);
-                                                        offsets.removeAt(data);
-                                                        fontsize.removeAt(data);
-                                                        howmuchwidgetis--;
-                                                      } else {
-                                                        type.removeAt(data);
-                                                        fontsize.removeAt(data);
-                                                        offsets.removeAt(data);
-                                                        multiwidget
-                                                            .removeAt(data);
-                                                        fontcolor
-                                                            .removeAt(data);
-                                                        howmuchwidgetis--;
-                                                      }
-                                                    });
-                                                  },
-                                                ),
-                                          SizedBox(
-                                            width: 20,
-                                          )
-                                        ])),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    Container(
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.text_fields,
-                                          color: AppTheme.notWhite,
-                                        ),
-                                        onPressed: () async {
-                                          type.add(2);
-                                          fontsize.add(22);
-                                          offsets.add(Offset(150, 250));
-                                          multiwidget.add("Type Here");
-                                          fontcolor.add(Color(0xff443a49));
-                                          isEditing = howmuchwidgetis;
-                                          howmuchwidgetis++;
-                                        },
-                                      ),
-                                    ),
-                                    Container(
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.layers_clear,
-                                          color: AppTheme.notWhite,
-                                          size: 35,
-                                        ),
-                                        onPressed: () {
-                                          _controller.clear();
-                                          type.clear();
-                                          fontsize.clear();
-                                          offsets.clear();
-                                          multiwidget.clear();
-                                          howmuchwidgetis = 0;
-                                        },
-                                      ),
-                                    ),
-                                    Container(
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.face,
-                                          color: AppTheme.notWhite,
-                                        ),
-                                        onPressed: () {
-                                          Future getemojis =
-                                              showModalBottomSheet(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return Emojies();
-                                                  });
-                                          getemojis.then((value) {
-                                            if (value != null) {
-                                              type.add(1);
-                                              fontsize.add(20);
-                                              offsets.add(Offset(150, 250));
-                                              multiwidget.add(value);
-                                              howmuchwidgetis++;
-                                            }
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    Container(
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.visibility,
-                                          color: AppTheme.notWhite,
-                                        ),
-                                        onPressed: toggeltimingVisibility,
-                                      ),
-                                    ),
-                                    Container(
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.done,
-                                          color: AppTheme.notWhite,
-                                        ),
-                                        onPressed: () {
-                                          File _imageFile;
-                                          _imageFile = null;
-                                          screenshotController
-                                              .capture(
-                                                  delay: Duration(
-                                                      milliseconds: 500),
-                                                  pixelRatio: 1.5)
-                                              .then((File image) async {
-                                            postBloc.changeImage(image);
-                                            postBloc.changeSubmit(true);
-                                            //print("Capture Done");
-                                            setState(() {
-                                              _imageFile = image;
-                                            });
-                                            // final paths = await getExternalStorageDirectory();
-                                            //image.copy(paths.path +
-                                            //  '/' +
-                                            //DateTime.now().millisecondsSinceEpoch.toString() +
-                                            //'.png');
-
-                                            //  Navigator.pop(context, image);
-                                          }).catchError((onError) {
-                                            print(onError);
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    Container(
-                                        child: SizedBox(
-                                      width: 20,
-                                    )),
-                                  ],
-                                ),
-                              ],
-                            ),
+                                ],
+                              ),
+                            ]),
                           )
                   ],
                 ),
@@ -539,48 +535,56 @@ class _CreatePostState extends State<CreatePost> {
 
   Widget putEditMode(int f, String value, Color color, double fontsize,
       double left, double top) {
-         final ValueNotifier<Matrix4> notifier = ValueNotifier(Matrix4.identity());
+    final ValueNotifier<Matrix4> notifier = ValueNotifier(Matrix4.identity());
     return Stack(
       children: <Widget>[
         Positioned(
-            left: left,
-            top: top,
-            child: MatrixGestureDetector(
+          left: left,
+          top: top,
+          child: MatrixGestureDetector(
               onMatrixUpdate: (m, tm, sm, rm) {
-              notifier.value = m;
-            },
+                notifier.value = m;
+              },
+              shouldScale: true,
               child: AnimatedBuilder(
-              animation: notifier,
-              builder: (ctx, child) {
-                print('xxxxxxxxxxxxxx');
-                return Transform(
-                  transform: notifier.value,
-                  child: Container(
-                width: 150,
-                height: 50,
-                child: TextField(
-                  controller: _econtroller,
-                  decoration: InputDecoration(hintText: "type here"),
-                  autofocus: true,
-                  cursorColor: color,
-                  focusNode: FocusNode(),
-                  // onChanged: (newValue) {
-                  //  multiwidget[f] = newValue;
-                  // },
-                  onSubmitted: (newValue) {
-                    setState(() {
-                      multiwidget[f] = newValue;
-                      isEditing = -1;
-                    });
-                  },
-                  style: TextStyle(
-                    color: color,
-                    fontSize: fontsize,
-                  ),
-                ),
-              ),
-                        );}
-            )),),
+                  animation: notifier,
+                  builder: (ctx, child) {
+                    print('hiiii im MatrixGestureDetector');
+                    return Transform(
+                      transform: notifier.value,
+                      child: Transform.scale(
+                        scale:
+                            1, // make this dynamic to change the scaling as in the basic demo
+                        origin: Offset(0.0, 0.0),
+
+                        child: Container(
+                          width: 150,
+                          height: 50,
+                          child: TextField(
+                            controller: _econtroller,
+                            decoration: InputDecoration(hintText: "type here"),
+                            autofocus: true,
+                            cursorColor: color,
+                            focusNode: FocusNode(),
+                            // onChanged: (newValue) {
+                            //  multiwidget[f] = newValue;
+                            // },
+                            onSubmitted: (newValue) {
+                              setState(() {
+                                multiwidget[f] = newValue;
+                                isEditing = -1;
+                              });
+                            },
+                            style: TextStyle(
+                              color: color,
+                              fontSize: fontsize,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  })),
+        ),
         Positioned(
           left: 5.0,
           bottom: 90,
