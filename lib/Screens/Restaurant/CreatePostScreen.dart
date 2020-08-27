@@ -556,8 +556,11 @@ class _CreatePostState extends State<CreatePost> {
                 return Transform(
                   transform: notifier.value,
                   child: Container(
+                    color:AppTheme.primaryColor,
                 width: 150,
-                height: 50,
+                height: 50,  child: Transform.scale(
+                            scale:
+                                notifier.value., // 
                 child: TextField(
                   controller: _econtroller,
                   decoration: InputDecoration(hintText: "type here"),
@@ -579,7 +582,7 @@ class _CreatePostState extends State<CreatePost> {
                   ),
                 ),
               ),
-                        );}
+                        ));}
             )),),
         Positioned(
           left: 5.0,
