@@ -114,6 +114,8 @@ class _CreatePostState extends State<CreatePost> {
   }
 
   double scale = 0.0;
+  double _scaleFactor = 1.0;
+  double _baseScaleFactor = 1.0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -191,37 +193,68 @@ class _CreatePostState extends State<CreatePost> {
                                         : type[f.key] == 2
                                             ? isEditing != f.key
                                                 ? DraggableWrap(
-                                                    TextView(
-                                                      value: f.value.toString(),
-                                                      fontsize: fontsize[f.key]
-                                                          .toDouble(),
-                                                      color: fontcolor[f.key],
-                                                      align: TextAlign.center,
-                                                      onDoubleTap: () {
-                                                        showDialog(
-                                                            context: context,
-                                                            child: AlertDialog(
-                                                                content:
-                                                                    Container()
-                                                                /*        SingleChildScrollView(
-                                                                        child:
-                                                                            Sliders(
-                                                              size: f.key,
-                                                              sizevalue: fontsize[
-                                                                      f.key]
-                                                                  .toDouble(),
-                                                            ))*/
-                                                                ));
+                                                    GestureDetector(
+                                                      onScaleStart: (details) {
+                                                        _baseScaleFactor =
+                                                            _scaleFactor;
                                                       },
-                                                      onlongpress: () async {
+                                                      onScaleUpdate: (details) {
+                                                        print(details.scale);
                                                         setState(() {
-                                                          _econtroller.text =
-                                                              multiwidget[
-                                                                  f.key];
-
-                                                          isEditing = f.key;
+                                                          _scaleFactor =
+                                                              _baseScaleFactor *
+                                                                  details.scale;
                                                         });
                                                       },
+                                                      onScaleEnd:
+                                                          (ScaleEndDetails
+                                                              details) {
+                                                        setState(() {
+                                                          fontsize[f.key] =
+                                                              _scaleFactor;
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        child: TextView(
+                                                          value: f.value
+                                                              .toString(),
+                                                          fontsize:
+                                                              fontsize[f.key]
+                                                                  .toDouble(),
+                                                          color:
+                                                              fontcolor[f.key],
+                                                          align:
+                                                              TextAlign.center,
+                                                          onDoubleTap: () {
+                                                            showDialog(
+                                                                context:
+                                                                    context,
+                                                                child: AlertDialog(
+                                                                    content:
+                                                                        Container()
+                                                                    /*        SingleChildScrollView(
+                                                                            child:
+                                                                                Sliders(
+                                                                  size: f.key,
+                                                                  sizevalue: fontsize[
+                                                                          f.key]
+                                                                      .toDouble(),
+                                                                ))*/
+                                                                    ));
+                                                          },
+                                                          onlongpress:
+                                                              () async {
+                                                            setState(() {
+                                                              _econtroller
+                                                                      .text =
+                                                                  multiwidget[
+                                                                      f.key];
+
+                                                              isEditing = f.key;
+                                                            });
+                                                          },
+                                                        ),
+                                                      ),
                                                     ),
                                                     offsets[f.key].dx,
                                                     offsets[f.key].dy,
