@@ -113,9 +113,10 @@ class _CreatePostState extends State<CreatePost> {
     });
   }
 
-  double scale = 0.0;
+  int select = -1;
   double _scaleFactor = 1.0;
   double _baseScaleFactor = 1.0;
+  double scale = 0.0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -163,6 +164,39 @@ class _CreatePostState extends State<CreatePost> {
                               key: globalKey,
                               child: Stack(
                                 children: <Widget>[
+                                  Positioned(
+                                      top: 85,
+                                      bottom: 80,
+                                      left: 45,
+                                      right: 20,
+                                      child: GestureDetector(
+                                        onScaleStart: (details) {
+                                          _baseScaleFactor = _scaleFactor;
+                                        },
+                                        onScaleUpdate: (details) {
+                                          print(details.scale);
+                                          setState(() {
+                                            _scaleFactor = _baseScaleFactor *
+                                                details.scale;
+                                          });
+                                        },
+                                        onScaleEnd: (ScaleEndDetails details) {
+                                          print('hiiiiiiiiiiiiii');
+                                          setState(() {
+                                            if (select != -1) {
+                                              fontsize[select] = _scaleFactor;
+                                            }
+                                          });
+                                        },
+                                        child: Container(
+                                          color: Colors.transparent,
+                                          height: MediaQuery.of(context)
+                                              .size
+                                              .height,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                        ),
+                                      )),
                                   Stack(
                                       children:
                                           multiwidget.asMap().entries.map((f) {
@@ -193,68 +227,40 @@ class _CreatePostState extends State<CreatePost> {
                                         : type[f.key] == 2
                                             ? isEditing != f.key
                                                 ? DraggableWrap(
-                                                    GestureDetector(
-                                                      onScaleStart: (details) {
-                                                        _baseScaleFactor =
-                                                            _scaleFactor;
-                                                      },
-                                                      onScaleUpdate: (details) {
-                                                        print(details.scale);
-                                                        setState(() {
-                                                          _scaleFactor =
-                                                              _baseScaleFactor *
-                                                                  details.scale;
-                                                        });
-                                                      },
-                                                      onScaleEnd:
-                                                          (ScaleEndDetails
-                                                              details) {
-                                                        setState(() {
-                                                          fontsize[f.key] =
-                                                              _scaleFactor;
-                                                        });
-                                                      },
-                                                      child: Container(
-                                                        child: TextView(
-                                                          value: f.value
-                                                              .toString(),
-                                                          fontsize:
-                                                              fontsize[f.key]
+                                                    TextView(
+                                                      value: f.value.toString(),
+                                                      fontsize: fontsize[f.key]
+                                                          .toDouble(),
+                                                      color: fontcolor[f.key],
+                                                      align: TextAlign.center,
+                                                      onDoubleTap: () {
+                                                        select = f.key;
+                                                        /* showDialog(
+                                                            context: context,
+                                                            child: AlertDialog(
+                                                                content:
+                                                                    Container()
+                                                                */ /*        SingleChildScrollView(
+                                                                        child:
+                                                                            Sliders(
+                                                              size: f.key,
+                                                              sizevalue: fontsize[
+                                                                      f.key]
                                                                   .toDouble(),
-                                                          color:
-                                                              fontcolor[f.key],
-                                                          align:
-                                                              TextAlign.center,
-                                                          onDoubleTap: () {
-                                                            showDialog(
-                                                                context:
-                                                                    context,
-                                                                child: AlertDialog(
-                                                                    content:
-                                                                        Container()
-                                                                    /*        SingleChildScrollView(
-                                                                            child:
-                                                                                Sliders(
-                                                                  size: f.key,
-                                                                  sizevalue: fontsize[
-                                                                          f.key]
-                                                                      .toDouble(),
+                                                            ))*/ /*
                                                                 ))*/
-                                                                    ));
-                                                          },
-                                                          onlongpress:
-                                                              () async {
-                                                            setState(() {
-                                                              _econtroller
-                                                                      .text =
-                                                                  multiwidget[
-                                                                      f.key];
+                                                        ;
+                                                      },
+                                                      onlongpress: () async {
+                                                        select = f.key;
+                                                        setState(() {
+                                                          _econtroller.text =
+                                                              multiwidget[
+                                                                  f.key];
 
-                                                              isEditing = f.key;
-                                                            });
-                                                          },
-                                                        ),
-                                                      ),
+                                                          isEditing = f.key;
+                                                        });
+                                                      },
                                                     ),
                                                     offsets[f.key].dx,
                                                     offsets[f.key].dy,
@@ -440,6 +446,7 @@ class _CreatePostState extends State<CreatePost> {
                                             multiwidget.add("Type Here");
                                             fontcolor.add(Color(0xff443a49));
                                             isEditing = howmuchwidgetis;
+                                            select = fontsize.length - 1;
                                             howmuchwidgetis++;
                                           },
                                         ),

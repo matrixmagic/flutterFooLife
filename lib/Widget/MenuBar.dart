@@ -6,7 +6,9 @@ import 'package:foolife/Screens/Main/CategoriesScreen.dart';
 
 class MenuBar extends StatefulWidget {
   List<CategoryDto> items;
-  MenuBar({this.items});
+  bool isProduct;
+  int lastCategoryId;
+  MenuBar({this.items, this.isProduct, this.lastCategoryId});
 
   @override
   _MenuBarState createState() => _MenuBarState();
@@ -16,7 +18,6 @@ class _MenuBarState extends State<MenuBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      
       height: 60,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -25,9 +26,7 @@ class _MenuBarState extends State<MenuBar> {
           if (index == 0) {
             return GestureDetector(
               child: Container(
-               
                 padding: EdgeInsets.symmetric(horizontal: 10),
-              
                 child: Icon(
                   Icons.local_dining,
                   size: 30,
@@ -35,15 +34,12 @@ class _MenuBarState extends State<MenuBar> {
                 ),
               ),
             );
-          }
-          else if(widget.items[index - 1].products==null) {
-             return Container();
-          }
-          else if(widget.items[index - 1].products.length<=0){
-             return Container();
+          } else if (widget.items[index - 1].products == null) {
+            return Container();
+          } else if (widget.items[index - 1].products.length <= 0) {
+            return Container();
           }
 
-          
           return GestureDetector(
             onTap: () async {
               FlutterSecureStorage storage = new FlutterSecureStorage();
@@ -60,10 +56,14 @@ class _MenuBarState extends State<MenuBar> {
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
-             
                 padding: EdgeInsets.symmetric(horizontal: 5),
                 decoration: BoxDecoration(
-                  boxShadow: [
+                    color:
+                        widget.lastCategoryId == widget.items[index - 1].id &&
+                                widget.isProduct
+                            ? Colors.white.withOpacity(0.3)
+                            : Colors.transparent,
+                    boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.3),
                         blurRadius: 15.0,
