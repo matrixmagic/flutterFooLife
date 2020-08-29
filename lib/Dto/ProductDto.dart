@@ -8,6 +8,7 @@ class ProductDto {
   dynamic restaurantId;
   dynamic categoryId;
   int fileId;
+  int typeId;
   String name;
   dynamic price;
   dynamic hidden;
@@ -17,14 +18,16 @@ class ProductDto {
   String updatedAt;
   String content;
   FileDto file;
+
   CategoryDto category;
-  List<ProductExtraDto>  productExtra;
+  List<ProductExtraDto> productExtra;
 
   ProductDto(
       {this.id,
       this.restaurantId,
       this.categoryId,
       this.fileId,
+      this.typeId,
       this.name,
       this.price,
       this.hidden,
@@ -34,32 +37,33 @@ class ProductDto {
       this.content,
       this.file,
       this.category,
-       this.details,
-       this.productExtra
-      });
+      this.details,
+      this.productExtra});
 
   ProductDto.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     restaurantId = json['restaurant_id'];
     categoryId = json['category_id'];
     fileId = json['file_id'];
+    typeId = json['type_id'];
     name = json['name'];
     price = json['price'];
     hidden = json['hidden'];
     displayOrder = json['displayOrder'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-     details = json['details'];
-     content= json['content'];
+    details = json['details'];
+    content = json['content'];
     file = json['file'] != null ? new FileDto.fromJson(json['file']) : null;
-    category = json['category'] != null ? new CategoryDto.fromJson(json['category']) : null;
+    category = json['category'] != null
+        ? new CategoryDto.fromJson(json['category'])
+        : null;
     if (json['product_extra'] != null) {
       productExtra = new List<ProductExtraDto>();
       json['product_extra'].forEach((v) {
         productExtra.add(new ProductExtraDto.fromJson(v));
       });
     }
-
   }
 
   Map<String, dynamic> toJson() {
@@ -68,6 +72,7 @@ class ProductDto {
     data['restaurant_id'] = this.restaurantId;
     data['category_id'] = this.categoryId;
     data['file_id'] = this.fileId;
+    data['type_id'] = this.typeId;
     data['details'] = this.details;
     data['name'] = this.name;
     data['price'] = this.price;
@@ -75,7 +80,7 @@ class ProductDto {
     data['displayOrder'] = this.displayOrder;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
-    data['content']= this.content;
+    data['content'] = this.content;
     if (this.file != null) {
       data['file'] = this.file.toJson();
     }

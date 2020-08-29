@@ -18,7 +18,7 @@ class ProductRepository {
   ApiProvider api = new ApiProvider();
 
   Future<ProductDto> add(String name, double price, dynamic fileId,
-      dynamic categoryId, String details) async {
+      dynamic typeId, dynamic categoryId, String details) async {
     try {
       ProductDto productDto = new ProductDto();
 
@@ -27,6 +27,7 @@ class ProductRepository {
       productDto.fileId = fileId;
       productDto.categoryId = categoryId;
       productDto.details = details;
+      productDto.typeId = typeId;
 
       var response = await api.post('product', productDto.toJson());
       print("add product");

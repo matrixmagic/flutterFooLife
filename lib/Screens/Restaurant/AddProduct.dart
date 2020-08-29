@@ -24,6 +24,9 @@ class AddProduct extends StatelessWidget {
   final Trimmer _trimmer = Trimmer();
   @override
   Widget build(BuildContext context) {
+    addProductBloc.changeFood(true);
+    addProductBloc.changeDrinks(false);
+    addProductBloc.changeOthers(false);
     addProductBloc.changeCategoryId(categoryId);
     addProductBloc.chageDetails(" ");
     addProductBloc.changeProductName(" ");
@@ -242,6 +245,62 @@ class AddProduct extends StatelessWidget {
                     },
                   ),
                 ],
+              )),
+          Positioned(
+              bottom: 40,
+              left: 10,
+              child: Container(
+                width: 300,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    StreamBuilder<Object>(
+                        stream: addProductBloc.foodStream,
+                        builder: (context, snapshot) {
+                          return IconButton(
+                              onPressed: () {
+                                addProductBloc.changeFood(true);
+                                addProductBloc.changeDrinks(false);
+                                addProductBloc.changeOthers(false);
+                              },
+                              icon: Icon(Icons.fastfood,
+                                  size: 40,
+                                  color: snapshot.hasData && snapshot.data
+                                      ? Colors.white
+                                      : Colors.grey.withOpacity(0.8)));
+                        }),
+                    StreamBuilder<Object>(
+                        stream: addProductBloc.drinksStream,
+                        builder: (context, snapshot) {
+                          return IconButton(
+                              onPressed: () {
+                                addProductBloc.changeFood(false);
+                                addProductBloc.changeDrinks(true);
+                                addProductBloc.changeOthers(false);
+                              },
+                              icon: Icon(Icons.free_breakfast,
+                                  size: 40,
+                                  color: snapshot.hasData && snapshot.data
+                                      ? Colors.white
+                                      : Colors.grey.withOpacity(0.8)));
+                        }),
+                    StreamBuilder<Object>(
+                        stream: addProductBloc.othersStream,
+                        builder: (context, snapshot) {
+                          return IconButton(
+                              onPressed: () {
+                                addProductBloc.changeFood(false);
+                                addProductBloc.changeDrinks(false);
+                                addProductBloc.changeOthers(true);
+                              },
+                              icon: Icon(Icons.cached,
+                                  size: 40,
+                                  color: snapshot.hasData && snapshot.data
+                                      ? Colors.white
+                                      : Colors.grey.withOpacity(0.8)));
+                        }),
+                  ],
+                ),
               ))
         ],
       ),
@@ -261,22 +320,27 @@ class AddProduct extends StatelessWidget {
                     onTap: () async {
                       var picture = await MultiMediaPicker.pickImages(
                           source: ImageSource.gallery);
-                      if (picture != null && picture.length > 0){
+                      if (picture != null && picture.length > 0) {
+                        Directory appDocumentDir =
+                            await getExternalStorageDirectory();
 
-                          Directory appDocumentDir =
-                              await getExternalStorageDirectory();
+                        String rawDocumentPath = appDocumentDir.path;
+                        print(rawDocumentPath);
 
-                          String rawDocumentPath = appDocumentDir.path;
-                          print(rawDocumentPath);
-
-                          var _random = new Random();
-                          var _rand = _random.nextInt(9999999) + 1;
-                          String outputPath =
-                              rawDocumentPath + "/" + _rand.toString() +"."+picture[0].path.substring( picture[0].path.length-3) ;
-print("fileeeeeeeeeeeeeeee:"+outputPath);
-addProductBloc.changeFile(await testCompressAndGetFile(picture[0],outputPath));
+                        var _random = new Random();
+                        var _rand = _random.nextInt(9999999) + 1;
+                        String outputPath = rawDocumentPath +
+                            "/" +
+                            _rand.toString() +
+                            "." +
+                            picture[0]
+                                .path
+                                .substring(picture[0].path.length - 3);
+                        print("fileeeeeeeeeeeeeeee:" + outputPath);
+                        addProductBloc.changeFile(await testCompressAndGetFile(
+                            picture[0], outputPath));
                       }
-                        
+
                       Navigator.of(bc).pop();
                     }),
                 new ListTile(
@@ -306,18 +370,16 @@ addProductBloc.changeFile(await testCompressAndGetFile(picture[0],outputPath));
         });
   }
 
-   Future<File> testCompressAndGetFile(File file, String targetPath) async {
+  Future<File> testCompressAndGetFile(File file, String targetPath) async {
     var result = await FlutterImageCompress.compressAndGetFile(
-        file.absolute.path, targetPath,
-        quality: 70,
-       
-      );
+      file.absolute.path,
+      targetPath,
+      quality: 70,
+    );
 
     print(file.lengthSync());
     print(result.lengthSync());
 
     return result;
   }
- 
-
 }
