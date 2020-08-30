@@ -130,6 +130,37 @@ class RestaurantRepository {
     }
   }
 
+  Future<List<RestaurantDto>> getAllResturantPaging(int pageIndex, int pageSize) async {
+    try {
+var body ={
+      "pageIndex": pageIndex,
+      "pageSize": pageSize
+    };
+
+
+      var response = await api.post("getAllResturantPaging",body);
+
+      print("status code" + response.statusCode.toString());
+      var data = ApiResponse.fromJson(json.decode(response.body));
+
+      if (data.success == true) {
+        print("waka waka paaaage paaaage");
+        List<RestaurantDto> lst = new List<RestaurantDto>();
+        data.data.forEach((v) {
+          lst.add(new RestaurantDto.fromJson(v));
+        });
+
+        print("biiila");
+        return lst;
+      } else
+        print("get nothing");
+      return null;
+    } catch (e) {
+      print("ohh shit");
+      print(e.toString());
+    }
+  }
+
   Future<List<CategoryDto>> getRestrantCategory(int restauratId) async {
     try {
       var response = await api.post(

@@ -10,50 +10,87 @@ import 'package:foolife/Widget/top_channel_bar.dart';
 
 import '../../AppTheme.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   @override
-  var images = [
-    'assets/images/Restaurant1.jpg',
-    'assets/images/Restaurant2.jpg',
-    'assets/images/Restaurant3.jpg'
-  ];
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  @override
+
 
   @override
   void initState() {
     // TODO: implement initState
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+restaurents=new List<RestaurantDto>();
+getAllResturants();
+
+  }
+  List<RestaurantDto> restaurents;
+  Future<void> getAllResturants()
+  async {
+   var x= await RestaurantRepository().getAllResturantPaging(pageIndex,4);
+
+
+setState(() {
+  restaurents.addAll(x);
+});
   }
 
   BuildContext _context;
+
+  int pageIndex = 0;
+
+  getMore() async {
+          pageIndex++;
+                    var x= await RestaurantRepository().getAllResturantPaging(pageIndex,4);
+                    print("ohhhh africaaaa");
+                    setState(() {
+                        restaurents.addAll(x);
+                      
+                    });
+                  print(restaurents.first.name +"   "+restaurents.last.name);
+  }
+
 
   Widget build(BuildContext context) {
     _context = context;
     return Scaffold(
         body: Stack(
       children: <Widget>[
-        FutureBuilder<Object>(
-            future: RestaurantRepository().gatAllResturants(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData &&
-                  snapshot.connectionState == ConnectionState.done) {
-                List<RestaurantDto> restaurents = snapshot.data;
+        
+             restaurents.length>0?
 
-                return Swiper(
-                  itemBuilder: (BuildContext context, int index) {
-                    return CustomMainScreenWiget(
-                      restauranDto: restaurents[index],
-                      cateogries: restaurents[index].categories,
-                    );
-                  },
-                  itemCount: restaurents.length,
-                  scrollDirection: Axis.vertical,
-                  scale: 1.0,
-                );
-              } else {
-                return Container();
-              }
-            }),
+                 Container(
+                   height: MediaQuery.of(context).size.height,
+    width: MediaQuery.of(context).size.width,
+                   child: ListView.builder(
+                     
+                
+                    itemBuilder: (BuildContext context, int index)  {
+                         if(index==restaurents.length-2)
+                      {
+                     getMore();
+                      }
+                    
+                     
+                      
+                      return CustomMainScreenWiget(
+                        restauranDto: restaurents[index],
+                        cateogries: restaurents[index].categories,
+                      );
+                    },
+                    itemCount: restaurents.length,
+                    scrollDirection: Axis.vertical,
+                
+
+                    
+                ),
+                 ):Container(),
+             
+         
         Positioned(
           bottom: 0,
           left: 5.0,
