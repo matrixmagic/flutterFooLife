@@ -2,53 +2,47 @@ import 'package:better_player/better_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'package:foolife/AppTheme.dart';
-import 'package:foolife/Dto/CategoryDto.dart';
+
 import 'package:foolife/Dto/ProductDto.dart';
 import 'package:foolife/Dto/ProductExtraDto.dart';
-import 'package:foolife/Repository/RestaurantRepository.dart';
-import 'package:foolife/Widget/MenuBar.dart';
-import 'package:pedantic/pedantic.dart';
-import 'package:foolife/Widget/stories_bar.dart';
-import 'package:video_player/video_player.dart';
 
-import 'custom_buttom_navigatior.dart';
-import 'my_flutter_app_icons.dart';
+import 'package:pedantic/pedantic.dart';
 
 class CustomProductWidget extends StatefulWidget {
-  String backgroundImage;
+  bool isDrink;
   ProductDto product;
-  int restaurantid;
-  String extention;
+  bool forChannel;
+   Function changeChannel;
   CustomProductWidget(
-      {this.backgroundImage, this.product, this.restaurantid, this.extention});
+      { this.product,this.forChannel,this.changeChannel,this.isDrink});
 
   @override
   _CustomProductWidgetState createState() => _CustomProductWidgetState();
 }
 
 class _CustomProductWidgetState extends State<CustomProductWidget> {
+ 
   // VideoPlayerController _controller;
   BetterPlayerController _betterPlayerController;
   bool boolInfo = false;
   bool detailsInfo = false;
   DefaultCacheManager _cacheManager;
+  double iconSize = WidgetsBinding.instance.window.physicalSize.height / 70;
+  double iconContainerSpace =
+   WidgetsBinding.instance.window.physicalSize.height / 62;
+   double  bottomSizeBox= WidgetsBinding.instance.window.physicalSize.height / 28 ;
   @override
   Future<void> initState() {
+
     super.initState();
+    print(widget.product.name);
     _cacheManager = DefaultCacheManager();
-    if (widget.extention == "mp4") {
-      print(widget.backgroundImage);
+    if (widget.product.file.extension == "mp4") {
+    
       getVideoController();
-      /*   _controller = VideoPlayerController.network(widget.backgroundImage)
-        ..initialize().then((_) {
-          // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-          setState(() {});
-        });
-      _controller.setLooping(true);
-      _controller.setVolume(0.0);
-      _controller.play();*/
+     
     }
   }
 
@@ -117,17 +111,15 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.backgroundImage);
-    print(widget.product.name);
-    print(widget.extention);
+ 
     return SafeArea(
       top: false,
       child: Scaffold(
         body: Stack(children: <Widget>[
           Container(
-            child: widget.extention != "mp4"
+            child: widget.product.file.extension != "mp4"
                 ? CachedNetworkImage(
-                    imageUrl: widget.backgroundImage,
+                    imageUrl: widget.product.file.path,
                     height: MediaQuery.of(context).size.height,
                     progressIndicatorBuilder:
                         (context, url, downloadProgress) => Center(
@@ -142,18 +134,6 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                         ),
                       )
                     : Container(),
-            // floatingActionButton: FloatingActionButton(
-            //   onPressed: () {
-            //     setState(() {
-            //       _controller.value.isPlaying
-            //           ? _controller.pause()
-            //           : _controller.play();
-            //     });
-            //   },
-            //   child: Icon(
-            //     _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-            //   ),
-            // ),
           ),
           GestureDetector(
             onTap: () {
@@ -167,204 +147,340 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
               color: Colors.blue.withOpacity(0),
             )),
           ),
-          Positioned(
-              left: 20,
-              top: 30,
-              child: Text(widget.product.category.name,
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: AppTheme.notWhite,
-                      fontFamily: "SpecialElite"))),
-          Container(
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  child:
-                      Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.7),
-                              blurRadius: 40.0,
-                              spreadRadius: 1.0,
-                            ),
-                          ]),
-                          child: Text(
-                            widget.product.name,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25,
-                                fontFamily: "SpecialElite"),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              Container(
-                                decoration: BoxDecoration(boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.7),
-                                    blurRadius: 40.0,
-                                    spreadRadius: 1.0,
-                                  ),
-                                ]),
-                                child: Text(
-                                    (widget.product.price.toString() +
-                                        "\$".toString()),
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontFamily: "SpecialElite")),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.7),
-                                    blurRadius: 40.0,
-                                    spreadRadius: 1.0,
-                                  ),
-                                ]),
-                                child: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        boolInfo = !boolInfo;
-                                        if (boolInfo) {
-                                          detailsInfo = false;
-                                        }
-                                      });
-                                    },
-                                    icon: Icon(
-                                      Icons.info_outline,
-                                      color: Colors.white,
-                                      size: 24,
-                                    )),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: 30,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: Text(widget.product.category.name,
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: AppTheme.notWhite,
+                            fontFamily: "SpecialElite")),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(right: 10),
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.7),
+                        blurRadius: 40.0,
+                        spreadRadius: 1.0,
+                      ),
+                    ]),
+                    child: Text(
+                      widget.product.name,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25,
+                          fontFamily: "SpecialElite"),
                     ),
-                  ]),
-                  padding: EdgeInsets.only(top: 30, right: 10),
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding:
-                EdgeInsets.only(top: MediaQuery.of(context).size.height / 5),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
+                  ),
+                ],
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+               
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Container(
+                            decoration: BoxDecoration(boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.7),
+                                blurRadius: 40.0,
+                                spreadRadius: 1.0,
+                              ),
+                            ]),
+                            child: Text(
+                              widget.product.price !=null ?
+                                (widget.product.price.toString() +
+                                    "\$".toString()):"",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontFamily: "SpecialElite")),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          widget.product.details == null|| widget.product.details==""||widget.product.details==" " ?
+                          Container():
+
+                          Container(
+                            decoration: BoxDecoration(boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.7),
+                                blurRadius: 40.0,
+                                spreadRadius: 1.0,
+                              ),
+                            ]),
+                            child: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    boolInfo = !boolInfo;
+                                    if (boolInfo) {
+                                      detailsInfo = false;
+                                    }
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.info_outline,
+                                  color: Colors.white,
+                                  size: 24,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height:  WidgetsBinding.instance.window.physicalSize.height / 21,),
+
                 Container(
-                  child: Column(
-                    children: <Widget>[
+                  height: iconContainerSpace + 5,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.7),
+                        blurRadius: 40.0,
+                        spreadRadius: 1.0,
+                      ),
+                    ],
+                  ),
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.favorite,
+                      size: iconSize,
+                      color: Colors.white.withOpacity(0.8),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 45,
+                  child: Center(
+                    child: Text(
+                      '22',
+                      style: TextStyle(
+                          color: Colors.white.withOpacity(0.8),
+                          fontFamily: "SpecialElite"),
+                    ),
+                  ),
+                ),
+               Container(
+                  height: iconContainerSpace ,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.7),
+                        blurRadius: 40.0,
+                        spreadRadius: 1.0,
+                      ),
+                    ],
+                  ),
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                       Icons.person,
+                      size: iconSize,
+                      color: Colors.white.withOpacity(0.8),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 45,
+                  child: Center(
+                    child: Text(
+                      '22',
+                      style: TextStyle(
+                          color: Colors.white.withOpacity(0.8),
+                          fontFamily: "SpecialElite"),
+                    ),
+                  ),
+                ),
+               Container(
+                  height: iconContainerSpace ,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.7),
+                        blurRadius: 40.0,
+                        spreadRadius: 1.0,
+                      ),
+                    ],
+                  ),
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.share,
+                      size: iconSize,
+                      color: Colors.white.withOpacity(0.8),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 45,
+                  child: Center(
+                    child: Text(
+                      '22',
+                      style: TextStyle(
+                          color: Colors.white.withOpacity(0.8),
+                          fontFamily: "SpecialElite"),
+                    ),
+                  ),
+                ),
+               Container(
+                  height: iconContainerSpace + 5,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.7),
+                        blurRadius: 40.0,
+                        spreadRadius: 1.0,
+                      ),
+                    ],
+                  ),
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.insert_comment,
+                      size: iconSize,
+                      color: Colors.white.withOpacity(0.8),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 45,
+                  child: Center(
+                    child: Text(
+                      '22',
+                      style: TextStyle(
+                          color: Colors.white.withOpacity(0.8),
+                          fontFamily: "SpecialElite"),
+                    ),
+                  ),
+                ),
+
+                Expanded(
+                  child:Container(
+
+                  )
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
                       Container(
-                        decoration: BoxDecoration(boxShadow: [
+                        padding: EdgeInsets.only(right: 10),
+                      height: iconContainerSpace ,
+                      decoration: BoxDecoration(
+                        boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.7),
                             blurRadius: 40.0,
                             spreadRadius: 1.0,
                           ),
-                        ]),
-                        child: IconButton(
-                          padding: EdgeInsets.all(0),
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.favorite,
-                            size: 31,
-                            color: Colors.white.withOpacity(0.8),
+                        ],
+                      ),
+                      child: IconButton(
+                      onPressed: () {
+                  setState(() {
+                    detailsInfo = !detailsInfo;
+                    if (detailsInfo) {
+                      boolInfo = false;
+                    }
+                  });
+                },
+                        icon: Icon(
+                           Icons.info,
+      
+                          size: iconSize*1.2,
+                          color: AppTheme.notWhite.withOpacity(0.7),
+                          
+                        ),
+                      ),
+                    ),
+                    
+                  ],),
+                 widget.forChannel?
+                  Row(children: <Widget>[
+
+                    Container(
+                        padding: EdgeInsets.only(right: 10),
+                      height: iconContainerSpace ,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.7),
+                            blurRadius: 40.0,
+                            spreadRadius: 1.0,
                           ),
-                        ),
+                        ],
                       ),
-                      Text(
-                        '22',
-                        style: TextStyle(color: Colors.white.withOpacity(0.8)),
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.7),
-                      blurRadius: 40.0,
-                      spreadRadius: 1.0,
-                    ),
-                  ]),
-                  child: Column(
-                    children: <Widget>[
-                      IconButton(
+                      child: IconButton(
+                       onPressed: () {
+                         widget.changeChannel.call(31);
+                                  setState(() {
+                                     widget.isDrink=false;
+                                    //info = !info;
+                                  });
+                                },
                         icon: Icon(
-                          Icons.person,
-                          size: 31,
-                          color: Colors.white.withOpacity(0.8),
+                           Icons.fastfood,
+      
+                          size: iconSize*1.5,
+                           color: widget.isDrink? Colors.white.withOpacity(0.5): Colors.white.withOpacity(0.9),
+                          
                         ),
                       ),
-                      Text('22',
-                          style:
-                              TextStyle(color: Colors.white.withOpacity(0.8)))
-                    ],
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.7),
-                      blurRadius: 40.0,
-                      spreadRadius: 1.0,
                     ),
-                  ]),
-                  child: Column(
-                    children: <Widget>[
-                      IconButton(
+                      Container(
+                        padding: EdgeInsets.only(right: 10),
+                      height: iconContainerSpace ,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            
+                            color: Colors.black.withOpacity(0.7),
+                            blurRadius: 40.0,
+                            spreadRadius: 1.0,
+                          ),
+                        ],
+                      ),
+                      child: IconButton(
+                       onPressed: () {
+                                    widget.changeChannel.call(32);
+                                  setState(() {
+                                       widget.isDrink=true;
+                                    //info = !info;
+                                  });
+                                },
                         icon: Icon(
-                          Icons.share,
-                          size: 31,
-                          color: Colors.white.withOpacity(0.8),
+                           Icons.free_breakfast,
+      
+                          size: iconSize*1.5,
+                       color: widget.isDrink? Colors.white.withOpacity(0.9): Colors.white.withOpacity(0.5),
+                          
                         ),
                       ),
-                      Text('22',
-                          style:
-                              TextStyle(color: Colors.white.withOpacity(0.8)))
-                    ],
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.7),
-                      blurRadius: 40.0,
-                      spreadRadius: 1.0,
-                    ),
-                  ]),
-                  child: Column(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(
-                          Icons.insert_comment,
-                          size: 31,
-                          color: Colors.white.withOpacity(0.8),
-                        ),
-                      ),
-                      Text('22',
-                          style:
-                              TextStyle(color: Colors.white.withOpacity(0.8)))
-                    ],
-                  ),
-                ),
-              ],
-            ),
+                    )                  ],
+                  
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  ):Container(),
+                  SizedBox(height: 65,)
+              
+            ],
           ),
+          
+          
           boolInfo
               ? Padding(
                   padding: EdgeInsets.only(
@@ -440,33 +556,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                   ),
                 )
               : Container(),
-          Positioned(
-            right: 5.0,
-            bottom: 90,
-            child: Container(
-              decoration: BoxDecoration(boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.7),
-                  blurRadius: 40.0,
-                  spreadRadius: 1.0,
-                ),
-              ]),
-              child: IconButton(
-                icon: Icon(
-                  Icons.info,
-                  color: AppTheme.notWhite.withOpacity(0.7),
-                ),
-                onPressed: () {
-                  setState(() {
-                    detailsInfo = !detailsInfo;
-                    if (detailsInfo) {
-                      boolInfo = false;
-                    }
-                  });
-                },
-              ),
-            ),
-          ),
+         
           detailsInfo
               ? Padding(
                   padding:
@@ -528,46 +618,3 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
   }
 }
 
-class LinePathClass extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = new Path();
-    path.lineTo(size.width / 1.12, 0);
-    path.lineTo(size.width, 10);
-    path.lineTo(size.width, size.height);
-    path.lineTo(0, size.height);
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return false;
-  }
-}
-
-class BorderPainter extends CustomPainter {
-  //         <-- CustomPainter class
-  @override
-  void paint(Canvas canvas, Size size) {
-    var paint = Paint();
-
-    paint.color = AppTheme.notWhite;
-    paint.style = PaintingStyle.stroke;
-    paint.strokeWidth = 1;
-
-    var path = Path();
-    path.moveTo(size.width / 1.12, 0);
-    path.cubicTo(size.width, -5, size.width, -20, size.width, -15);
-    path.lineTo(size.width, 10);
-
-    canvas.drawPath(path, paint);
-
-    //canvas.drawPoints(pointMode, points, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
-}

@@ -341,4 +341,65 @@ class ProductRepository {
       print(e.toString());
     }
   }
+
+  Future<List<ProductDto>> getAllFoodsPaging(int pageIndex, int pageSize) async {
+    try {
+    var body ={
+      "pageIndex": pageIndex,
+      "pageSize": pageSize
+    };
+
+
+      var response = await api.post("getAllFoodsPaging",body);
+
+      var data = ApiResponse.fromJson(json.decode(response.body));
+
+      if (data.success == true) {
+        print("foods returned successfully");
+
+        List<ProductDto> lst = new List<ProductDto>();
+        data.data.forEach((v) {
+          lst.add(new ProductDto.fromJson(v));
+        });
+
+        return lst;
+      } else
+        print("get nothing");
+      return null;
+    } catch (e) {
+      print("ohh shit");
+      print(e.toString());
+    }
+  }
+
+  Future<List<ProductDto>> getAllDrinksPaging(int pageIndex, int pageSize) async {
+    try {
+    var body ={
+      "pageIndex": pageIndex,
+      "pageSize": pageSize
+    };
+
+
+      var response = await api.post("getAllDrinksPaging",body);
+
+      var data = ApiResponse.fromJson(json.decode(response.body));
+
+      if (data.success == true) {
+        print("drinks returned successfully");
+
+        List<ProductDto> lst = new List<ProductDto>();
+        data.data.forEach((v) {
+          lst.add(new ProductDto.fromJson(v));
+        });
+
+        return lst;
+      } else
+        print("get nothing");
+      return null;
+    } catch (e) {
+      print("ohh shit");
+      print(e.toString());
+    }
+  }
+
 }

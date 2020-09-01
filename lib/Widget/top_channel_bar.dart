@@ -7,14 +7,34 @@ import 'package:foolife/Repository/AuthRepository.dart';
 import 'package:foolife/Widget/topBar.dart';
 
 class Top_channel_bar extends StatelessWidget {
-  @override
-  //FlutterSecureStorage storage = new FlutterSecureStorage();
-  Widget build(BuildContext context) {
-    TopBarBloc topBarBloc = new TopBarBloc();
-    topBarBloc.changeFirst(true);
+
+  Function changeChannel;
+  int selectedChannel;
+  TopBarBloc topBarBloc;
+
+  Top_channel_bar({this.changeChannel, this.selectedChannel}){
+   topBarBloc = new TopBarBloc();
+    topBarBloc.changeFirst(false);
     topBarBloc.changeSecond(false);
     topBarBloc.changeThird(false);
     topBarBloc.changeFourth(false);
+
+    if(selectedChannel == 1)
+      topBarBloc.changeFirst(true);
+    else if(selectedChannel == 2)
+      topBarBloc.changeSecond(true);
+    else if(selectedChannel == 31 || selectedChannel == 32)
+      topBarBloc.changeThird(true);
+    else  if(selectedChannel == 4)
+      topBarBloc.changeFourth(true);
+
+
+  }
+
+  @override
+  //FlutterSecureStorage storage = new FlutterSecureStorage();
+  Widget build(BuildContext context) {
+  
 
     return Container(
       child: Row(
@@ -37,6 +57,8 @@ class Top_channel_bar extends StatelessWidget {
                       topBarBloc.changeSecond(false);
                       topBarBloc.changeThird(false);
                       topBarBloc.changeFourth(false);
+                      changeChannel.call(1);
+
                     },
                     icon: Icon(TopBar.castle_emblem,
                         color: snapshot.hasData && snapshot.data
@@ -63,6 +85,7 @@ class Top_channel_bar extends StatelessWidget {
                       topBarBloc.changeSecond(true);
                       topBarBloc.changeThird(false);
                       topBarBloc.changeFourth(false);
+                       changeChannel.call(2);
                     },
                     icon: Icon(TopBar.restaurant,
                         color: snapshot.hasData && snapshot.data
@@ -88,6 +111,7 @@ class Top_channel_bar extends StatelessWidget {
                       topBarBloc.changeSecond(false);
                       topBarBloc.changeThird(true);
                       topBarBloc.changeFourth(false);
+                        changeChannel.call(31);
                     },
                     icon: Icon(Icons.fastfood,
                         color: snapshot.hasData && snapshot.data
@@ -114,6 +138,7 @@ class Top_channel_bar extends StatelessWidget {
                       topBarBloc.changeSecond(false);
                       topBarBloc.changeThird(false);
                       topBarBloc.changeFourth(true);
+                         changeChannel.call(4);
                     },
                     child: Container(
                       child: Text(

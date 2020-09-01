@@ -35,11 +35,11 @@ class CategoriesScreen extends StatelessWidget {
                   Swiper(
                     itemBuilder: (BuildContext context, int index) {
                       return CustomProductWidget(
-                        backgroundImage: products[index].file.path,
+                      
                         product: products[index],
-                        restaurantid: restaurantid,
-                        extention: products[index].file.extension,
-                        //cateogries: products[index].categories,
+                       
+                       forChannel: false,
+                        
                       );
                     },
                     itemCount: products.length,

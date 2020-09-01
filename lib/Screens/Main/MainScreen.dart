@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:foolife/Dto/ProductDto.dart';
 import 'package:foolife/Dto/RestaurantDto.dart';
+import 'package:foolife/Repository/ProductRepository.dart';
 import 'package:foolife/Repository/RestaurantRepository.dart';
 import 'package:foolife/Widget/CustomMainScreenWiget.dart';
+import 'package:foolife/Widget/CustomProductWidget.dart';
+import 'package:foolife/Widget/CustomRestaurantScreenWiget.dart';
 import 'package:foolife/Widget/custom_buttom_navigatior.dart';
 import 'package:foolife/Widget/top_channel_bar.dart';
 
@@ -17,80 +21,272 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   @override
-
-
   @override
   void initState() {
     // TODO: implement initState
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-restaurents=new List<RestaurantDto>();
-getAllResturants();
+    restaurents = new List<RestaurantDto>();
+     foods = new List<ProductDto> ();
+ drinks = new List<ProductDto> ();
 
+    getAllResturants();
+
+    getAllFoodsPaging();
+
+    getAllDrinksPaging();
+swiperControl=new SwiperController();
+    
   }
+
   List<RestaurantDto> restaurents;
-  Future<void> getAllResturants()
-  async {
-   var x= await RestaurantRepository().getAllResturantPaging(pageIndex,4);
+  List<ProductDto> foods;
+  List<ProductDto> drinks;
+  SwiperController swiperControl;
+
+  int restaurentsPageIndex = 0;
+  int foodsPageIndex = 0;
+  int drinksPageIndex = 0;
+  int pageSize = 10;
+   int lastSelectedChannel = 2;
 
 
-setState(() {
-  restaurents.addAll(x);
-});
+  Future<void> getAllResturants() async {
+    var data = await RestaurantRepository()
+        .getAllResturantPaging(restaurentsPageIndex, pageSize);
+
+    setState(() {
+      restaurents.addAll(data);
+    });
+  }
+
+  Future<void> getAllFoodsPaging() async {
+    var data =
+        await ProductRepository().getAllFoodsPaging(foodsPageIndex, pageSize);
+
+    setState(() {
+      foods.addAll(data);
+    });
+  }
+
+  Future<void> getAllDrinksPaging() async {
+    var data =
+        await ProductRepository().getAllDrinksPaging(drinksPageIndex, pageSize);
+
+    setState(() {
+      drinks.addAll(data);
+    });
   }
 
   BuildContext _context;
 
-  int pageIndex = 0;
-
   getMore() async {
-          pageIndex++;
-                    var x= await RestaurantRepository().getAllResturantPaging(pageIndex,4);
-                    print("ohhhh africaaaa");
-                    setState(() {
-                        restaurents.addAll(x);
-                      
-                    });
-                  print(restaurents.first.name +"   "+restaurents.last.name);
+    var data;
+
+    if (lastSelectedChannel == 2) {
+      restaurentsPageIndex++;
+      data = await RestaurantRepository()
+          .getAllResturantPaging(restaurentsPageIndex, pageSize);
+      setState(() {
+        restaurents.addAll(data);
+      });
+    } else if (lastSelectedChannel == 31) {
+      foodsPageIndex++;
+      data =
+          await ProductRepository().getAllFoodsPaging(foodsPageIndex, pageSize);
+      setState(() {
+        foods.addAll(data);
+      });
+    } else if (lastSelectedChannel == 32) {
+      drinksPageIndex++;
+      data = await ProductRepository()
+          .getAllDrinksPaging(drinksPageIndex, pageSize);
+      setState(() {
+        drinks.addAll(data);
+      });
+    }
   }
 
+ 
+
+  void selectChannel(int channel) {
+    setState(() {
+      lastSelectedChannel = channel;
+    });
+
+    swiperControl.move(0);  }
 
   Widget build(BuildContext context) {
     _context = context;
     return Scaffold(
         body: Stack(
       children: <Widget>[
-        
-             restaurents.length>0?
-
-                 Container(
-                   height: MediaQuery.of(context).size.height,
-    width: MediaQuery.of(context).size.width,
-                   child: ListView.builder(
-                     
+        lastSelectedChannel==2 && 
+        restaurents.length > 0
+            ? Swiper(controller: swiperControl,
+              onIndexChanged: (int index){
+                  if (lastSelectedChannel == 2 &&
+                    index == restaurents.length - 2) {
+                    getMore();
+                  }
+                  else  if (lastSelectedChannel == 31 &&
+                    index == foods.length - 2) {
+                    getMore();
+                  }
+                  else  if (lastSelectedChannel == 32 &&
+                    index == drinks.length - 2) {
+                    getMore();
+                  }
+              },
+                itemBuilder: (BuildContext context, int index) {
                 
-                    itemBuilder: (BuildContext context, int index)  {
-                         if(index==restaurents.length-2)
-                      {
-                     getMore();
-                      }
+                  if (lastSelectedChannel == 2) {
+                    return CustomRestaurantScreenWiget(
+                      restauranDto: restaurents[index],
+                      cateogries: restaurents[index].categories,
+                    );
+                  }
+                  else  if (lastSelectedChannel == 31) {
+                    return CustomProductWidget(
+
+                      forChannel: true,
+                      product: foods[index],
+                      changeChannel:selectChannel 
+                    ,
                     
-                     
-                      
-                      return CustomMainScreenWiget(
-                        restauranDto: restaurents[index],
-                        cateogries: restaurents[index].categories,
-                      );
-                    },
-                    itemCount: restaurents.length,
-                    scrollDirection: Axis.vertical,
+                    );
+                  }
+                  else  if (lastSelectedChannel == 32) {
+                    return CustomProductWidget(
+
+                      forChannel: true,
+                      product: drinks[index],
+                       changeChannel:selectChannel 
+                    
+                    );
+                  }
+                  else {
+                    return CustomRestaurantScreenWiget(
+                      restauranDto: restaurents[index],
+                      cateogries: restaurents[index].categories,
+                    );
+                  }
+                },
+                itemCount: restaurents.length,
+                scrollDirection: Axis.vertical,
+              )
+            : lastSelectedChannel == 32 && drinks.length > 0 ? Swiper(
+              controller: swiperControl,
+              onIndexChanged: (int index){
+                  if (lastSelectedChannel == 2 &&
+                    index == restaurents.length - 2) {
+                    getMore();
+                  }
+                  else  if (lastSelectedChannel == 31 &&
+                    index == foods.length - 2) {
+                    getMore();
+                  }
+                  else  if (lastSelectedChannel == 32 &&
+                    index == drinks.length - 2) {
+                    getMore();
+                  }
+              },
+                itemBuilder: (BuildContext context, int index) {
                 
+                  if (lastSelectedChannel == 2) {
+                    return CustomRestaurantScreenWiget(
+                      restauranDto: restaurents[index],
+                      cateogries: restaurents[index].categories,
+                    );
+                  }
+                  else  if (lastSelectedChannel == 31) {
+
+                    return CustomProductWidget(
+
+                      forChannel: true,
+                      product: foods[index],
+                      isDrink: false,
+
+                       changeChannel:selectChannel 
+                    
+                    );
+                  }
+                  else  if (lastSelectedChannel == 32) {
+                    return CustomProductWidget(
+
+                      forChannel: true,
+                      product: drinks[index],
+                       changeChannel:selectChannel ,
+                      isDrink: true,
 
                     
-                ),
-                 ):Container(),
-             
-         
+                    );
+                  }
+                  else {
+                    return CustomRestaurantScreenWiget(
+                      restauranDto: restaurents[index],
+                      cateogries: restaurents[index].categories,
+                    );
+                  }
+                },
+                itemCount: restaurents.length,
+                scrollDirection: Axis.vertical,
+              ):lastSelectedChannel == 31 && foods.length > 0 ? Swiper(
+                controller: swiperControl,
+              onIndexChanged: (int index){
+                  if (lastSelectedChannel == 2 &&
+                    index == restaurents.length - 2) {
+                    getMore();
+                  }
+                  else  if (lastSelectedChannel == 31 &&
+                    index == foods.length - 2) {
+                    getMore();
+                  }
+                  else  if (lastSelectedChannel == 32 &&
+                    index == drinks.length - 2) {
+                    getMore();
+                  }
+              },
+                itemBuilder: (BuildContext context, int index) {
+                
+                  if (lastSelectedChannel == 2) {
+                    return CustomRestaurantScreenWiget(
+                      restauranDto: restaurents[index],
+                      cateogries: restaurents[index].categories,
+                    );
+                  }
+                  else  if (lastSelectedChannel == 31) {
+
+                    return CustomProductWidget(
+
+                      forChannel: true,
+                      product: foods[index],
+                       changeChannel:selectChannel ,
+                      isDrink: false,
+
+                    
+                    );
+                  }
+                  else  if (lastSelectedChannel == 32) {
+                    return CustomProductWidget(
+
+                      forChannel: true,
+                      product: drinks[index],
+                     changeChannel:selectChannel ,
+                      isDrink: true,
+
+                    );
+                  }
+                  else {
+                    return CustomRestaurantScreenWiget(
+                      restauranDto: restaurents[index],
+                      cateogries: restaurents[index].categories,
+                    );
+                  }
+                },
+                itemCount: restaurents.length,
+                scrollDirection: Axis.vertical,
+              ): Container(),
         Positioned(
           bottom: 0,
           left: 5.0,
@@ -99,7 +295,14 @@ setState(() {
             showDialog: _ParentFunction,
           ),
         ),
-        Positioned(top: 50, left: 5.0, right: 5.0, child: Top_channel_bar()),
+        Positioned(
+            top: 50,
+            left: 5.0,
+            right: 5.0,
+            child: Top_channel_bar(
+              changeChannel: selectChannel,
+              selectedChannel: lastSelectedChannel,
+            )),
       ],
     ));
   }
