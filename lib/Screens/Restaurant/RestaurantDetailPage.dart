@@ -18,6 +18,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
+import '../../AppTheme.dart';
 import 'FriendsPage.dart';
 
 class RestaurantDetail extends StatefulWidget {
@@ -150,6 +151,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
 
   @override
   Widget build(BuildContext context) {
+    _context=context;
     return Scaffold(
         body: Stack(children: <Widget>[
       Column(
@@ -799,4 +801,48 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
       ],
     );
   }*/
+
+  _ParentFunction() async {
+   
+
+    await _showSelectionDialog(_context);
+  }
+BuildContext _context;
+  Future<void> _showSelectionDialog(BuildContext context) async {
+    print('im clicked hiiiii');
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(
+                    Icons.image,
+                    color: AppTheme.primaryColor,
+                  ),
+                  title: Text("Sign up"),
+                  onTap: () {
+                    Navigator.of(context).pushNamed('/usersignup');
+                  },
+                ),
+                Divider(
+                  height: 1.0,
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.camera_alt,
+                    color: AppTheme.primaryColor,
+                  ),
+                  title: Text("Log in"),
+                  onTap: () {
+                    Navigator.of(context).pushNamed('/signin');
+                  },
+                )
+              ],
+            ),
+          ));
+        });
+  }
 }

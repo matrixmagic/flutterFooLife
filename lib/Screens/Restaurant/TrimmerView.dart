@@ -7,6 +7,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:foolife/Bloc/Product/add/AddProductBloc.dart';
 import 'package:foolife/Bloc/Restaurant/ChangeBackgroundBloc.dart';
+import 'package:foolife/Screens/Welcome/UserSignup.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_trimmer/storage_dir.dart';
 import 'package:video_trimmer/video_trimmer.dart';
@@ -67,57 +68,62 @@ String  _miliSecoundToString(double time){
                     backgroundColor: Colors.red,
                   ),
                 ),
-                RaisedButton(
-                  onPressed: _progressVisibility
-                      ? null
-                      : () async {
-                          Directory appDocumentDir =
-                              await getExternalStorageDirectory();
+                Padding(
+                  padding: const EdgeInsets.only( top: 20),
+                  child: RaisedButton(
+                    onPressed: _progressVisibility
+                        ? null
+                        : () async {
+                            Dialogs.showLoadingDialog(context);
+                            Directory appDocumentDir =
+                                await getExternalStorageDirectory();
 
-                          String rawDocumentPath = appDocumentDir.path;
-                          print(rawDocumentPath);
+                            String rawDocumentPath = appDocumentDir.path;
+                            
+                            var _random = new Random();
+                            var _rand = _random.nextInt(9999999) + 1;
+                            String outputPath =
+                                rawDocumentPath + "/" + _rand.toString() + ".mp4";
+                            final FlutterFFmpeg _flutterFFmpeg =
+                                new FlutterFFmpeg();
 
-                          var _random = new Random();
-                          var _rand = _random.nextInt(9999999) + 1;
-                          String outputPath =
-                              rawDocumentPath + "/" + _rand.toString() + ".mp4";
-                          final FlutterFFmpeg _flutterFFmpeg =
-                              new FlutterFFmpeg();
 
-
-                              _endValue= _endValue<= _startValue ? _startValue+16*1000:_endValue;
+                                _endValue= _endValue<= _startValue ? _startValue+16*1000:_endValue;
               
-                       
-                          _flutterFFmpeg
-                              .execute("-i " +
-                                  widget.video.path +
-                                  " -ss "+_miliSecoundToString(_startValue) +" -t "+ ((_endValue - _startValue) >= (15*1000) ?"00:00:15":_miliSecoundToString(_endValue - _startValue))+ " -c:v mpeg4   " +
-                                  outputPath)
-                              .then((rc) {
-                            if (rc == 0) {
-                              File video = new File(outputPath);
+                         
+                            _flutterFFmpeg
+                                .execute("-i \"" +
+                                    widget.video.path +
+                                    "\" -ss "+_miliSecoundToString(_startValue) +" -t "+ ((_endValue - _startValue) >= (15*1000) ?"00:00:15":_miliSecoundToString(_endValue - _startValue))+ " -c:v mpeg4   " +
+                                    outputPath)
+                                .then((rc) {
+                              if (rc == 0) {
+                                File video = new File(outputPath);
 
-                              final snackBar = SnackBar(
-                                  content: Text('Video Saved successfully'));
-                                  if(widget.addProductBloc != null)
-                              widget.addProductBloc.changeFile(video);
-                              if(widget.changeBackgroundBloc != null)
-                              widget.changeBackgroundBloc.changeFile(video);
-                              Scaffold.of(context).showSnackBar(snackBar);
-                              SchedulerBinding.instance
-                                  .addPostFrameCallback((_) {
-                                // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
-                                Navigator.of(context).pop();
-                              });
-                            } else {
-                              final snackBar =
-                                  SnackBar(content: Text('Video error'));
+                                final snackBar = SnackBar(
+                                    content: Text('Video Saved successfully'));
+                                    if(widget.addProductBloc != null)
+                                widget.addProductBloc.changeFile(video);
+                                if(widget.changeBackgroundBloc != null)
+                                widget.changeBackgroundBloc.changeFile(video);
+                                Scaffold.of(context).showSnackBar(snackBar);
+                                SchedulerBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
+                                   Navigator.of(context).pop();
+                                });
+                              } else {
+                                final snackBar =
+                                    SnackBar(content: Text('Video error'));
 
-                              Scaffold.of(context).showSnackBar(snackBar);
-                            }
-                          });
-                        },
-                  child: Text("Trim"),
+                                Scaffold.of(context).showSnackBar(snackBar);
+                              }
+                            });
+                          },
+                    child: Text("Trim"),
+                  ),
                 ),
                 Expanded(
                   child: VideoViewer(),

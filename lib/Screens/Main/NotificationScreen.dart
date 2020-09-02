@@ -18,6 +18,7 @@ class NotificationScreen extends StatelessWidget {
   ];
   var names = ['KFC', 'Pizza Hut', 'McDonald'];
   Widget build(BuildContext context) {
+    _context=context;
     return SafeArea(
       child: DefaultTabController(
         length: 5,
@@ -100,5 +101,48 @@ class NotificationScreen extends StatelessWidget {
         )),
       ),
     );
+  }
+  _ParentFunction() async {
+   
+
+    await _showSelectionDialog(_context);
+  }
+BuildContext _context;
+  Future<void> _showSelectionDialog(BuildContext context) async {
+    print('im clicked hiiiii');
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(
+                    Icons.image,
+                    color: AppTheme.primaryColor,
+                  ),
+                  title: Text("Sign up"),
+                  onTap: () {
+                    Navigator.of(context).pushNamed('/usersignup');
+                  },
+                ),
+                Divider(
+                  height: 1.0,
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.camera_alt,
+                    color: AppTheme.primaryColor,
+                  ),
+                  title: Text("Log in"),
+                  onTap: () {
+                    Navigator.of(context).pushNamed('/signin');
+                  },
+                )
+              ],
+            ),
+          ));
+        });
   }
 }
