@@ -15,8 +15,13 @@ class CustomProductWidget extends StatefulWidget {
   ProductDto product;
   bool forChannel;
   Function changeChannel;
+  Function goToRestaurent;
   CustomProductWidget(
-      {this.product, this.forChannel, this.changeChannel, this.isDrink});
+      {this.product,
+      this.forChannel,
+      this.changeChannel,
+      this.isDrink,
+      this.goToRestaurent});
 
   @override
   _CustomProductWidgetState createState() => _CustomProductWidgetState();
@@ -148,16 +153,20 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
               SizedBox(
                 height: 30,
               ),
+              Center(
+                  child: Text(
+                widget.product.restaurantDto.name,
+                style: TextStyle(
+                    color: Colors.white, fontSize: 22, fontFamily: "calibril"),
+              )),
+              SizedBox(
+                height: 60,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
                     margin: EdgeInsets.only(left: 10),
-                    child: Text(widget.product.category.name,
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: AppTheme.notWhite,
-                            fontFamily: "SpecialElite")),
                   ),
                   Container(
                     margin: EdgeInsets.only(right: 10),
@@ -173,7 +182,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 25,
-                          fontFamily: "SpecialElite"),
+                          fontFamily: "calibril"),
                     ),
                   ),
                 ],
@@ -369,6 +378,40 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                 ),
               ),
               Expanded(child: Container()),
+              widget.forChannel
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.only(right: 10),
+                          height: iconContainerSpace,
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.7),
+                                blurRadius: 40.0,
+                                spreadRadius: 1.0,
+                              ),
+                            ],
+                          ),
+                          child: IconButton(
+                            onPressed: () {
+                              widget.goToRestaurent
+                                  .call(widget.product.restaurantId);
+                            },
+                            icon: Icon(
+                              Icons.keyboard_return,
+                              size: iconSize * 1.2,
+                              color: AppTheme.notWhite.withOpacity(0.7),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(),
+              SizedBox(
+                height: 12,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
@@ -464,7 +507,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                           ),
                         )
                       ],
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.center,
                     )
                   : Container(),
               SizedBox(
@@ -554,7 +597,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(30)),
-                        color: Colors.black.withOpacity(0.4)),
+                        color: Colors.black.withOpacity(0.8)),
                     child: Container(
                       margin: EdgeInsets.all(10),
                       height: 1200,
@@ -565,8 +608,8 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                             : widget.product.details,
                         style: TextStyle(
                             color: AppTheme.notWhite,
-                            fontSize: 15,
-                            fontFamily: "SpecialElite"),
+                            fontSize: 20,
+                            fontFamily: "calibril"),
                         textAlign: TextAlign.center,
                       ),
                     ),

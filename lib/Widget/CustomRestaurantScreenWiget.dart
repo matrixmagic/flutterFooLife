@@ -27,8 +27,10 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
   bool mainScreenWidgetVisibility = true;
   bool postScreenWidgetVisibility = false;
   double iconSize = WidgetsBinding.instance.window.physicalSize.height / 70;
-  double iconContainerSpace = WidgetsBinding.instance.window.physicalSize.height / 62;
-   double  bottomSizeBox= WidgetsBinding.instance.window.physicalSize.height / 25 ;
+  double iconContainerSpace =
+      WidgetsBinding.instance.window.physicalSize.height / 62;
+  double bottomSizeBox =
+      WidgetsBinding.instance.window.physicalSize.height / 25;
   DefaultCacheManager _cacheManager;
   bool info = false;
   BetterPlayerController _betterPlayerController;
@@ -131,7 +133,6 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
 
   @override
   Widget build(BuildContext context) {
-      
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
@@ -165,8 +166,6 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                         )
                       : Container(),
             ),
-           
-           
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -179,7 +178,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 22,
-                        fontFamily: "SpecialElite"),
+                        fontFamily: "calibril"),
                   ),
                 ),
                 SizedBox(
@@ -345,7 +344,6 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                   ),
                 ),
                 Container(
-                
                   height: iconContainerSpace + 5,
                   decoration: BoxDecoration(
                     boxShadow: [
@@ -376,13 +374,13 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                     ),
                   ),
                 ),
-               Expanded(child: Container()),
+                Expanded(child: Container()),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     Container(
-                        padding: EdgeInsets.only(right: 5),
-                      height: iconContainerSpace *1.5,
+                      padding: EdgeInsets.only(right: 5),
+                      height: iconContainerSpace * 1.5,
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -396,22 +394,19 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                         onPressed: () {},
                         icon: Icon(
                           qrcode1.ddd__1_,
-                          size: iconSize*1.5,
+                          size: iconSize * 1.5,
                           color: AppTheme.notWhite.withOpacity(0.7),
                         ),
                       ),
                     ),
-                    
-                    
-                    
                   ],
                 ),
-                  Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     Container(
-                        padding: EdgeInsets.only(right: 10),
-                      height: iconContainerSpace*1.5 ,
+                      padding: EdgeInsets.only(right: 10),
+                      height: iconContainerSpace * 1.5,
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -425,23 +420,19 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                         onPressed: () {},
                         icon: Icon(
                           StoryICons.burning_meteor,
-      
-                          size: iconSize*1.5,
+                          size: iconSize * 1.5,
                           color: AppTheme.notWhite.withOpacity(0.7),
                         ),
                       ),
                     ),
-                     
-                    
                   ],
                 ),
-                
-                 Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     Container(
-                        padding: EdgeInsets.only(right: 10),
-                      height: iconContainerSpace ,
+                      padding: EdgeInsets.only(right: 10),
+                      height: iconContainerSpace,
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -452,49 +443,43 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                         ],
                       ),
                       child: IconButton(
-                       onPressed: () {
-                                  setState(() {
-                                    info = !info;
-                                  });
-                                },
+                        onPressed: () {
+                          setState(() {
+                            info = !info;
+                          });
+                        },
                         icon: Icon(
-                           Icons.info,
-      
-                          size: iconSize*1.5,
+                          Icons.info,
+                          size: iconSize * 1.5,
                           color: AppTheme.notWhite.withOpacity(0.7),
-                          
                         ),
                       ),
                     ),
-                    
-                     
-                    
                   ],
                 ),
-               Expanded(child: Container(),),
+                Expanded(
+                  child: Container(),
+                ),
                 widget.cateogries != null && widget.cateogries.length > 0
-                  ?
-                       Container(
-                          height: 40,
-                          width: WidgetsBinding.instance.window.physicalSize.width, 
-                          child: MenuBar(items: widget.cateogries))
-                  : Container(),
-                   SizedBox(height: 40),
-          
-
-
+                    ? Container(
+                        height: 40,
+                        width:
+                            WidgetsBinding.instance.window.physicalSize.width,
+                        child: MenuBar(items: widget.cateogries))
+                    : Container(),
+                SizedBox(height: 40),
               ],
             ),
-              info
+            info
                 ? Padding(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 50, vertical: 90),
+                        const EdgeInsets.only(right: 50, bottom: 90, top: 60),
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(30)),
                         gradient: LinearGradient(colors: [
-                          Colors.green.withOpacity(0.4),
-                          Colors.pinkAccent.withOpacity(0.4)
+                          Colors.green.withOpacity(0.7),
+                          Colors.pinkAccent.withOpacity(0.7)
                         ]),
                       ),
                       child: Expanded(
@@ -504,26 +489,33 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                           width: 400,
                           child: Column(
                             children: <Widget>[
-                              Container(
-                                child: Text(
-                                  widget.restauranDto.name,
-                                  textAlign: TextAlign.start,
-                                  style: AppTheme.insperryTheme,
-                                ),
+                              SizedBox(
+                                height: 20,
                               ),
                               Container(
-                                child: Text(
-                                  "United Kingdom",
-                                  textAlign: TextAlign.start,
-                                  style: AppTheme.insperryTheme,
-                                ),
+                                child: Text(widget.restauranDto.name,
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22,
+                                        fontFamily: "calibril")),
+                              ),
+                              Container(
+                                child: Text("United Kingdom",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22,
+                                        fontFamily: "calibril")),
                               ),
                               Text(
-                                widget.restauranDto.city +
-                                    ", " +
-                                    widget.restauranDto.street,
-                                style: AppTheme.insperryTheme,
-                              ),
+                                  widget.restauranDto.city +
+                                      ", " +
+                                      widget.restauranDto.street,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 22,
+                                      fontFamily: "calibril")),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
@@ -532,16 +524,18 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                   ),
                                   Container(
                                     width: 120,
-                                    child: Text(
-                                      "telephon:",
-                                      textAlign: TextAlign.start,
-                                      style: AppTheme.insperryTheme,
-                                    ),
+                                    child: Text("telephon:",
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 22,
+                                            fontFamily: "calibril")),
                                   ),
-                                  Text(
-                                    widget.restauranDto.user.phoneNumber,
-                                    style: AppTheme.insperryTheme,
-                                  )
+                                  Text(widget.restauranDto.user.phoneNumber,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 22,
+                                          fontFamily: "calibril"))
                                 ],
                               ),
                               Row(
@@ -552,15 +546,17 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                   ),
                                   Container(
                                     width: 120,
-                                    child: Text(
-                                      "fax:",
-                                      style: AppTheme.insperryTheme,
-                                    ),
+                                    child: Text("fax:",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 22,
+                                            fontFamily: "calibril")),
                                   ),
-                                  Text(
-                                    widget.restauranDto.fax,
-                                    style: AppTheme.insperryTheme,
-                                  )
+                                  Text(widget.restauranDto.fax,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 22,
+                                          fontFamily: "calibril"))
                                 ],
                               ),
                               Row(
@@ -571,27 +567,30 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                   ),
                                   Container(
                                     width: 120,
-                                    child: Text(
-                                      "Email:",
-                                      textAlign: TextAlign.start,
-                                      style: AppTheme.insperryTheme,
-                                    ),
+                                    child: Text("Email:",
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 22,
+                                            fontFamily: "calibril")),
                                   ),
                                   Container(
                                     width: 70,
-                                    child: Text(
-                                      widget.restauranDto.user.email,
-                                      style: AppTheme.insperryTheme,
-                                    ),
+                                    child: Text(widget.restauranDto.user.email,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 22,
+                                            fontFamily: "calibril")),
                                   )
                                 ],
                               ),
                               Container(
                                 width: 120,
-                                child: Text(
-                                  "openingtime:",
-                                  style: AppTheme.insperryTheme,
-                                ),
+                                child: Text("openingtime:",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22,
+                                        fontFamily: "calibril")),
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -599,15 +598,17 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                   SizedBox(width: 50),
                                   Container(
                                     width: 120,
-                                    child: Text(
-                                      "opentime:",
-                                      style: AppTheme.insperryTheme,
-                                    ),
+                                    child: Text("opentime:",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 22,
+                                            fontFamily: "calibril")),
                                   ),
-                                  Text(
-                                    widget.restauranDto.openTime,
-                                    style: AppTheme.insperryTheme,
-                                  )
+                                  Text(widget.restauranDto.openTime,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 22,
+                                          fontFamily: "calibril"))
                                 ],
                               ),
                               Row(
@@ -616,15 +617,17 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                   SizedBox(width: 50),
                                   Container(
                                     width: 120,
-                                    child: Text(
-                                      "closetime:",
-                                      style: AppTheme.insperryTheme,
-                                    ),
+                                    child: Text("closetime:",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 22,
+                                            fontFamily: "calibril")),
                                   ),
-                                  Text(
-                                    widget.restauranDto.closeTime,
-                                    style: AppTheme.insperryTheme,
-                                  )
+                                  Text(widget.restauranDto.closeTime,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 22,
+                                          fontFamily: "calibril"))
                                 ],
                               ),
                               Row(
@@ -633,10 +636,11 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                   SizedBox(width: 50),
                                   Container(
                                     width: 120,
-                                    child: Text(
-                                      "Payment Method:",
-                                      style: AppTheme.insperryTheme,
-                                    ),
+                                    child: Text("Payment Method:",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 22,
+                                            fontFamily: "calibril")),
                                   ),
                                   Container(
                                       width: 70,
@@ -685,35 +689,37 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                             : Container()),
                                     Container(
                                         padding: EdgeInsets.all(7),
-                                        child:
-                                            widget.restauranDto.services.wifi == 1
-                                                ? Icon(
-                                                    Icons.wifi,
-                                                    color: AppTheme.primaryColor,
-                                                    size: 34,
-                                                  )
-                                                : Container()),
+                                        child: widget.restauranDto.services
+                                                    .wifi ==
+                                                1
+                                            ? Icon(
+                                                Icons.wifi,
+                                                color: AppTheme.primaryColor,
+                                                size: 34,
+                                              )
+                                            : Container()),
                                     Container(
                                         padding: EdgeInsets.all(7),
-                                        child:
-                                            widget.restauranDto.services.power ==
-                                                    1
-                                                ? Icon(
-                                                    Icons.power,
-                                                    color: AppTheme.primaryColor,
-                                                    size: 34,
-                                                  )
-                                                : Container()),
+                                        child: widget.restauranDto.services
+                                                    .power ==
+                                                1
+                                            ? Icon(
+                                                Icons.power,
+                                                color: AppTheme.primaryColor,
+                                                size: 34,
+                                              )
+                                            : Container()),
                                     Container(
                                         padding: EdgeInsets.all(7),
-                                        child:
-                                            widget.restauranDto.services.pets == 1
-                                                ? Icon(
-                                                    Icons.pets,
-                                                    color: AppTheme.primaryColor,
-                                                    size: 34,
-                                                  )
-                                                : Container()),
+                                        child: widget.restauranDto.services
+                                                    .pets ==
+                                                1
+                                            ? Icon(
+                                                Icons.pets,
+                                                color: AppTheme.primaryColor,
+                                                size: 34,
+                                              )
+                                            : Container()),
                                   ],
                                 ),
                               )

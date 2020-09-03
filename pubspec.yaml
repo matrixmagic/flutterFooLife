@@ -112,6 +112,9 @@ flutter:
     - family: SpecialElite
       fonts:
         - asset: assets/fonts/SpecialElite-Regular.ttf
+    - family: calibril
+      fonts:
+        - asset: assets/fonts/calibril.ttf
     - family: story
       fonts:
         - asset: assets/fonts/story.ttf

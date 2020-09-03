@@ -130,15 +130,43 @@ class RestaurantRepository {
     }
   }
 
-  Future<List<RestaurantDto>> getAllResturantPaging(int pageIndex, int pageSize) async {
+  Future<List<RestaurantDto>> getAllResturantPaging(
+      int pageIndex, int pageSize) async {
     try {
-var body ={
-      "pageIndex": pageIndex,
-      "pageSize": pageSize
-    };
+      var body = {"pageIndex": pageIndex, "pageSize": pageSize};
 
+      var response = await api.post("getAllResturantPaging", body);
 
-      var response = await api.post("getAllResturantPaging",body);
+      print("status code" + response.statusCode.toString());
+      var data = ApiResponse.fromJson(json.decode(response.body));
+
+      if (data.success == true) {
+        print("waka waka paaaage paaaage");
+        List<RestaurantDto> lst = new List<RestaurantDto>();
+        data.data.forEach((v) {
+          lst.add(new RestaurantDto.fromJson(v));
+        });
+
+        print("biiila");
+        return lst;
+      } else
+        print("get nothing");
+      return null;
+    } catch (e) {
+      print("ohh shit");
+      print(e.toString());
+    }
+  }
+
+  Future<List<RestaurantDto>> getAllResturantPaging2(
+      List<dynamic> exceptIds, int pageSize) async {
+    try {
+      var body = {
+        "exceptRestaurantIds": exceptIds.map((v) => v).toList(),
+        "pageSize": pageSize
+      };
+
+      var response = await api.post("getAllResturantPagingRand", body);
 
       print("status code" + response.statusCode.toString());
       var data = ApiResponse.fromJson(json.decode(response.body));
@@ -236,6 +264,27 @@ var body ={
       print("something wrong in getResturantStatistic");
       print(e.toString());
       return e;
+    }
+  }
+
+  Future<RestaurantDto> getRestaurantById(int id) async {
+    try {
+      var response = await api.get("getRestaurantById");
+      var body = {
+        "id": id,
+      };
+      var data = ApiResponse.fromJson(json.decode(response.body));
+
+      if (data.success == true) {
+        print("get my restautent by Id");
+        RestaurantDto restaurant = RestaurantDto.fromJson(data.data);
+        return restaurant;
+      } else
+        print("get nothing");
+      return null;
+    } catch (e) {
+      print("ohh shit");
+      print(e.toString());
     }
   }
 
