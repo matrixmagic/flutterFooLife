@@ -229,7 +229,7 @@ swiperControl=new SwiperController();
                     );
                   }
                 },
-                itemCount: restaurents.length,
+                itemCount: drinks.length,
                 scrollDirection: Axis.vertical,
               ):lastSelectedChannel == 31 && foods.length > 0 ? Swiper(
                 controller: swiperControl,
@@ -284,7 +284,7 @@ swiperControl=new SwiperController();
                     );
                   }
                 },
-                itemCount: restaurents.length,
+                itemCount: foods.length,
                 scrollDirection: Axis.vertical,
               ): Container(),
         Positioned(
