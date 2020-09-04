@@ -127,12 +127,14 @@ class _MainScreenState extends State<MainScreen> {
   void selectChannel(int channel) {
     setState(() {
       lastSelectedChannel = channel;
+       swiperControl.move(0);
     });
 
-    swiperControl.move(0);
+   
   }
 
   Widget build(BuildContext context) {
+    print(lastSelectedChannel);
     _context = context;
     return Scaffold(
         body: Stack(

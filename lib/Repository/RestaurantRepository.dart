@@ -172,13 +172,13 @@ class RestaurantRepository {
       var data = ApiResponse.fromJson(json.decode(response.body));
 
       if (data.success == true) {
-        print("waka waka paaaage paaaage");
+        print("get all restaurants from our database");
         List<RestaurantDto> lst = new List<RestaurantDto>();
         data.data.forEach((v) {
           lst.add(new RestaurantDto.fromJson(v));
         });
 
-        print("biiila");
+       
         return lst;
       } else
         print("get nothing");
