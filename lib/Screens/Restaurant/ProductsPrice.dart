@@ -203,10 +203,12 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
       productincategory.add(
         Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <
             Widget>[
-          Container(width: 65, child: Text(pro.name)),
+          Container(
+              width: (MediaQuery.of(context).size.width / 10),
+              child: Text(pro.name)),
           Container(
             height: (MediaQuery.of(context).size.height / 24),
-            width: (MediaQuery.of(context).size.height / 5),
+            width: (MediaQuery.of(context).size.width / 4),
             child: StreamBuilder(
                 stream: priceProductBloc.productContentStream(map[pro.id]),
                 builder: (context, snapshot) {
@@ -241,7 +243,7 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
           ),
           Container(
             height: (MediaQuery.of(context).size.height / 24),
-            width: (MediaQuery.of(context).size.height / 9),
+            width: (MediaQuery.of(context).size.width / 4),
             child: StreamBuilder(
                 stream: priceProductBloc.productPrice(map[pro.id]),
                 builder: (context, snapshot) {
@@ -340,10 +342,12 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
         productincategory.add(
           Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <
               Widget>[
-            Container(width: 65, child: Text("")),
+            Container(
+                width: (MediaQuery.of(context).size.width / 17),
+                child: Text("")),
             Container(
               height: (MediaQuery.of(context).size.height / 24),
-              width: (MediaQuery.of(context).size.height / 5),
+              width: (MediaQuery.of(context).size.width / 4),
               child: StreamBuilder(
                   stream: priceProductBloc
                       .productExtraContentStream(mapEx[proEx.id]),
@@ -378,56 +382,52 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
                     );
                   }),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: Container(
-                height: (MediaQuery.of(context).size.height / 24),
-                width: (MediaQuery.of(context).size.height / 5),
-                child: StreamBuilder(
-                    stream: priceProductBloc.extraProductPrice(mapEx[proEx.id]),
-                    builder: (context, snapshot) {
-                      return TextField(
-                        keyboardType: TextInputType.number,
-                        textAlignVertical: TextAlignVertical.center,
-                        onChanged: (value) {
-                          var short = ShortModel();
-                          short.id = proEx.id;
-                          short.value = value;
-                          priceProductBloc.changExtraPrice(
-                              short, mapEx[proEx.id]);
-                        },
-                        autocorrect: true,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.all(5.0),
-                          hintText: proEx.price,
-                          hintStyle: TextStyle(
-                            color: Colors.grey,
-                          ),
-                          filled: true,
-                          fillColor: Colors.white70,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(12.0)),
-                            borderSide: BorderSide(
-                                color: AppTheme.primaryColor, width: 2),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(
-                              color: AppTheme.primaryColor,
-                            ),
+            Container(
+              padding: EdgeInsets.only(top: 5),
+              height: (MediaQuery.of(context).size.height / 20),
+              width: (MediaQuery.of(context).size.width / 4),
+              child: StreamBuilder(
+                  stream: priceProductBloc.extraProductPrice(mapEx[proEx.id]),
+                  builder: (context, snapshot) {
+                    return TextField(
+                      keyboardType: TextInputType.number,
+                      textAlignVertical: TextAlignVertical.center,
+                      onChanged: (value) {
+                        var short = ShortModel();
+                        short.id = proEx.id;
+                        short.value = value;
+                        priceProductBloc.changExtraPrice(
+                            short, mapEx[proEx.id]);
+                      },
+                      autocorrect: true,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(5.0),
+                        hintText: proEx.price,
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        filled: true,
+                        fillColor: Colors.white70,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                          borderSide: BorderSide(
+                              color: AppTheme.primaryColor, width: 2),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                            color: AppTheme.primaryColor,
                           ),
                         ),
-                      );
-                    }),
-              ),
+                      ),
+                    );
+                  }),
             ),
             SizedBox(
-              width: (MediaQuery.of(context).size.height / 100),
+              width: (MediaQuery.of(context).size.width / 10.2),
             ),
             SizedBox(
-              width: (MediaQuery.of(context).size.height / 100),
+              width: (MediaQuery.of(context).size.width / 10.2),
             )
           ]),
         );
@@ -454,7 +454,7 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
               children: <Widget>[
                 //
                 Container(
-                  width: 100,
+                  width: (MediaQuery.of(context).size.width / 5),
                   child: Column(children: <Widget>[
                     IconButton(
                       onPressed: () {
@@ -471,7 +471,7 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
 
                 Container(
                   height: (MediaQuery.of(context).size.height / 24),
-                  width: (MediaQuery.of(context).size.height / 4),
+                  width: (MediaQuery.of(context).size.width / 2),
                   child: StreamBuilder(
                       stream: priceProductBloc.categoryPriceStream,
                       builder: (context, snapshot) {
@@ -682,8 +682,7 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
                               child: Container(
                                 height:
                                     (MediaQuery.of(context).size.height / 24),
-                                width:
-                                    (MediaQuery.of(context).size.height / 10),
+                                width: (MediaQuery.of(context).size.width / 5),
                                 child: StreamBuilder(
                                     stream: priceProductBloc.amountStream,
                                     builder: (context, snapshot) {
@@ -723,8 +722,7 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
                               child: Container(
                                 height:
                                     (MediaQuery.of(context).size.height / 24),
-                                width:
-                                    (MediaQuery.of(context).size.height / 10),
+                                width: (MediaQuery.of(context).size.width / 6),
                                 child: StreamBuilder(
                                     stream: priceProductBloc.fromStream,
                                     builder: (context, snapshot) {
@@ -762,8 +760,7 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
                               child: Container(
                                 height:
                                     (MediaQuery.of(context).size.height / 24),
-                                width:
-                                    (MediaQuery.of(context).size.height / 10),
+                                width: (MediaQuery.of(context).size.width / 6),
                                 child: StreamBuilder(
                                     stream: priceProductBloc.toStream,
                                     builder: (context, snapshot) {
@@ -883,7 +880,7 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
                           children: <Widget>[
                             SizedBox(),
                             Text('beschreibung'),
-                            Text('preis'),
+                            Text('preis          '),
                             SizedBox(),
                             SizedBox(),
                           ],
