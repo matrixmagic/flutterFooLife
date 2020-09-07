@@ -147,57 +147,170 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
               color: Colors.blue.withOpacity(0),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: 30,
-              ),
-              Center(
-                  child: Text(
+          SizedBox(
+            height: 30,
+          ),
+          Center(
+              heightFactor: 2,
+              child: Text(
                 widget.product.restaurantDto.name,
                 style: TextStyle(
                     color: Colors.white, fontSize: 22, fontFamily: "calibril"),
               )),
-              SizedBox(
-                height: 60,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(left: 10),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(right: 10),
-                    decoration: BoxDecoration(boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.7),
-                        blurRadius: 40.0,
-                        spreadRadius: 1.0,
-                      ),
-                    ]),
-                    child: Text(
-                      widget.product.name,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                          fontFamily: "calibril"),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      height:
+                          WidgetsBinding.instance.window.physicalSize.height /
+                              9,
                     ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                    Container(
+                      height: iconContainerSpace + 5,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.7),
+                            blurRadius: 40.0,
+                            spreadRadius: 1.0,
+                          ),
+                        ],
+                      ),
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.favorite,
+                          size: iconSize,
+                          color: Colors.white.withOpacity(0.8),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 45,
+                      child: Center(
+                        child: Text(
+                          '22',
+                          style: TextStyle(
+                              color: Colors.white.withOpacity(0.8),
+                              fontFamily: "SpecialElite"),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: iconContainerSpace,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.7),
+                            blurRadius: 40.0,
+                            spreadRadius: 1.0,
+                          ),
+                        ],
+                      ),
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.person,
+                          size: iconSize,
+                          color: Colors.white.withOpacity(0.8),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 45,
+                      child: Center(
+                        child: Text(
+                          '22',
+                          style: TextStyle(
+                              color: Colors.white.withOpacity(0.8),
+                              fontFamily: "SpecialElite"),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: iconContainerSpace,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.7),
+                            blurRadius: 40.0,
+                            spreadRadius: 1.0,
+                          ),
+                        ],
+                      ),
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.share,
+                          size: iconSize,
+                          color: Colors.white.withOpacity(0.8),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 45,
+                      child: Center(
+                        child: Text(
+                          '22',
+                          style: TextStyle(
+                              color: Colors.white.withOpacity(0.8),
+                              fontFamily: "SpecialElite"),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: iconContainerSpace + 5,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.7),
+                            blurRadius: 40.0,
+                            spreadRadius: 1.0,
+                          ),
+                        ],
+                      ),
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.insert_comment,
+                          size: iconSize,
+                          color: Colors.white.withOpacity(0.8),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 45,
+                      child: Center(
+                        child: Text(
+                          '22',
+                          style: TextStyle(
+                              color: Colors.white.withOpacity(0.8),
+                              fontFamily: "SpecialElite"),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 65,
+                    )
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 100,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Container(
+                          margin: EdgeInsets.only(left: 10),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(right: 10),
                           decoration: BoxDecoration(boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.7),
@@ -206,23 +319,26 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                             ),
                           ]),
                           child: Text(
-                              widget.product.price != null
-                                  ? (widget.product.price.toString() +
-                                      "\$".toString())
-                                  : "",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontFamily: "SpecialElite")),
+                            widget.product.name,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontFamily: "calibril"),
+                          ),
                         ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
                         SizedBox(
-                          width: 10,
+                          height: 5,
                         ),
-                        widget.product.details == null ||
-                                widget.product.details == "" ||
-                                widget.product.details == " "
-                            ? Container()
-                            : Container(
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Container(
                                 decoration: BoxDecoration(boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.7),
@@ -230,156 +346,89 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                                     spreadRadius: 1.0,
                                   ),
                                 ]),
-                                child: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        boolInfo = !boolInfo;
-                                        if (boolInfo) {
-                                          detailsInfo = false;
-                                        }
-                                      });
-                                    },
-                                    icon: Icon(
-                                      Icons.info_outline,
-                                      color: Colors.white,
-                                      size: 24,
-                                    )),
+                                child: Text(
+                                    widget.product.price != null
+                                        ? (widget.product.price.toString() +
+                                            "\$".toString())
+                                        : "",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontFamily: "SpecialElite")),
                               ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              widget.product.details == null ||
+                                      widget.product.details == "" ||
+                                      widget.product.details == " "
+                                  ? Container()
+                                  : Container(
+                                      decoration: BoxDecoration(boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.7),
+                                          blurRadius: 40.0,
+                                          spreadRadius: 1.0,
+                                        ),
+                                      ]),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              boolInfo = !boolInfo;
+                                              if (boolInfo) {
+                                                detailsInfo = false;
+                                              }
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.info_outline,
+                                            color: Colors.white,
+                                            size: 24,
+                                          )),
+                                    ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: WidgetsBinding.instance.window.physicalSize.height / 21,
-              ),
-              Container(
-                height: iconContainerSpace + 5,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.7),
-                      blurRadius: 40.0,
-                      spreadRadius: 1.0,
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 2,
                     ),
-                  ],
-                ),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.favorite,
-                    size: iconSize,
-                    color: Colors.white.withOpacity(0.8),
-                  ),
-                ),
-              ),
-              Container(
-                width: 45,
-                child: Center(
-                  child: Text(
-                    '22',
-                    style: TextStyle(
-                        color: Colors.white.withOpacity(0.8),
-                        fontFamily: "SpecialElite"),
-                  ),
-                ),
-              ),
-              Container(
-                height: iconContainerSpace,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.7),
-                      blurRadius: 40.0,
-                      spreadRadius: 1.0,
+                    widget.forChannel
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.only(right: 10),
+                                height: iconContainerSpace,
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.7),
+                                      blurRadius: 40.0,
+                                      spreadRadius: 1.0,
+                                    ),
+                                  ],
+                                ),
+                                child: IconButton(
+                                  onPressed: () {
+                                    widget.goToRestaurent
+                                        .call(widget.product.restaurantId);
+                                  },
+                                  icon: Icon(
+                                    Icons.keyboard_return,
+                                    size: iconSize * 1.2,
+                                    color: AppTheme.notWhite.withOpacity(0.7),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Container(),
+                    SizedBox(
+                      height: 12,
                     ),
-                  ],
-                ),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.person,
-                    size: iconSize,
-                    color: Colors.white.withOpacity(0.8),
-                  ),
-                ),
-              ),
-              Container(
-                width: 45,
-                child: Center(
-                  child: Text(
-                    '22',
-                    style: TextStyle(
-                        color: Colors.white.withOpacity(0.8),
-                        fontFamily: "SpecialElite"),
-                  ),
-                ),
-              ),
-              Container(
-                height: iconContainerSpace,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.7),
-                      blurRadius: 40.0,
-                      spreadRadius: 1.0,
-                    ),
-                  ],
-                ),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.share,
-                    size: iconSize,
-                    color: Colors.white.withOpacity(0.8),
-                  ),
-                ),
-              ),
-              Container(
-                width: 45,
-                child: Center(
-                  child: Text(
-                    '22',
-                    style: TextStyle(
-                        color: Colors.white.withOpacity(0.8),
-                        fontFamily: "SpecialElite"),
-                  ),
-                ),
-              ),
-              Container(
-                height: iconContainerSpace + 5,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.7),
-                      blurRadius: 40.0,
-                      spreadRadius: 1.0,
-                    ),
-                  ],
-                ),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.insert_comment,
-                    size: iconSize,
-                    color: Colors.white.withOpacity(0.8),
-                  ),
-                ),
-              ),
-              Container(
-                width: 45,
-                child: Center(
-                  child: Text(
-                    '22',
-                    style: TextStyle(
-                        color: Colors.white.withOpacity(0.8),
-                        fontFamily: "SpecialElite"),
-                  ),
-                ),
-              ),
-              Expanded(child: Container()),
-              widget.forChannel
-                  ? Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         Container(
@@ -396,125 +445,95 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                           ),
                           child: IconButton(
                             onPressed: () {
-                              widget.goToRestaurent
-                                  .call(widget.product.restaurantId);
+                              setState(() {
+                                detailsInfo = !detailsInfo;
+                                if (detailsInfo) {
+                                  boolInfo = false;
+                                }
+                              });
                             },
                             icon: Icon(
-                              Icons.keyboard_return,
+                              Icons.info,
                               size: iconSize * 1.2,
                               color: AppTheme.notWhite.withOpacity(0.7),
                             ),
                           ),
                         ),
                       ],
-                    )
-                  : Container(),
-              SizedBox(
-                height: 12,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.only(right: 10),
-                    height: iconContainerSpace,
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.7),
-                          blurRadius: 40.0,
-                          spreadRadius: 1.0,
-                        ),
-                      ],
                     ),
-                    child: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          detailsInfo = !detailsInfo;
-                          if (detailsInfo) {
-                            boolInfo = false;
-                          }
-                        });
-                      },
-                      icon: Icon(
-                        Icons.info,
-                        size: iconSize * 1.2,
-                        color: AppTheme.notWhite.withOpacity(0.7),
-                      ),
-                    ),
+                  ],
+                )
+              ]),
+          widget.forChannel
+              ? Column(children: <Widget>[
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 1.2,
                   ),
-                ],
-              ),
-              widget.forChannel
-                  ? Row(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(right: 10),
-                          height: iconContainerSpace,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.7),
-                                blurRadius: 40.0,
-                                spreadRadius: 1.0,
-                              ),
-                            ],
-                          ),
-                          child: IconButton(
-                            onPressed: () {
-                              widget.changeChannel.call(31);
-                              setState(() {
-                                widget.isDrink = false;
-                                //info = !info;
-                              });
-                            },
-                            icon: Icon(
-                              Icons.fastfood,
-                              size: iconSize * 1.5,
-                              color: widget.isDrink
-                                  ? Colors.white.withOpacity(0.5)
-                                  : Colors.white.withOpacity(0.9),
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.only(right: 10),
+                        height: iconContainerSpace,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.7),
+                              blurRadius: 40.0,
+                              spreadRadius: 1.0,
                             ),
+                          ],
+                        ),
+                        child: IconButton(
+                          onPressed: () {
+                            widget.changeChannel.call(31);
+                            setState(() {
+                              widget.isDrink = false;
+                              //info = !info;
+                            });
+                          },
+                          icon: Icon(
+                            Icons.fastfood,
+                            size: iconSize * 1.5,
+                            color: widget.isDrink
+                                ? Colors.white.withOpacity(0.5)
+                                : Colors.white.withOpacity(0.9),
                           ),
                         ),
-                        Container(
-                          padding: EdgeInsets.only(right: 10),
-                          height: iconContainerSpace,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.7),
-                                blurRadius: 40.0,
-                                spreadRadius: 1.0,
-                              ),
-                            ],
-                          ),
-                          child: IconButton(
-                            onPressed: () {
-                              widget.changeChannel.call(32);
-                              setState(() {
-                                widget.isDrink = true;
-                                //info = !info;
-                              });
-                            },
-                            icon: Icon(
-                              Icons.free_breakfast,
-                              size: iconSize * 1.5,
-                              color: widget.isDrink
-                                  ? Colors.white.withOpacity(0.9)
-                                  : Colors.white.withOpacity(0.5),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(right: 10),
+                        height: iconContainerSpace,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.7),
+                              blurRadius: 40.0,
+                              spreadRadius: 1.0,
                             ),
+                          ],
+                        ),
+                        child: IconButton(
+                          onPressed: () {
+                            widget.changeChannel.call(32);
+                            setState(() {
+                              widget.isDrink = true;
+                              //info = !info;
+                            });
+                          },
+                          icon: Icon(
+                            Icons.free_breakfast,
+                            size: iconSize * 1.5,
+                            color: widget.isDrink
+                                ? Colors.white.withOpacity(0.9)
+                                : Colors.white.withOpacity(0.5),
                           ),
-                        )
-                      ],
-                      mainAxisAlignment: MainAxisAlignment.center,
-                    )
-                  : Container(),
-              SizedBox(
-                height: 65,
-              )
-            ],
-          ),
+                        ),
+                      )
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                  ),
+                ])
+              : Container(),
           boolInfo
               ? Padding(
                   padding: EdgeInsets.only(

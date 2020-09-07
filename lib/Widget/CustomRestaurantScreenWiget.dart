@@ -1,5 +1,6 @@
 import 'package:better_player/better_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -166,310 +167,326 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                         )
                       : Container(),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: 30,
-                ),
-                Center(
-                  child: Text(
-                    widget.restauranDto.name,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontFamily: "calibril"),
-                  ),
-                ),
-                SizedBox(
-                  height:
-                      WidgetsBinding.instance.window.physicalSize.height / 31,
-                ),
-                Container(
-                  height: iconContainerSpace + 5,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.7),
-                        blurRadius: 40.0,
-                        spreadRadius: 1.0,
+            SizedBox(
+              height: 30,
+            ),
+            Center(
+              heightFactor: 2,
+              child: Text(
+                widget.restauranDto.name,
+                style: TextStyle(
+                    color: Colors.white, fontSize: 22, fontFamily: "calibril"),
+              ),
+            ),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        height:
+                            WidgetsBinding.instance.window.physicalSize.height /
+                                20,
+                      ),
+                      Container(
+                        height: iconContainerSpace + 5,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.7),
+                              blurRadius: 40.0,
+                              spreadRadius: 1.0,
+                            ),
+                          ],
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.favorite,
+                            size: iconSize,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 45,
+                        child: Center(
+                          child: Text(
+                            '22',
+                            style: TextStyle(
+                                color: Colors.white.withOpacity(0.8),
+                                fontFamily: "SpecialElite"),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: iconContainerSpace,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.7),
+                              blurRadius: 40.0,
+                              spreadRadius: 1.0,
+                            ),
+                          ],
+                        ),
+                        child: IconButton(
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.star,
+                            size: iconSize,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 45,
+                        child: Center(
+                          child: Text(
+                            '22',
+                            style: TextStyle(
+                                color: Colors.white.withOpacity(0.8),
+                                fontFamily: "SpecialElite"),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: iconContainerSpace,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.7),
+                              blurRadius: 40.0,
+                              spreadRadius: 1.0,
+                            ),
+                          ],
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.person,
+                            size: iconSize,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 28,
+                        width: 45,
+                        child: Center(
+                          child: Text(
+                            '22',
+                            style: TextStyle(
+                                color: Colors.white.withOpacity(0.8),
+                                fontFamily: "SpecialElite"),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: iconContainerSpace,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.7),
+                              blurRadius: 40.0,
+                              spreadRadius: 1.0,
+                            ),
+                          ],
+                        ),
+                        child: IconButton(
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.share,
+                            size: iconSize,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 45,
+                        child: Center(
+                          child: Text(
+                            '22',
+                            style: TextStyle(
+                                color: Colors.white.withOpacity(0.8),
+                                fontFamily: "SpecialElite"),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: iconContainerSpace + 10,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.7),
+                              blurRadius: 40.0,
+                              spreadRadius: 1.0,
+                            ),
+                          ],
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            MyFlutterApp.kellner_option,
+                            size: iconSize,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 45,
+                        child: Center(
+                          child: Text(
+                            '22',
+                            style: TextStyle(
+                                color: Colors.white.withOpacity(0.8),
+                                fontFamily: "SpecialElite"),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: iconContainerSpace + 5,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.7),
+                              blurRadius: 40.0,
+                              spreadRadius: 1.0,
+                            ),
+                          ],
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.insert_comment,
+                            size: iconSize,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 45,
+                        child: Center(
+                          child: Text(
+                            '22',
+                            style: TextStyle(
+                                color: Colors.white.withOpacity(0.8),
+                                fontFamily: "SpecialElite"),
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.favorite,
-                      size: iconSize,
-                      color: Colors.white.withOpacity(0.8),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 45,
-                  child: Center(
-                    child: Text(
-                      '22',
-                      style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
-                          fontFamily: "SpecialElite"),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: iconContainerSpace,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.7),
-                        blurRadius: 40.0,
-                        spreadRadius: 1.0,
+                  Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 1.52,
                       ),
-                    ],
-                  ),
-                  child: IconButton(
-                    padding: EdgeInsets.all(0),
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.star,
-                      size: iconSize,
-                      color: Colors.white.withOpacity(0.8),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 45,
-                  child: Center(
-                    child: Text(
-                      '22',
-                      style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
-                          fontFamily: "SpecialElite"),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: iconContainerSpace,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.7),
-                        blurRadius: 40.0,
-                        spreadRadius: 1.0,
-                      ),
-                    ],
-                  ),
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.person,
-                      size: iconSize,
-                      color: Colors.white.withOpacity(0.8),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 28,
-                  width: 45,
-                  child: Center(
-                    child: Text(
-                      '22',
-                      style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
-                          fontFamily: "SpecialElite"),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: iconContainerSpace,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.7),
-                        blurRadius: 40.0,
-                        spreadRadius: 1.0,
-                      ),
-                    ],
-                  ),
-                  child: IconButton(
-                    padding: EdgeInsets.all(0),
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.share,
-                      size: iconSize,
-                      color: Colors.white.withOpacity(0.8),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 45,
-                  child: Center(
-                    child: Text(
-                      '22',
-                      style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
-                          fontFamily: "SpecialElite"),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: iconContainerSpace + 10,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.7),
-                        blurRadius: 40.0,
-                        spreadRadius: 1.0,
-                      ),
-                    ],
-                  ),
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      MyFlutterApp.kellner_option,
-                      size: iconSize,
-                      color: Colors.white.withOpacity(0.8),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 45,
-                  child: Center(
-                    child: Text(
-                      '22',
-                      style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
-                          fontFamily: "SpecialElite"),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: iconContainerSpace + 5,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.7),
-                        blurRadius: 40.0,
-                        spreadRadius: 1.0,
-                      ),
-                    ],
-                  ),
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.insert_comment,
-                      size: iconSize,
-                      color: Colors.white.withOpacity(0.8),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 45,
-                  child: Center(
-                    child: Text(
-                      '22',
-                      style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
-                          fontFamily: "SpecialElite"),
-                    ),
-                  ),
-                ),
-                Expanded(child: Container()),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(right: 5),
-                      height: iconContainerSpace * 1.5,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.7),
-                            blurRadius: 40.0,
-                            spreadRadius: 1.0,
+                      //Expanded(child: Container()),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.only(right: 5),
+                            height: iconContainerSpace * 1.5,
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.7),
+                                  blurRadius: 40.0,
+                                  spreadRadius: 1.0,
+                                ),
+                              ],
+                            ),
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                qrcode1.ddd__1_,
+                                size: iconSize * 1.5,
+                                color: AppTheme.notWhite.withOpacity(0.7),
+                              ),
+                            ),
                           ),
                         ],
                       ),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          qrcode1.ddd__1_,
-                          size: iconSize * 1.5,
-                          color: AppTheme.notWhite.withOpacity(0.7),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(right: 10),
-                      height: iconContainerSpace * 1.5,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.7),
-                            blurRadius: 40.0,
-                            spreadRadius: 1.0,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.only(right: 10),
+                            height: iconContainerSpace * 1.5,
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.7),
+                                  blurRadius: 40.0,
+                                  spreadRadius: 1.0,
+                                ),
+                              ],
+                            ),
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                StoryICons.burning_meteor,
+                                size: iconSize * 1.5,
+                                color: AppTheme.notWhite.withOpacity(0.7),
+                              ),
+                            ),
                           ),
                         ],
                       ),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          StoryICons.burning_meteor,
-                          size: iconSize * 1.5,
-                          color: AppTheme.notWhite.withOpacity(0.7),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(right: 10),
-                      height: iconContainerSpace,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.7),
-                            blurRadius: 40.0,
-                            spreadRadius: 1.0,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.only(right: 10),
+                            height: iconContainerSpace,
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.7),
+                                  blurRadius: 40.0,
+                                  spreadRadius: 1.0,
+                                ),
+                              ],
+                            ),
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  info = !info;
+                                });
+                              },
+                              icon: Icon(
+                                Icons.info,
+                                size: iconSize * 1.5,
+                                color: AppTheme.notWhite.withOpacity(0.7),
+                              ),
+                            ),
                           ),
                         ],
                       ),
-                      child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            info = !info;
-                          });
-                        },
-                        icon: Icon(
-                          Icons.info,
-                          size: iconSize * 1.5,
-                          color: AppTheme.notWhite.withOpacity(0.7),
-                        ),
+                      Expanded(
+                        child: Container(),
                       ),
+                    ],
+                  )
+                ]),
+            widget.cateogries != null && widget.cateogries.length > 0
+                ? Column(children: <Widget>[
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 1.15,
                     ),
-                  ],
-                ),
-                Expanded(
-                  child: Container(),
-                ),
-                widget.cateogries != null && widget.cateogries.length > 0
-                    ? Container(
-                        height: 40,
+                    Container(
+                        height: 45,
                         width:
                             WidgetsBinding.instance.window.physicalSize.width,
-                        child: MenuBar(items: widget.cateogries))
-                    : Container(),
-                SizedBox(height: 40),
-              ],
-            ),
+                        child: MenuBar(items: widget.cateogries)),
+                  ])
+                : Container(),
+            SizedBox(height: 100),
             info
                 ? Padding(
                     padding:
@@ -497,7 +514,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 22,
+                                        fontSize: 16,
                                         fontFamily: "calibril")),
                               ),
                               Container(
@@ -505,7 +522,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 22,
+                                        fontSize: 14,
                                         fontFamily: "calibril")),
                               ),
                               Text(
@@ -514,7 +531,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                       widget.restauranDto.street,
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 22,
+                                      fontSize: 14,
                                       fontFamily: "calibril")),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -528,13 +545,13 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 22,
+                                            fontSize: 14,
                                             fontFamily: "calibril")),
                                   ),
                                   Text(widget.restauranDto.user.phoneNumber,
                                       style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 22,
+                                          fontSize: 14,
                                           fontFamily: "calibril"))
                                 ],
                               ),
@@ -549,13 +566,13 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                     child: Text("fax:",
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 22,
+                                            fontSize: 14,
                                             fontFamily: "calibril")),
                                   ),
                                   Text(widget.restauranDto.fax,
                                       style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 22,
+                                          fontSize: 14,
                                           fontFamily: "calibril"))
                                 ],
                               ),
@@ -571,7 +588,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 22,
+                                            fontSize: 14,
                                             fontFamily: "calibril")),
                                   ),
                                   Container(
@@ -579,7 +596,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                     child: Text(widget.restauranDto.user.email,
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 22,
+                                            fontSize: 14,
                                             fontFamily: "calibril")),
                                   )
                                 ],
@@ -589,7 +606,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                 child: Text("openingtime:",
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 22,
+                                        fontSize: 14,
                                         fontFamily: "calibril")),
                               ),
                               Row(
@@ -601,13 +618,13 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                     child: Text("opentime:",
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 22,
+                                            fontSize: 14,
                                             fontFamily: "calibril")),
                                   ),
                                   Text(widget.restauranDto.openTime,
                                       style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 22,
+                                          fontSize: 14,
                                           fontFamily: "calibril"))
                                 ],
                               ),
@@ -620,13 +637,13 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                     child: Text("closetime:",
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 22,
+                                            fontSize: 14,
                                             fontFamily: "calibril")),
                                   ),
                                   Text(widget.restauranDto.closeTime,
                                       style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 22,
+                                          fontSize: 14,
                                           fontFamily: "calibril"))
                                 ],
                               ),
@@ -639,7 +656,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                     child: Text("Payment Method:",
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 22,
+                                            fontSize: 14,
                                             fontFamily: "calibril")),
                                   ),
                                   Container(
@@ -662,7 +679,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                             ? Icon(
                                                 FontAwesomeIcons.gamepad,
                                                 color: AppTheme.primaryColor,
-                                                size: 34,
+                                                size: 30,
                                               )
                                             : Container()),
                                     Container(
@@ -673,7 +690,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                             ? Icon(
                                                 Icons.accessible,
                                                 color: AppTheme.primaryColor,
-                                                size: 34,
+                                                size: 30,
                                               )
                                             : Container()),
                                     Container(
@@ -684,7 +701,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                             ? Icon(
                                                 Icons.child_friendly,
                                                 color: AppTheme.primaryColor,
-                                                size: 34,
+                                                size: 30,
                                               )
                                             : Container()),
                                     Container(
@@ -695,7 +712,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                             ? Icon(
                                                 Icons.wifi,
                                                 color: AppTheme.primaryColor,
-                                                size: 34,
+                                                size: 30,
                                               )
                                             : Container()),
                                     Container(
@@ -706,7 +723,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                             ? Icon(
                                                 Icons.power,
                                                 color: AppTheme.primaryColor,
-                                                size: 34,
+                                                size: 30,
                                               )
                                             : Container()),
                                     Container(
@@ -717,7 +734,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                             ? Icon(
                                                 Icons.pets,
                                                 color: AppTheme.primaryColor,
-                                                size: 34,
+                                                size: 30,
                                               )
                                             : Container()),
                                   ],

@@ -48,9 +48,12 @@ class _PorductPriceState extends State<PorductPrice> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Text(
-                "Auf alle Artiklen bewirken",
-                style: AppTheme.body2,
+              Container(
+                width: (MediaQuery.of(context).size.height / 4),
+                child: Text(
+                  "Auf alle Artiklen bewirken",
+                  style: AppTheme.body2,
+                ),
               ),
               Container(
                 height: (MediaQuery.of(context).size.height / 24),
@@ -532,146 +535,151 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
               child: isVisible
                   ? Column(
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                Text("Mo"),
-                                StreamBuilder(
-                                    stream: priceProductBloc.monStream,
-                                    builder: (context, snapshot) {
-                                      return Checkbox(
-                                        value: mo,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            mo = !mo;
-                                            priceProductBloc
-                                                .changeMon(mo == true ? 1 : 0);
-                                          });
-                                        },
-                                      );
-                                    })
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Text("Di"),
-                                StreamBuilder(
-                                    stream: priceProductBloc.tusStream,
-                                    builder: (context, snapshot) {
-                                      return Checkbox(
-                                        value: di,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            di = !di;
-                                            priceProductBloc
-                                                .changeTus(di == true ? 1 : 0);
-                                          });
-                                        },
-                                      );
-                                    })
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Text("Mi"),
-                                StreamBuilder<Object>(
-                                    stream: priceProductBloc.wedStream,
-                                    builder: (context, snapshot) {
-                                      return Checkbox(
-                                        value: mi,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            mi = !mi;
-                                            priceProductBloc
-                                                .changeWed(mi == true ? 1 : 0);
-                                          });
-                                        },
-                                      );
-                                    })
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Text("Do"),
-                                StreamBuilder(
-                                    stream: priceProductBloc.thurStream,
-                                    builder: (context, snapshot) {
-                                      return StreamBuilder(
-                                          stream: priceProductBloc.thurStream,
-                                          builder: (context, snapshot) {
-                                            return Checkbox(
-                                              value: don,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  don = !don;
-                                                  priceProductBloc.changeThurt(
-                                                      don == true ? 1 : 0);
-                                                });
-                                              },
-                                            );
-                                          });
-                                    })
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Text("Fr"),
-                                StreamBuilder(
-                                    stream: priceProductBloc.friStream,
-                                    builder: (context, snapshot) {
-                                      return Checkbox(
-                                        value: fr,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            priceProductBloc
-                                                .changefri(fr == true ? 1 : 0);
-                                            fr = !fr;
-                                          });
-                                        },
-                                      );
-                                    })
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Text("Sa"),
-                                StreamBuilder(
-                                    stream: priceProductBloc.satStream,
-                                    builder: (context, snapshot) {
-                                      return Checkbox(
-                                        value: sa,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            sa = !sa;
-                                            priceProductBloc
-                                                .changeSat(sa == true ? 1 : 0);
-                                          });
-                                        },
-                                      );
-                                    })
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Text("So"),
-                                StreamBuilder(
-                                    stream: priceProductBloc.sonStream,
-                                    builder: (context, snapshot) {
-                                      return Checkbox(
-                                        value: so,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            so = !so;
-                                            priceProductBloc
-                                                .changeSon(so == true ? 1 : 0);
-                                          });
-                                        },
-                                      );
-                                    })
-                              ],
-                            )
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  Text("Mo"),
+                                  StreamBuilder(
+                                      stream: priceProductBloc.monStream,
+                                      builder: (context, snapshot) {
+                                        return Checkbox(
+                                          value: mo,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              mo = !mo;
+                                              priceProductBloc.changeMon(
+                                                  mo == true ? 1 : 0);
+                                            });
+                                          },
+                                        );
+                                      })
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text("Di"),
+                                  StreamBuilder(
+                                      stream: priceProductBloc.tusStream,
+                                      builder: (context, snapshot) {
+                                        return Checkbox(
+                                          value: di,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              di = !di;
+                                              priceProductBloc.changeTus(
+                                                  di == true ? 1 : 0);
+                                            });
+                                          },
+                                        );
+                                      })
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text("Mi"),
+                                  StreamBuilder<Object>(
+                                      stream: priceProductBloc.wedStream,
+                                      builder: (context, snapshot) {
+                                        return Checkbox(
+                                          value: mi,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              mi = !mi;
+                                              priceProductBloc.changeWed(
+                                                  mi == true ? 1 : 0);
+                                            });
+                                          },
+                                        );
+                                      })
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text("Do"),
+                                  StreamBuilder(
+                                      stream: priceProductBloc.thurStream,
+                                      builder: (context, snapshot) {
+                                        return StreamBuilder(
+                                            stream: priceProductBloc.thurStream,
+                                            builder: (context, snapshot) {
+                                              return Checkbox(
+                                                value: don,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    don = !don;
+                                                    priceProductBloc
+                                                        .changeThurt(don == true
+                                                            ? 1
+                                                            : 0);
+                                                  });
+                                                },
+                                              );
+                                            });
+                                      })
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text("Fr"),
+                                  StreamBuilder(
+                                      stream: priceProductBloc.friStream,
+                                      builder: (context, snapshot) {
+                                        return Checkbox(
+                                          value: fr,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              priceProductBloc.changefri(
+                                                  fr == true ? 1 : 0);
+                                              fr = !fr;
+                                            });
+                                          },
+                                        );
+                                      })
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text("Sa"),
+                                  StreamBuilder(
+                                      stream: priceProductBloc.satStream,
+                                      builder: (context, snapshot) {
+                                        return Checkbox(
+                                          value: sa,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              sa = !sa;
+                                              priceProductBloc.changeSat(
+                                                  sa == true ? 1 : 0);
+                                            });
+                                          },
+                                        );
+                                      })
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text("So"),
+                                  StreamBuilder(
+                                      stream: priceProductBloc.sonStream,
+                                      builder: (context, snapshot) {
+                                        return Checkbox(
+                                          value: so,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              so = !so;
+                                              priceProductBloc.changeSon(
+                                                  so == true ? 1 : 0);
+                                            });
+                                          },
+                                        );
+                                      })
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -718,11 +726,12 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
                             ),
                             Text('von'),
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.only(
+                                  top: 8, bottom: 8, right: 2, left: 2),
                               child: Container(
                                 height:
                                     (MediaQuery.of(context).size.height / 24),
-                                width: (MediaQuery.of(context).size.width / 6),
+                                width: (MediaQuery.of(context).size.width / 7),
                                 child: StreamBuilder(
                                     stream: priceProductBloc.fromStream,
                                     builder: (context, snapshot) {
@@ -756,11 +765,12 @@ class _PriceItemState extends State<PriceItem> with TickerProviderStateMixin {
                             ),
                             Text('bis'),
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.only(
+                                  top: 8, bottom: 8, right: 2, left: 2),
                               child: Container(
                                 height:
                                     (MediaQuery.of(context).size.height / 24),
-                                width: (MediaQuery.of(context).size.width / 6),
+                                width: (MediaQuery.of(context).size.width / 7),
                                 child: StreamBuilder(
                                     stream: priceProductBloc.toStream,
                                     builder: (context, snapshot) {
