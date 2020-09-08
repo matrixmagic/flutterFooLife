@@ -269,15 +269,18 @@ class RestaurantRepository {
 
   Future<RestaurantDto> getRestaurantById(int id) async {
     try {
-      var response = await api.get("getRestaurantById");
+      
       var body = {
         "id": id,
       };
+      
+       var response = await api.post("getRestaurantById",body);
       var data = ApiResponse.fromJson(json.decode(response.body));
 
       if (data.success == true) {
         print("get my restautent by Id");
         RestaurantDto restaurant = RestaurantDto.fromJson(data.data);
+        print(restaurant.name);
         return restaurant;
       } else
         print("get nothing");

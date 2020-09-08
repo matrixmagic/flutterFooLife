@@ -18,10 +18,10 @@ import 'qrcode1.dart';
 class CustomMainScreenWiget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _CustomMainScreenWiget();
-  CustomMainScreenWiget({this.restauranDto, this.cateogries});
+  CustomMainScreenWiget({this.restauranDto});
 
   RestaurantDto restauranDto;
-  List<CategoryDto> cateogries;
+ 
 }
 
 class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
@@ -450,13 +450,13 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
                       ))),
             Visibility(
               visible: mainScreenWidgetVisibility,
-              child: widget.cateogries != null && widget.cateogries.length > 0
+              child: widget.restauranDto.categories != null &&widget.restauranDto.categories.length > 0
                   ? Positioned(
                       bottom: 40,
                       child: Container(
                           height: 40,
                           width: 500,
-                          child: MenuBar(items: widget.cateogries)))
+                          child: MenuBar(items:  widget.restauranDto.categories)))
                   : Container(),
             ),
             info
