@@ -172,13 +172,13 @@ class RestaurantRepository {
       var data = ApiResponse.fromJson(json.decode(response.body));
 
       if (data.success == true) {
-        print("waka waka paaaage paaaage");
+        print("get all restaurants from our database");
         List<RestaurantDto> lst = new List<RestaurantDto>();
         data.data.forEach((v) {
           lst.add(new RestaurantDto.fromJson(v));
         });
 
-        print("biiila");
+       
         return lst;
       } else
         print("get nothing");
@@ -269,15 +269,18 @@ class RestaurantRepository {
 
   Future<RestaurantDto> getRestaurantById(int id) async {
     try {
-      var response = await api.get("getRestaurantById");
+      
       var body = {
         "id": id,
       };
+      
+       var response = await api.post("getRestaurantById",body);
       var data = ApiResponse.fromJson(json.decode(response.body));
 
       if (data.success == true) {
         print("get my restautent by Id");
         RestaurantDto restaurant = RestaurantDto.fromJson(data.data);
+        print(restaurant.name);
         return restaurant;
       } else
         print("get nothing");

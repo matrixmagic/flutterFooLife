@@ -5,6 +5,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:foolife/Dto/RestaurantDto.dart';
 import 'package:foolife/Dto/StatisticDto.dart';
 import 'package:foolife/Repository/RestaurantRepository.dart';
@@ -409,8 +410,25 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
         left: 5.0,
         right: 15,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+              SizedBox(
+              width: 10,
+            ),
+            InkWell(
+              onTap: () async {
+                 final storage = new FlutterSecureStorage();
+        await storage.delete(key: "_roleId");
+      await storage.delete(key: "_token");
+      await storage.delete(key: "_userId");
+               Navigator.of(context)
+                            .pushReplacementNamed('/mainscreen');
+              },
+              child:Icon( Icons.exit_to_app,size:40)
+            ),
+             Expanded(
+              child: Container(),
+            ),
             InkWell(
                 onTap: () {
                   setState(() {
