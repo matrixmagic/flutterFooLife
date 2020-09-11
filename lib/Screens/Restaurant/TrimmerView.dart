@@ -19,7 +19,8 @@ class TrimmerView extends StatefulWidget {
   final AddProductBloc addProductBloc;
   ChangeBackgroundBloc changeBackgroundBloc;
   File video;
-  TrimmerView(this._trimmer, {this.addProductBloc, this.video,this.changeBackgroundBloc});
+  TrimmerView(this._trimmer,
+      {this.addProductBloc, this.video, this.changeBackgroundBloc});
   @override
   _TrimmerViewState createState() => _TrimmerViewState();
 }
@@ -28,27 +29,22 @@ class _TrimmerViewState extends State<TrimmerView> {
   double _startValue = 0.0;
   double _endValue = 0.0;
 
-
-
   bool _isPlaying = false;
   bool _progressVisibility = false;
 
-  
-String  _miliSecoundToString(double time){
-  double  toSecond=time/1000;
-  int sec = (toSecond%60).toInt();
-  double  toMinute=(toSecond-sec)/60;
-  int min =(toMinute%60).toInt();
-  double  toHour=(toMinute-min)/60;
-  int hour =(toHour%60).toInt();
-  String sec_str=sec>=10?sec.toString():"0"+sec.toString();
-  String min_str=min>=10?min.toString():"0"+min.toString();
-  String hour_str=hour>=10?hour.toString():"0"+hour.toString();
+  String _miliSecoundToString(double time) {
+    double toSecond = time / 1000;
+    int sec = (toSecond % 60).toInt();
+    double toMinute = (toSecond - sec) / 60;
+    int min = (toMinute % 60).toInt();
+    double toHour = (toMinute - min) / 60;
+    int hour = (toHour % 60).toInt();
+    String sec_str = sec >= 10 ? sec.toString() : "0" + sec.toString();
+    String min_str = min >= 10 ? min.toString() : "0" + min.toString();
+    String hour_str = hour >= 10 ? hour.toString() : "0" + hour.toString();
 
-  return hour_str+":"+min_str+":"+sec_str;
-
-
-}
+    return hour_str + ":" + min_str + ":" + sec_str;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +65,7 @@ String  _miliSecoundToString(double time){
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only( top: 20),
+                  padding: const EdgeInsets.only(top: 20),
                   child: RaisedButton(
                     onPressed: _progressVisibility
                         ? null
@@ -79,22 +75,31 @@ String  _miliSecoundToString(double time){
                                 await getExternalStorageDirectory();
 
                             String rawDocumentPath = appDocumentDir.path;
-                            
+
                             var _random = new Random();
                             var _rand = _random.nextInt(9999999) + 1;
-                            String outputPath =
-                                rawDocumentPath + "/" + _rand.toString() + ".mp4";
+                            String outputPath = rawDocumentPath +
+                                "/" +
+                                _rand.toString() +
+                                ".mp4";
                             final FlutterFFmpeg _flutterFFmpeg =
                                 new FlutterFFmpeg();
 
+                            _endValue = _endValue <= _startValue
+                                ? _startValue + 16 * 1000
+                                : _endValue;
 
-                                _endValue= _endValue<= _startValue ? _startValue+16*1000:_endValue;
-              
-                         
                             _flutterFFmpeg
                                 .execute("-i \"" +
                                     widget.video.path +
-                                    "\" -ss "+_miliSecoundToString(_startValue) +" -t "+ ((_endValue - _startValue) >= (15*1000) ?"00:00:15":_miliSecoundToString(_endValue - _startValue))+ " -c:v mpeg4   " +
+                                    "\" -ss " +
+                                    _miliSecoundToString(_startValue) +
+                                    " -t " +
+                                    ((_endValue - _startValue) >= (15 * 1000)
+                                        ? "00:00:15"
+                                        : _miliSecoundToString(
+                                            _endValue - _startValue)) +
+                                    " -c:v libx265 " +
                                     outputPath)
                                 .then((rc) {
                               if (rc == 0) {
@@ -102,17 +107,17 @@ String  _miliSecoundToString(double time){
 
                                 final snackBar = SnackBar(
                                     content: Text('Video Saved successfully'));
-                                    if(widget.addProductBloc != null)
-                                widget.addProductBloc.changeFile(video);
-                                if(widget.changeBackgroundBloc != null)
-                                widget.changeBackgroundBloc.changeFile(video);
+                                if (widget.addProductBloc != null)
+                                  widget.addProductBloc.changeFile(video);
+                                if (widget.changeBackgroundBloc != null)
+                                  widget.changeBackgroundBloc.changeFile(video);
                                 Scaffold.of(context).showSnackBar(snackBar);
                                 SchedulerBinding.instance
                                     .addPostFrameCallback((_) {
                                   // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
                                   Navigator.of(context).pop();
                                   Navigator.of(context).pop();
-                                   Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
                                 });
                               } else {
                                 final snackBar =
@@ -134,7 +139,6 @@ String  _miliSecoundToString(double time){
                     viewerWidth: MediaQuery.of(context).size.width,
                     onChangeStart: (value) {
                       _startValue = value;
-                       
                     },
                     onChangeEnd: (value) {
                       _endValue = value;
