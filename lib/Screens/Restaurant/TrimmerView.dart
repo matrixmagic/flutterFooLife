@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:math';
-
+import 'package:flutter_video_compress/flutter_video_compress.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -71,6 +71,8 @@ class _TrimmerViewState extends State<TrimmerView> {
                         ? null
                         : () async {
                             Dialogs.showLoadingDialog(context);
+                            final _flutterVideoCompress =
+                                FlutterVideoCompress();
                             Directory appDocumentDir =
                                 await getExternalStorageDirectory();
 
@@ -99,18 +101,26 @@ class _TrimmerViewState extends State<TrimmerView> {
                                         ? "00:00:15"
                                         : _miliSecoundToString(
                                             _endValue - _startValue)) +
-                                    " -c:v libx265 " +
+                                    " -c:v copy " +
                                     outputPath)
-                                .then((rc) {
+                                .then((rc) async {
                               if (rc == 0) {
                                 File video = new File(outputPath);
-
+                                final info =
+                                    await _flutterVideoCompress.compressVideo(
+                                  outputPath,
+                                  quality: VideoQuality
+                                      .HighestQuality, // default(VideoQuality.DefaultQuality)
+                                  deleteOrigin: true, // default(false)
+                                );
+                                debugPrint(info.toJson().toString());
                                 final snackBar = SnackBar(
                                     content: Text('Video Saved successfully'));
                                 if (widget.addProductBloc != null)
-                                  widget.addProductBloc.changeFile(video);
+                                  widget.addProductBloc.changeFile(info.file);
                                 if (widget.changeBackgroundBloc != null)
-                                  widget.changeBackgroundBloc.changeFile(video);
+                                  widget.changeBackgroundBloc
+                                      .changeFile(info.file);
                                 Scaffold.of(context).showSnackBar(snackBar);
                                 SchedulerBinding.instance
                                     .addPostFrameCallback((_) {

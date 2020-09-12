@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:foolife/Dto/ProductDto.dart';
@@ -79,17 +80,10 @@ class _MainScreenState extends State<MainScreen> {
   BuildContext _context;
 
   goToRestaurent(int restId) async {
-
-      restaurents.clear();
-      foods.clear();
-      drinks.clear(); 
- lastSelectedChannel = 2;
-
- getMore();
-    
+    lastSelectedChannel = 2;
 
     var index = restaurents.map((e) => e.id).toList().indexOf(restId);
-    print("fuuuucking index = "+index.toString());
+    print("fuuuucking index = " + index.toString());
     if (index == -1) {
       restaurents.add(await RestaurantRepository().getRestaurantById(restId));
       setState(() {
@@ -100,7 +94,9 @@ class _MainScreenState extends State<MainScreen> {
       setState(() {
         lastSelectedChannel = 2;
       });
-      swiperControl.move(index);
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        swiperControl.move(index);
+      });
     }
   }
 
@@ -109,9 +105,11 @@ class _MainScreenState extends State<MainScreen> {
 
     if (lastSelectedChannel == 2) {
       restaurentsPageIndex++;
-      data = await RestaurantRepository().getAllResturantPaging2(restaurents==null || restaurents.length==0?[]:
-
-          restaurents.map((e) => e.id).toList(), pageSize);
+      data = await RestaurantRepository().getAllResturantPaging2(
+          restaurents == null || restaurents.length == 0
+              ? []
+              : restaurents.map((e) => e.id).toList(),
+          pageSize);
       if (data != null)
         setState(() {
           restaurents.addAll(data);
@@ -136,17 +134,18 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void selectChannel(int channel) {
-    print("chaneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeel "+lastSelectedChannel.toString() + " to "+channel.toString());
+    print("chaneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeel " +
+        lastSelectedChannel.toString() +
+        " to " +
+        channel.toString());
     setState(() {
       lastSelectedChannel = channel;
-      restaurents.clear();
-      foods.clear();
-      drinks.clear();
-       getMore();
-       //swiperControl.move(0);
-    });
 
-   
+      //swiperControl.move(0);
+    });
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      swiperControl.move(0);
+    });
   }
 
   Widget build(BuildContext context) {
@@ -162,7 +161,7 @@ class _MainScreenState extends State<MainScreen> {
                   if (lastSelectedChannel == 2 &&
                       index >= restaurents.length - 5) {
                     getMore();
-                  } 
+                  }
                 },
                 itemBuilder: (BuildContext context, int index) {
                   if (lastSelectedChannel == 2) {
@@ -170,7 +169,7 @@ class _MainScreenState extends State<MainScreen> {
                       restauranDto: restaurents[index],
                       cateogries: restaurents[index].categories,
                     );
-                  } 
+                  }
                 },
                 itemCount: restaurents.length,
                 scrollDirection: Axis.vertical,
@@ -190,7 +189,8 @@ class _MainScreenState extends State<MainScreen> {
                           restauranDto: restaurents[index],
                           cateogries: restaurents[index].categories,
                         );
-                      }  if (lastSelectedChannel == 32) {
+                      }
+                      if (lastSelectedChannel == 32) {
                         return CustomProductWidget(
                           goToRestaurent: goToRestaurent,
                           forChannel: true,
@@ -198,7 +198,7 @@ class _MainScreenState extends State<MainScreen> {
                           changeChannel: selectChannel,
                           isDrink: true,
                         );
-                      } 
+                      }
                     },
                     itemCount: drinks.length,
                     scrollDirection: Axis.vertical,
@@ -207,8 +207,8 @@ class _MainScreenState extends State<MainScreen> {
                     ? Swiper(
                         controller: swiperControl,
                         onIndexChanged: (int index) {
-                           if (lastSelectedChannel == 31 &&
-                             index >= foods.length - 5 ) {
+                          if (lastSelectedChannel == 31 &&
+                              index >= foods.length - 5) {
                             getMore();
                           }
                         },
@@ -221,8 +221,7 @@ class _MainScreenState extends State<MainScreen> {
                               changeChannel: selectChannel,
                               isDrink: false,
                             );
-                         
-                          } 
+                          }
                         },
                         itemCount: foods.length,
                         scrollDirection: Axis.vertical,
