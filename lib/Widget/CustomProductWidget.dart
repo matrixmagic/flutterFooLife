@@ -84,7 +84,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
         betterPlayerDataSource: betterPlayerDataSource,
       );
 
-      _betterPlayerController.setVolume(0.0);
+      _betterPlayerController.setVolume(88);
 
       return _betterPlayerController;
     } else {

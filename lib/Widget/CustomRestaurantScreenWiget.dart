@@ -105,7 +105,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
         betterPlayerDataSource: betterPlayerDataSource,
       );
 
-      _betterPlayerController.setVolume(0.0);
+      _betterPlayerController.setVolume(100);
 
       return _betterPlayerController;
     } else {
@@ -127,7 +127,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
         betterPlayerDataSource: betterPlayerDataSource,
       );
 
-      _betterPlayerController.setVolume(0.0);
+      _betterPlayerController.setVolume(100);
       return _betterPlayerController;
     }
   }

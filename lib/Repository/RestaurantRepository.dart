@@ -160,6 +160,7 @@ class RestaurantRepository {
 
   Future<List<RestaurantDto>> getAllResturantPaging2(
       List<dynamic> exceptIds, int pageSize) async {
+    final storage = new FlutterSecureStorage();
     try {
       var body = {
         "exceptRestaurantIds": exceptIds.map((v) => v).toList(),
@@ -177,14 +178,25 @@ class RestaurantRepository {
         data.data.forEach((v) {
           lst.add(new RestaurantDto.fromJson(v));
         });
+        String restlist = jsonEncode(lst);
+        print(restlist);
 
-       
+        await storage.write(key: "_restaurant", value: restlist);
         return lst;
       } else
         print("get nothing");
       return null;
     } catch (e) {
-      print("ohh shit");
+      List<RestaurantDto> listofrest = new List();
+      String restlist = await storage.read(key: "_restaurant");
+      listofrest = jsonDecode(restlist).forEach((v) {
+        listofrest.add(new RestaurantDto.fromJson(v));
+      });
+      print('its cashed broooo and there is ' +
+          listofrest.length.toString() +
+          ' restuarants');
+      return listofrest;
+
       print(e.toString());
     }
   }
@@ -269,12 +281,11 @@ class RestaurantRepository {
 
   Future<RestaurantDto> getRestaurantById(int id) async {
     try {
-      
       var body = {
         "id": id,
       };
-      
-       var response = await api.post("getRestaurantById",body);
+
+      var response = await api.post("getRestaurantById", body);
       var data = ApiResponse.fromJson(json.decode(response.body));
 
       if (data.success == true) {
