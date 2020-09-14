@@ -189,7 +189,7 @@ class RestaurantRepository {
     } catch (e) {
       List<RestaurantDto> listofrest = new List();
       String restlist = await storage.read(key: "_restaurant");
-      listofrest = jsonDecode(restlist).forEach((v) {
+      jsonDecode(restlist).forEach((v) {
         listofrest.add(new RestaurantDto.fromJson(v));
       });
       print('its cashed broooo and there is ' +

@@ -18,10 +18,9 @@ import 'qrcode1.dart';
 class CustomRestaurantScreenWiget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _CustomRestaurantScreenWiget();
-  CustomRestaurantScreenWiget({this.restauranDto, this.cateogries});
+  CustomRestaurantScreenWiget({this.restauranDto});
 
   RestaurantDto restauranDto;
-  List<CategoryDto> cateogries;
 }
 
 class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
@@ -474,7 +473,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                     ],
                   )
                 ]),
-            widget.cateogries != null && widget.cateogries.length > 0
+            widget.restauranDto.categories != null && widget.restauranDto.categories.length > 0
                 ? Column(children: <Widget>[
                     SizedBox(
                       height: MediaQuery.of(context).size.height / 1.15,
@@ -483,7 +482,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                         height: 45,
                         width:
                             WidgetsBinding.instance.window.physicalSize.width,
-                        child: MenuBar(items: widget.cateogries)),
+                        child: MenuBar(items: widget.restauranDto.categories)),
                   ])
                 : Container(),
             SizedBox(height: 100),
