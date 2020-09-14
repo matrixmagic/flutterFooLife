@@ -114,6 +114,7 @@ class ProductRepository {
 
   Future<List<ProductDto>> getAllFoodsPagingRand(
       List<dynamic> exceptIds, int pageSize) async {
+         final storage = new FlutterSecureStorage();
     try {
       var body = {
         "exceptIds": exceptIds.map((v) => v).toList(),
@@ -131,19 +132,29 @@ class ProductRepository {
         data.data.forEach((v) {
           lst.add(new ProductDto.fromJson(v));
         });
-
+ String foodlist = jsonEncode(lst);
+        print(foodlist);
+        await storage.write(key: "_food", value: foodlist);
         return lst;
       } else
         print("get nothing");
       return null;
     } catch (e) {
-      print("ohh shit");
-      print(e.toString());
+     List<ProductDto> listoffood = new List();
+      String restlist = await storage.read(key: "_food");
+      jsonDecode(restlist).forEach((v) {
+        listoffood.add(new ProductDto.fromJson(v));
+      });
+      print('its cashed broooo and there is ' +
+          listoffood.length.toString() +
+          ' food');
+      return listoffood;
     }
   }
 
   Future<List<ProductDto>> getAllDrinksPagingRand(
       List<dynamic> exceptIds, int pageSize) async {
+        final storage = new FlutterSecureStorage();
     try {
       var body = {
         "exceptIds": exceptIds.map((v) => v).toList(),
@@ -161,14 +172,24 @@ class ProductRepository {
         data.data.forEach((v) {
           lst.add(new ProductDto.fromJson(v));
         });
+        String drinklist = jsonEncode(lst);
+        print(drinklist);
+        await storage.write(key: "_drink", value: drinklist);
 
         return lst;
       } else
         print("get nothing");
       return null;
     } catch (e) {
-      print("ohh shit");
-      print(e.toString());
+     List<ProductDto> listofdrink = new List();
+      String restlist = await storage.read(key: "_drink");
+      jsonDecode(restlist).forEach((v) {
+        listofdrink.add(new ProductDto.fromJson(v));
+      });
+      print('its cashed broooo and there is ' +
+          listofdrink.length.toString() +
+          ' restuarants');
+      return listofdrink;
     }
   }
 

@@ -180,22 +180,37 @@ class RestaurantRepository {
         });
         String restlist = jsonEncode(lst);
         print(restlist);
+        String encoded = base64Url.encode(utf8.encode(response.body)); // dXNlcm5hbWU6cGFzc3dvcmQ=
+  
 
-        await storage.write(key: "_restaurant", value: restlist);
+        await storage.write(key: "_restaurant", value: encoded);
         return lst;
       } else
         print("get nothing");
       return null;
     } catch (e) {
       List<RestaurantDto> listofrest = new List();
-      String restlist = await storage.read(key: "_restaurant");
-      jsonDecode(restlist).forEach((v) {
-        listofrest.add(new RestaurantDto.fromJson(v));
-      });
-      print('its cashed broooo and there is ' +
-          listofrest.length.toString() +
+      
+      String body = await storage.read(key: "_restaurant");
+      String decoded = utf8.decode(base64Url.decode(body));
+
+
+      var data = ApiResponse.fromJson(json.decode(decoded));
+
+      if (data.success == true) {
+        print("get all restaurants from our database");
+        List<RestaurantDto> lst = new List<RestaurantDto>();
+        data.data.forEach((v) {
+          lst.add(new RestaurantDto.fromJson(v));
+        });
+          print('its cashed broooo and there is ' +
+          lst.length.toString() +
           ' restuarants');
-      return listofrest;
+      return lst;
+        
+      }
+   
+    
 
       print(e.toString());
     }
