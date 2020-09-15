@@ -473,7 +473,8 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                     ],
                   )
                 ]),
-            widget.restauranDto.categories != null && widget.restauranDto.categories.length > 0
+            widget.restauranDto.categories != null &&
+                    widget.restauranDto.categories.length > 0
                 ? Column(children: <Widget>[
                     SizedBox(
                       height: MediaQuery.of(context).size.height / 1.15,

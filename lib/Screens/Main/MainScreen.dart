@@ -167,7 +167,6 @@ class _MainScreenState extends State<MainScreen> {
                   if (lastSelectedChannel == 2) {
                     return CustomRestaurantScreenWiget(
                       restauranDto: restaurents[index],
-
                     );
                   }
                 },
@@ -187,7 +186,6 @@ class _MainScreenState extends State<MainScreen> {
                       if (lastSelectedChannel == 2) {
                         return CustomRestaurantScreenWiget(
                           restauranDto: restaurents[index],
-
                         );
                       }
                       if (lastSelectedChannel == 32) {

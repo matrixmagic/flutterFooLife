@@ -114,7 +114,7 @@ class ProductRepository {
 
   Future<List<ProductDto>> getAllFoodsPagingRand(
       List<dynamic> exceptIds, int pageSize) async {
-         final storage = new FlutterSecureStorage();
+    final storage = new FlutterSecureStorage();
     try {
       var body = {
         "exceptIds": exceptIds.map((v) => v).toList(),
@@ -132,29 +132,38 @@ class ProductRepository {
         data.data.forEach((v) {
           lst.add(new ProductDto.fromJson(v));
         });
- String foodlist = jsonEncode(lst);
+        String foodlist = jsonEncode(lst);
         print(foodlist);
-        await storage.write(key: "_food", value: foodlist);
+        String encoded = base64Url.encode(utf8.encode(response.body));
+        await storage.write(key: "_food", value: encoded);
         return lst;
       } else
         print("get nothing");
       return null;
     } catch (e) {
-     List<ProductDto> listoffood = new List();
-      String restlist = await storage.read(key: "_food");
-      jsonDecode(restlist).forEach((v) {
-        listoffood.add(new ProductDto.fromJson(v));
-      });
-      print('its cashed broooo and there is ' +
-          listoffood.length.toString() +
-          ' food');
-      return listoffood;
+      List<ProductDto> listoffood = new List();
+      String body = await storage.read(key: "_food");
+      String decoded = utf8.decode(base64Url.decode(body));
+      var data = ApiResponse.fromJson(json.decode(decoded));
+
+      if (data.success == true) {
+        print("get all food from our database");
+        List<ProductDto> lst = new List<ProductDto>();
+        data.data.forEach((v) {
+          lst.add(new ProductDto.fromJson(v));
+        });
+        print('its cashed food broooo and there is ' +
+            lst.length.toString() +
+            ' food');
+        return lst;
+      }
+      print(e.toString());
     }
   }
 
   Future<List<ProductDto>> getAllDrinksPagingRand(
       List<dynamic> exceptIds, int pageSize) async {
-        final storage = new FlutterSecureStorage();
+    final storage = new FlutterSecureStorage();
     try {
       var body = {
         "exceptIds": exceptIds.map((v) => v).toList(),
@@ -174,22 +183,29 @@ class ProductRepository {
         });
         String drinklist = jsonEncode(lst);
         print(drinklist);
-        await storage.write(key: "_drink", value: drinklist);
+        String encoded = base64Url.encode(utf8.encode(response.body));
+        await storage.write(key: "_drink", value: encoded);
 
         return lst;
       } else
         print("get nothing");
       return null;
     } catch (e) {
-     List<ProductDto> listofdrink = new List();
-      String restlist = await storage.read(key: "_drink");
-      jsonDecode(restlist).forEach((v) {
-        listofdrink.add(new ProductDto.fromJson(v));
-      });
-      print('its cashed broooo and there is ' +
-          listofdrink.length.toString() +
-          ' restuarants');
-      return listofdrink;
+      List<ProductDto> listofdrink = new List();
+      String body = await storage.read(key: "_drink");
+      String decoded = utf8.decode(base64Url.decode(body));
+      var data = ApiResponse.fromJson(json.decode(decoded));
+      if (data.success == true) {
+        print("get all drinks from our database");
+        List<ProductDto> lst = new List<ProductDto>();
+        data.data.forEach((v) {
+          lst.add(new ProductDto.fromJson(v));
+        });
+        print('its cashed drink broooo and there is ' +
+            lst.length.toString() +
+            ' drink');
+        return lst;
+      }
     }
   }
 
