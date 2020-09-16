@@ -166,327 +166,329 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                         )
                       : Container(),
             ),
-            SizedBox(
-              height: 30,
-            ),
-            Center(
-              heightFactor: 2,
-              child: Text(
-                widget.restauranDto.name,
-                style: TextStyle(
-                    color: Colors.white, fontSize: 22, fontFamily: "calibril"),
-              ),
-            ),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height:
-                            WidgetsBinding.instance.window.physicalSize.height /
-                                20,
+            Container(
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Center(
+                      heightFactor: 2,
+                      child: Text(
+                        widget.restauranDto.name,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontFamily: "calibril"),
                       ),
-                      Container(
-                        height: iconContainerSpace + 5,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.7),
-                              blurRadius: 40.0,
-                              spreadRadius: 1.0,
-                            ),
-                          ],
-                        ),
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.favorite,
-                            size: iconSize,
-                            color: Colors.white.withOpacity(0.8),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 45,
-                        child: Center(
-                          child: Text(
-                            '22',
-                            style: TextStyle(
-                                color: Colors.white.withOpacity(0.8),
-                                fontFamily: "SpecialElite"),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: iconContainerSpace,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.7),
-                              blurRadius: 40.0,
-                              spreadRadius: 1.0,
-                            ),
-                          ],
-                        ),
-                        child: IconButton(
-                          padding: EdgeInsets.all(0),
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.star,
-                            size: iconSize,
-                            color: Colors.white.withOpacity(0.8),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 45,
-                        child: Center(
-                          child: Text(
-                            '22',
-                            style: TextStyle(
-                                color: Colors.white.withOpacity(0.8),
-                                fontFamily: "SpecialElite"),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: iconContainerSpace,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.7),
-                              blurRadius: 40.0,
-                              spreadRadius: 1.0,
-                            ),
-                          ],
-                        ),
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.person,
-                            size: iconSize,
-                            color: Colors.white.withOpacity(0.8),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 28,
-                        width: 45,
-                        child: Center(
-                          child: Text(
-                            '22',
-                            style: TextStyle(
-                                color: Colors.white.withOpacity(0.8),
-                                fontFamily: "SpecialElite"),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: iconContainerSpace,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.7),
-                              blurRadius: 40.0,
-                              spreadRadius: 1.0,
-                            ),
-                          ],
-                        ),
-                        child: IconButton(
-                          padding: EdgeInsets.all(0),
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.share,
-                            size: iconSize,
-                            color: Colors.white.withOpacity(0.8),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 45,
-                        child: Center(
-                          child: Text(
-                            '22',
-                            style: TextStyle(
-                                color: Colors.white.withOpacity(0.8),
-                                fontFamily: "SpecialElite"),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: iconContainerSpace + 10,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.7),
-                              blurRadius: 40.0,
-                              spreadRadius: 1.0,
-                            ),
-                          ],
-                        ),
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            MyFlutterApp.kellner_option,
-                            size: iconSize,
-                            color: Colors.white.withOpacity(0.8),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 45,
-                        child: Center(
-                          child: Text(
-                            '22',
-                            style: TextStyle(
-                                color: Colors.white.withOpacity(0.8),
-                                fontFamily: "SpecialElite"),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: iconContainerSpace + 5,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.7),
-                              blurRadius: 40.0,
-                              spreadRadius: 1.0,
-                            ),
-                          ],
-                        ),
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.insert_comment,
-                            size: iconSize,
-                            color: Colors.white.withOpacity(0.8),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 45,
-                        child: Center(
-                          child: Text(
-                            '22',
-                            style: TextStyle(
-                                color: Colors.white.withOpacity(0.8),
-                                fontFamily: "SpecialElite"),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height / 1.52,
-                      ),
-                      //Expanded(child: Container()),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.only(right: 5),
-                            height: iconContainerSpace * 1.5,
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.7),
-                                  blurRadius: 40.0,
-                                  spreadRadius: 1.0,
-                                ),
-                              ],
-                            ),
-                            child: IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                qrcode1.ddd__1_,
-                                size: iconSize * 1.5,
-                                color: AppTheme.notWhite.withOpacity(0.7),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.only(right: 10),
-                            height: iconContainerSpace * 1.5,
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.7),
-                                  blurRadius: 40.0,
-                                  spreadRadius: 1.0,
-                                ),
-                              ],
-                            ),
-                            child: IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                StoryICons.burning_meteor,
-                                size: iconSize * 1.5,
-                                color: AppTheme.notWhite.withOpacity(0.7),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.only(right: 10),
-                            height: iconContainerSpace,
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.7),
-                                  blurRadius: 40.0,
-                                  spreadRadius: 1.0,
-                                ),
-                              ],
-                            ),
-                            child: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  info = !info;
-                                });
-                              },
-                              icon: Icon(
-                                Icons.info,
-                                size: iconSize * 1.5,
-                                color: AppTheme.notWhite.withOpacity(0.7),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        child: Container(),
-                      ),
-                    ],
-                  )
-                ]),
-            widget.restauranDto.categories != null &&
-                    widget.restauranDto.categories.length > 0
-                ? Column(children: <Widget>[
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height / 1.15,
                     ),
-                    Container(
-                        height: 45,
-                        width:
-                            WidgetsBinding.instance.window.physicalSize.width,
-                        child: MenuBar(items: widget.restauranDto.categories)),
-                  ])
-                : Container(),
-            SizedBox(height: 100),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            SizedBox(
+                              height: WidgetsBinding
+                                      .instance.window.physicalSize.height /
+                                  30,
+                            ),
+                            Container(
+                              height: iconContainerSpace + 5,
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.7),
+                                    blurRadius: 40.0,
+                                    spreadRadius: 1.0,
+                                  ),
+                                ],
+                              ),
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.favorite,
+                                  size: iconSize,
+                                  color: Colors.white.withOpacity(0.8),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 45,
+                              child: Center(
+                                child: Text(
+                                  '22',
+                                  style: TextStyle(
+                                      color: Colors.white.withOpacity(0.8),
+                                      fontFamily: "SpecialElite"),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: iconContainerSpace,
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.7),
+                                    blurRadius: 40.0,
+                                    spreadRadius: 1.0,
+                                  ),
+                                ],
+                              ),
+                              child: IconButton(
+                                padding: EdgeInsets.all(0),
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.star,
+                                  size: iconSize,
+                                  color: Colors.white.withOpacity(0.8),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 45,
+                              child: Center(
+                                child: Text(
+                                  '22',
+                                  style: TextStyle(
+                                      color: Colors.white.withOpacity(0.8),
+                                      fontFamily: "SpecialElite"),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: iconContainerSpace,
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.7),
+                                    blurRadius: 40.0,
+                                    spreadRadius: 1.0,
+                                  ),
+                                ],
+                              ),
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.person,
+                                  size: iconSize,
+                                  color: Colors.white.withOpacity(0.8),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 28,
+                              width: 45,
+                              child: Center(
+                                child: Text(
+                                  '22',
+                                  style: TextStyle(
+                                      color: Colors.white.withOpacity(0.8),
+                                      fontFamily: "SpecialElite"),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: iconContainerSpace,
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.7),
+                                    blurRadius: 40.0,
+                                    spreadRadius: 1.0,
+                                  ),
+                                ],
+                              ),
+                              child: IconButton(
+                                padding: EdgeInsets.all(0),
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.share,
+                                  size: iconSize,
+                                  color: Colors.white.withOpacity(0.8),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 45,
+                              child: Center(
+                                child: Text(
+                                  '22',
+                                  style: TextStyle(
+                                      color: Colors.white.withOpacity(0.8),
+                                      fontFamily: "SpecialElite"),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: iconContainerSpace + 10,
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.7),
+                                    blurRadius: 40.0,
+                                    spreadRadius: 1.0,
+                                  ),
+                                ],
+                              ),
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  MyFlutterApp.kellner_option,
+                                  size: iconSize,
+                                  color: Colors.white.withOpacity(0.8),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 45,
+                              child: Center(
+                                child: Text(
+                                  '22',
+                                  style: TextStyle(
+                                      color: Colors.white.withOpacity(0.8),
+                                      fontFamily: "SpecialElite"),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: iconContainerSpace + 5,
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.7),
+                                    blurRadius: 40.0,
+                                    spreadRadius: 1.0,
+                                  ),
+                                ],
+                              ),
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.insert_comment,
+                                  size: iconSize,
+                                  color: Colors.white.withOpacity(0.8),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 45,
+                              child: Center(
+                                child: Text(
+                                  '22',
+                                  style: TextStyle(
+                                      color: Colors.white.withOpacity(0.8),
+                                      fontFamily: "SpecialElite"),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: <Widget>[
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height / 1.7,
+                            ),
+                            //Expanded(child: Container()),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Container(
+                                  padding: EdgeInsets.only(right: 5),
+                                  height: iconContainerSpace * 1.5,
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.7),
+                                        blurRadius: 40.0,
+                                        spreadRadius: 1.0,
+                                      ),
+                                    ],
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      qrcode1.ddd__1_,
+                                      size: iconSize * 1.5,
+                                      color: AppTheme.notWhite.withOpacity(0.7),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Container(
+                                  padding: EdgeInsets.only(right: 10),
+                                  height: iconContainerSpace * 1.5,
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.7),
+                                        blurRadius: 40.0,
+                                        spreadRadius: 1.0,
+                                      ),
+                                    ],
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      StoryICons.burning_meteor,
+                                      size: iconSize * 1.5,
+                                      color: AppTheme.notWhite.withOpacity(0.7),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Container(
+                                  padding: EdgeInsets.only(right: 10),
+                                  height: iconContainerSpace,
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.7),
+                                        blurRadius: 40.0,
+                                        spreadRadius: 1.0,
+                                      ),
+                                    ],
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        info = !info;
+                                      });
+                                    },
+                                    icon: Icon(
+                                      Icons.info,
+                                      size: iconSize * 1.5,
+                                      color: AppTheme.notWhite.withOpacity(0.7),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 23,
+                    ),
+                    widget.restauranDto.categories != null &&
+                            widget.restauranDto.categories.length > 0
+                        ? Container(
+                            height: 45,
+                            width: WidgetsBinding
+                                .instance.window.physicalSize.width,
+                            child:
+                                MenuBar(items: widget.restauranDto.categories))
+                        : Container(),
+                  ]),
+            ),
             info
                 ? Padding(
                     padding:
