@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:foolife/Bloc/video/VideoBloc.dart';
 import 'package:foolife/Dto/CategoryDto.dart';
 import 'package:foolife/Dto/RestaurantDto.dart';
 import 'package:foolife/Screens/Restaurant/CreatePostScreen.dart';
@@ -17,8 +18,9 @@ import 'qrcode1.dart';
 
 class CustomRestaurantScreenWiget extends StatefulWidget {
   @override
+   VideoBloc videoBloc;
   State<StatefulWidget> createState() => _CustomRestaurantScreenWiget();
-  CustomRestaurantScreenWiget({this.restauranDto});
+  CustomRestaurantScreenWiget({this.restauranDto,this.videoBloc});
 
   RestaurantDto restauranDto;
 }
@@ -26,6 +28,7 @@ class CustomRestaurantScreenWiget extends StatefulWidget {
 class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
   bool mainScreenWidgetVisibility = true;
   bool postScreenWidgetVisibility = false;
+
   double iconSize = WidgetsBinding.instance.window.physicalSize.height / 70;
   double iconContainerSpace =
       WidgetsBinding.instance.window.physicalSize.height / 62;
@@ -36,11 +39,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
   BetterPlayerController _betterPlayerController;
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-
+ 
   @override
   Future<void> initState() {
     // TODO: implement initState
@@ -130,9 +129,33 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
       return _betterPlayerController;
     }
   }
+ @override
+  void dispose() {
+    // TODO: implement dispose
+ 
+    _betterPlayerController.setVolume(0);
+  
+    _betterPlayerController.pause();
+    _betterPlayerController.dispose();
+       super.dispose();
+  }
+
+  
+  bool isVideoBlocReady = false;
+  void initVideoBloc()
+  {
+    if(_betterPlayerController!=null)
+    {
+ 
+ widget.videoBloc.addVideo(_betterPlayerController);
+ isVideoBlocReady = true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if(!isVideoBlocReady)
+     initVideoBloc();
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
@@ -484,8 +507,11 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                             height: 45,
                             width: WidgetsBinding
                                 .instance.window.physicalSize.width,
-                            child:
-                                MenuBar(items: widget.restauranDto.categories))
+                            child: MenuBar(
+                              videoBloc:  widget.videoBloc,
+                              items: widget.restauranDto.categories,
+                              
+                            ))
                         : Container(),
                   ]),
             ),
@@ -767,4 +793,5 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
       return text;
     }).toList();
   }
+  
 }

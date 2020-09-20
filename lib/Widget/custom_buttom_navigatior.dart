@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:foolife/AppTheme.dart';
+import 'package:foolife/Bloc/video/VideoBloc.dart';
 import 'package:foolife/Repository/AuthRepository.dart';
 
 class CustomButtomNavigatior extends StatelessWidget {
   Function showDialog;
-  CustomButtomNavigatior({this.showDialog});
+  VideoBloc videoBloc;
+  CustomButtomNavigatior({this.showDialog,this.videoBloc});
   @override
   FlutterSecureStorage storage = new FlutterSecureStorage();
   Widget build(BuildContext context) {
@@ -45,7 +47,7 @@ class CustomButtomNavigatior extends StatelessWidget {
                           onPressed: () async {
                             await storage.write(
                                 key: "_lastButtonPreesed", value: "1");
-
+                    videoBloc.disposeAllVideos();
                             Navigator.of(context)
                                 .pushReplacementNamed('/mainscreen');
                           })),

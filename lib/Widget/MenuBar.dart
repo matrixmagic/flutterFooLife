@@ -1,14 +1,18 @@
+import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:foolife/AppTheme.dart';
+import 'package:foolife/Bloc/video/VideoBloc.dart';
 import 'package:foolife/Dto/CategoryDto.dart';
 import 'package:foolife/Screens/Main/CategoriesScreen.dart';
 
 class MenuBar extends StatefulWidget {
   List<CategoryDto> items;
+  VideoBloc videoBloc;
   bool isProduct;
   int lastCategoryId;
-  MenuBar({this.items, this.isProduct, this.lastCategoryId});
+
+  MenuBar({this.items, this.isProduct, this.lastCategoryId,this.videoBloc});
 
   @override
   _MenuBarState createState() => _MenuBarState();
@@ -44,6 +48,8 @@ class _MenuBarState extends State<MenuBar> {
             onTap: () async {
               FlutterSecureStorage storage = new FlutterSecureStorage();
               await storage.write(key: "_lastButtonPreesed", value: "-1");
+             
+            await  widget.videoBloc.disposeAllVideos();
               Navigator.push(
                 context,
                 MaterialPageRoute(
