@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:foolife/Bloc/video/VideoBloc.dart';
+
 import 'package:foolife/Dto/ProductDto.dart';
 import 'package:foolife/Dto/RestaurantDto.dart';
 import 'package:foolife/Repository/ProductRepository.dart';
@@ -50,7 +50,7 @@ class _MainScreenState extends State<MainScreen> {
   int drinksPageIndex = 0;
   int pageSize = 10;
   int lastSelectedChannel = 2;
-  VideoBloc videoBloc = new VideoBloc();
+
 
   Future<void> getAllResturants() async {
     var data = await RestaurantRepository().getAllResturantPaging2(
@@ -169,7 +169,7 @@ class _MainScreenState extends State<MainScreen> {
                   if (lastSelectedChannel == 2) {
                     return CustomRestaurantScreenWiget(
                       restauranDto: restaurents[index],
-                      videoBloc: videoBloc,
+                   
                     );
                   }
                 },
@@ -189,7 +189,7 @@ class _MainScreenState extends State<MainScreen> {
                       if (lastSelectedChannel == 2) {
                         return CustomRestaurantScreenWiget(
                           restauranDto: restaurents[index],
-                            videoBloc: videoBloc,
+                       
                         );
                       }
                       if (lastSelectedChannel == 32) {
@@ -235,7 +235,7 @@ class _MainScreenState extends State<MainScreen> {
           right: 5.0,
           child: CustomButtomNavigatior(
             showDialog: _ParentFunction,
-            videoBloc: videoBloc,
+           
           ),
         ),
         Positioned(

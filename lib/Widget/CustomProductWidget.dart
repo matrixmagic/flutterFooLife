@@ -5,7 +5,6 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import 'package:foolife/AppTheme.dart';
 import 'package:foolife/Bloc/provider.dart';
-import 'package:foolife/Bloc/video/VideoBloc.dart';
 
 import 'package:foolife/Dto/ProductDto.dart';
 import 'package:foolife/Dto/ProductExtraDto.dart';
@@ -19,13 +18,13 @@ class CustomProductWidget extends StatefulWidget {
   bool forChannel;
   Function changeChannel;
   Function goToRestaurent;
-  VideoBloc videoBloc;
+BetterPlayerController betterPlayerController;
   CustomProductWidget(
       {this.product,
       this.forChannel,
       this.changeChannel,
       this.isDrink,
-      this.videoBloc,
+this.betterPlayerController,
       this.goToRestaurent});
 
   @override
@@ -34,110 +33,33 @@ class CustomProductWidget extends StatefulWidget {
 
 class _CustomProductWidgetState extends State<CustomProductWidget> {
   // VideoPlayerController _controller;
-  BetterPlayerController _betterPlayerController;
+  
   bool boolInfo = false;
   bool detailsInfo = false;
-  DefaultCacheManager _cacheManager;
+ 
   double iconSize = WidgetsBinding.instance.window.physicalSize.height / 70;
   double iconContainerSpace =
       WidgetsBinding.instance.window.physicalSize.height / 62;
   double bottomSizeBox =
       WidgetsBinding.instance.window.physicalSize.height / 28;
   @override
-  Future<void> initState() {
+  initState() {
     super.initState();
     print(widget.product.name);
-    _cacheManager = DefaultCacheManager();
-    if (widget.product.file.extension == "mp4") {
-      getVideoController();
-    }
+ // if(widget.betterPlayerController!= null)
+ // widget.betterPlayerController.play();
+   
   }
 
 
 
-  void getVideoController() async {
-    double _screenWidth = WidgetsBinding.instance.window.physicalSize.width;
-    double _screenHeight = WidgetsBinding.instance.window.physicalSize.height;
-    var x = await getControllerForVideo(
-        widget.product.file.path, _screenWidth, _screenHeight);
-  try{
-
-  
-    setState(() {
-      _betterPlayerController = x;
-    });
-      if(  x!=null ){
-
-      if(!isVideoBlocReady){
-        widget.videoBloc.addVideo(x);
-        isVideoBlocReady=true;
-      }
-    }
-  }catch(e){
-      print("dsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
-    print(e);
-  }
-  }
-
-  Future<BetterPlayerController> getControllerForVideo(
-      String videoUrl, double _screenWidth, double _screenHeight) async {
-    final fileInfo = await _cacheManager.getFileFromCache(videoUrl);
-
-    if (fileInfo == null || fileInfo.file == null) {
-      print('[VideoControllerService]: No video in cache');
-
-      print('[VideoControllerService]: Saving video to cache');
-      unawaited(_cacheManager.downloadFile(videoUrl));
-
-      BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
-        BetterPlayerDataSourceType.NETWORK,
-        videoUrl,
-        liveStream: true,
-      );
-      _betterPlayerController = BetterPlayerController(
-        BetterPlayerConfiguration(
-          autoPlay: true,
-          looping: true,
-          aspectRatio: _screenWidth / _screenHeight,
-          controlsConfiguration: BetterPlayerControlsConfiguration(
-              liveText: "", showControls: false),
-        ),
-        betterPlayerDataSource: betterPlayerDataSource,
-      );
-
-      _betterPlayerController.setVolume(100);
-
-      return _betterPlayerController;
-    } else {
-      print('[VideoControllerService]: Loading video from cache');
-
-      BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
-        BetterPlayerDataSourceType.FILE,
-        fileInfo.file.path,
-        liveStream: true,
-      );
-      _betterPlayerController = BetterPlayerController(
-        BetterPlayerConfiguration(
-          autoPlay: true,
-          looping: true,
-          aspectRatio: _screenWidth / _screenHeight,
-          controlsConfiguration: BetterPlayerControlsConfiguration(
-              liveText: "", showControls: false),
-        ),
-        betterPlayerDataSource: betterPlayerDataSource,
-      );
-
-      _betterPlayerController.setVolume(100);
-      return _betterPlayerController;
-    }
-  }
-
+ 
   bool isVideoBlocReady = false;
  
 
   @override
   Widget build(BuildContext context) {
-  
+    
     return SafeArea(
       top: false,
       child: Scaffold(
@@ -153,10 +75,10 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                                 value: downloadProgress.progress)),
                     fit: BoxFit.cover,
                   )
-                : _betterPlayerController != null
+                : widget.betterPlayerController != null
                     ? Container(
                         child: BetterPlayer(
-                          controller: _betterPlayerController,
+                          controller: widget.betterPlayerController,
                         ),
                       )
                     : Container(),
@@ -696,10 +618,11 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
   void dispose() {
     // TODO: implement dispose
     
-    _betterPlayerController.setVolume(0);
+   widget.betterPlayerController.setVolume(0);
   
-    _betterPlayerController.pause();
-    _betterPlayerController.dispose();
-    super.dispose();
+    widget.betterPlayerController.pause();
+   
+   
+   super.dispose();
   }
 }

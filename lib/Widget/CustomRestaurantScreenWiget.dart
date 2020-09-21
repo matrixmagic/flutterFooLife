@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:foolife/Bloc/video/VideoBloc.dart';
+
 import 'package:foolife/Dto/CategoryDto.dart';
 import 'package:foolife/Dto/RestaurantDto.dart';
 import 'package:foolife/Screens/Restaurant/CreatePostScreen.dart';
@@ -18,9 +18,9 @@ import 'qrcode1.dart';
 
 class CustomRestaurantScreenWiget extends StatefulWidget {
   @override
-   VideoBloc videoBloc;
+ 
   State<StatefulWidget> createState() => _CustomRestaurantScreenWiget();
-  CustomRestaurantScreenWiget({this.restauranDto,this.videoBloc});
+  CustomRestaurantScreenWiget({this.restauranDto});
 
   RestaurantDto restauranDto;
 }
@@ -103,7 +103,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
         betterPlayerDataSource: betterPlayerDataSource,
       );
 
-      _betterPlayerController.setVolume(100);
+      _betterPlayerController.setVolume(0);
 
       return _betterPlayerController;
     } else {
@@ -125,7 +125,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
         betterPlayerDataSource: betterPlayerDataSource,
       );
 
-      _betterPlayerController.setVolume(100);
+      _betterPlayerController.setVolume(0);
       return _betterPlayerController;
     }
   }
@@ -142,20 +142,11 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
 
   
   bool isVideoBlocReady = false;
-  void initVideoBloc()
-  {
-    if(_betterPlayerController!=null)
-    {
- 
- widget.videoBloc.addVideo(_betterPlayerController);
- isVideoBlocReady = true;
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
-    if(!isVideoBlocReady)
-     initVideoBloc();
+   
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
@@ -508,7 +499,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                             width: WidgetsBinding
                                 .instance.window.physicalSize.width,
                             child: MenuBar(
-                              videoBloc:  widget.videoBloc,
+                             
                               items: widget.restauranDto.categories,
                               
                             ))
