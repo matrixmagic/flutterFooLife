@@ -23,8 +23,10 @@ print("dddddddddddddddd delete"+betterPlayerController.length.toString() );
   await betterPlayerController.forEach((element) async {
     if(element!= null)
     {
+         print('this is video blooooooooc');
       try{
       if(await element.isPlaying()==true ){
+         print('this is video blooooooooc');
     element.setVolume(0);
     element.pause();
     }}
@@ -41,6 +43,7 @@ for(int i=0;i<betterPlayerController.length-1;i++)
   {try{
     if(betterPlayerController[i]== null)continue;
     if(await betterPlayerController[i].isPlaying()==true){
+      print('this is video blooooooooc');
     betterPlayerController[i].setVolume(0);
     betterPlayerController[i].pause();
     
