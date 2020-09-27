@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:foolife/Bloc/video/VideoBloc.dart';
 import 'package:foolife/Dto/CategoryDto.dart';
 import 'package:foolife/Dto/RestaurantDto.dart';
 import 'package:foolife/Screens/Restaurant/CreatePostScreen.dart';
@@ -17,8 +18,9 @@ import 'qrcode1.dart';
 
 class CustomRestaurantScreenWiget extends StatefulWidget {
   @override
+   VideoBloc videoBloc;
   State<StatefulWidget> createState() => _CustomRestaurantScreenWiget();
-  CustomRestaurantScreenWiget({this.restauranDto});
+  CustomRestaurantScreenWiget({this.restauranDto,this.videoBloc});
 
   RestaurantDto restauranDto;
 }
@@ -130,9 +132,25 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
       return _betterPlayerController;
     }
   }
+ @override
+
+
+  
+  bool isVideoBlocReady = false;
+  void initVideoBloc()
+  {
+    if(_betterPlayerController!=null)
+    {
+ 
+ widget.videoBloc.addVideo(_betterPlayerController);
+ isVideoBlocReady = true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if(!isVideoBlocReady)
+     initVideoBloc();
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
@@ -484,8 +502,11 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                             height: 45,
                             width: WidgetsBinding
                                 .instance.window.physicalSize.width,
-                            child:
-                                MenuBar(items: widget.restauranDto.categories))
+                            child: MenuBar(
+                              videoBloc:  widget.videoBloc,
+                              items: widget.restauranDto.categories,
+                              
+                            ))
                         : Container(),
                   ]),
             ),

@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:foolife/Bloc/video/VideoBloc.dart';
 import 'package:foolife/Dto/ProductDto.dart';
 import 'package:foolife/Dto/RestaurantDto.dart';
 import 'package:foolife/Repository/ProductRepository.dart';
@@ -49,6 +50,7 @@ class _MainScreenState extends State<MainScreen> {
   int drinksPageIndex = 0;
   int pageSize = 10;
   int lastSelectedChannel = 2;
+  VideoBloc videoBloc = new VideoBloc();
 
   Future<void> getAllResturants() async {
     var data = await RestaurantRepository().getAllResturantPaging2(
@@ -157,16 +159,19 @@ class _MainScreenState extends State<MainScreen> {
         lastSelectedChannel == 2 && restaurents.length > 0
             ? Swiper(
                 controller: swiperControl,
-                onIndexChanged: (int index) {
+                onIndexChanged: (int index) async {
                   if (lastSelectedChannel == 2 &&
                       index >= restaurents.length - 5) {
                     getMore();
+                      
                   }
+                  await  videoBloc.disposeAllVideosleave();
                 },
                 itemBuilder: (BuildContext context, int index) {
                   if (lastSelectedChannel == 2) {
                     return CustomRestaurantScreenWiget(
                       restauranDto: restaurents[index],
+                      videoBloc: videoBloc,
                     );
                   }
                 },
@@ -176,16 +181,19 @@ class _MainScreenState extends State<MainScreen> {
             : lastSelectedChannel == 32 && drinks.length > 0
                 ? Swiper(
                     controller: swiperControl,
-                    onIndexChanged: (int index) {
+                    onIndexChanged: (int index) async {
                       if (lastSelectedChannel == 32 &&
                           index >= drinks.length - 5) {
                         getMore();
+                          
                       }
+                      await  videoBloc.disposeAllVideosleave();
                     },
                     itemBuilder: (BuildContext context, int index) {
                       if (lastSelectedChannel == 2) {
                         return CustomRestaurantScreenWiget(
                           restauranDto: restaurents[index],
+                            videoBloc: videoBloc,
                         );
                       }
                       if (lastSelectedChannel == 32) {
@@ -195,6 +203,7 @@ class _MainScreenState extends State<MainScreen> {
                           product: drinks[index],
                           changeChannel: selectChannel,
                           isDrink: true,
+                          videoBloc: videoBloc,
                         );
                       }
                     },
@@ -203,12 +212,14 @@ class _MainScreenState extends State<MainScreen> {
                   )
                 : lastSelectedChannel == 31 && foods.length > 0
                     ? Swiper(
+                      
                         controller: swiperControl,
-                        onIndexChanged: (int index) {
+                        onIndexChanged: (int index) async {
                           if (lastSelectedChannel == 31 &&
                               index >= foods.length - 5) {
                             getMore();
                           }
+                            await  videoBloc.disposeAllVideosleave();
                         },
                         itemBuilder: (BuildContext context, int index) {
                           if (lastSelectedChannel == 31) {
@@ -218,6 +229,7 @@ class _MainScreenState extends State<MainScreen> {
                               product: foods[index],
                               changeChannel: selectChannel,
                               isDrink: false,
+                              videoBloc: videoBloc,
                             );
                           }
                         },
@@ -231,6 +243,7 @@ class _MainScreenState extends State<MainScreen> {
           right: 5.0,
           child: CustomButtomNavigatior(
             showDialog: _ParentFunction,
+            videoBloc: videoBloc,
           ),
         ),
         Positioned(

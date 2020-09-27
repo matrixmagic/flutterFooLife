@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import 'package:foolife/AppTheme.dart';
+import 'package:foolife/Bloc/provider.dart';
+import 'package:foolife/Bloc/video/VideoBloc.dart';
 
 import 'package:foolife/Dto/ProductDto.dart';
 import 'package:foolife/Dto/ProductExtraDto.dart';
@@ -16,11 +18,13 @@ class CustomProductWidget extends StatefulWidget {
   bool forChannel;
   Function changeChannel;
   Function goToRestaurent;
+  VideoBloc videoBloc;
   CustomProductWidget(
       {this.product,
       this.forChannel,
       this.changeChannel,
       this.isDrink,
+      this.videoBloc,
       this.goToRestaurent});
 
   @override
@@ -47,18 +51,18 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
       getVideoController();
     }
   }
-
-  void getVideoController() async {
+ void getVideoController() async {
     double _screenWidth = WidgetsBinding.instance.window.physicalSize.width;
     double _screenHeight = WidgetsBinding.instance.window.physicalSize.height;
     var x = await getControllerForVideo(
         widget.product.file.path, _screenWidth, _screenHeight);
+      
+        widget.videoBloc.addVideo(x);
     setState(() {
       _betterPlayerController = x;
     });
   }
-
-  Future<BetterPlayerController> getControllerForVideo(
+ Future<BetterPlayerController> getControllerForVideo(
       String videoUrl, double _screenWidth, double _screenHeight) async {
     final fileInfo = await _cacheManager.getFileFromCache(videoUrl);
 
@@ -110,9 +114,13 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
       return _betterPlayerController;
     }
   }
+  
+  bool isVideoBlocReady = false;
+ 
 
   @override
   Widget build(BuildContext context) {
+  
     return SafeArea(
       top: false,
       child: Scaffold(
@@ -666,4 +674,17 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
         );
     }).toList();
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+     print('this is video dispose prod');
+    _betterPlayerController.setVolume(0);
+  
+    _betterPlayerController.pause();
+
+    super.dispose();
+  }
 }
+    
+      
