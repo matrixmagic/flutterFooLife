@@ -1,14 +1,24 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foolife/Widget/my_flutter_app_icons2.dart';
 import 'package:foolife/Bloc/provider.dart';
 import 'package:foolife/Bloc/searsch/SearchBloc.dart';
-
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:foolife/Widget/custom_buttom_navigatior.dart';
 
 import '../../AppTheme.dart';
 
 class SearchScreen extends StatelessWidget {
+  Completer<GoogleMapController> _controller = Completer();
+
+  static const LatLng _center = const LatLng(45.521563, -122.677433);
+
+  void _onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -17,7 +27,7 @@ class SearchScreen extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
-    _context=context;
+    _context = context;
     SearchBloc searchBloc = new SearchBloc();
     searchBloc.changeAll(true);
     searchBloc.changeFavorite(false);
@@ -138,6 +148,14 @@ class SearchScreen extends StatelessWidget {
                                   builder: (context, snapshot) {
                                     return IconButton(
                                         onPressed: () {
+                                          GoogleMap(
+                                            onMapCreated: _onMapCreated,
+                                            initialCameraPosition:
+                                                CameraPosition(
+                                              target: _center,
+                                              zoom: 11.0,
+                                            ),
+                                          );
                                           searchBloc.changeFavorite(false);
                                           searchBloc.changeAll(false);
                                           searchBloc.changeRestaurant(true);
@@ -179,7 +197,9 @@ class SearchScreen extends StatelessWidget {
                 bottom: 0,
                 left: 5.0,
                 right: 5.0,
-                child: CustomButtomNavigatior(showDialog: _ParentFunction,),
+                child: CustomButtomNavigatior(
+                  showDialog: _ParentFunction,
+                ),
               ),
             ],
           ),
@@ -188,12 +208,11 @@ class SearchScreen extends StatelessWidget {
     );
   }
 
-   _ParentFunction() async {
-   
-
+  _ParentFunction() async {
     await _showSelectionDialog(_context);
   }
-BuildContext _context;
+
+  BuildContext _context;
   Future<void> _showSelectionDialog(BuildContext context) async {
     print('im clicked hiiiii');
     return showDialog(
