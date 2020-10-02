@@ -148,14 +148,6 @@ class SearchScreen extends StatelessWidget {
                                   builder: (context, snapshot) {
                                     return IconButton(
                                         onPressed: () {
-                                          GoogleMap(
-                                            onMapCreated: _onMapCreated,
-                                            initialCameraPosition:
-                                                CameraPosition(
-                                              target: _center,
-                                              zoom: 11.0,
-                                            ),
-                                          );
                                           searchBloc.changeFavorite(false);
                                           searchBloc.changeAll(false);
                                           searchBloc.changeRestaurant(true);
@@ -189,6 +181,13 @@ class SearchScreen extends StatelessWidget {
                           ),
                         )
                       ],
+                    ),
+                  ),
+                  GoogleMap(
+                    onMapCreated: _onMapCreated,
+                    initialCameraPosition: CameraPosition(
+                      target: _center,
+                      zoom: 11.0,
                     ),
                   ),
                 ],
