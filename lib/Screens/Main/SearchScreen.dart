@@ -183,9 +183,7 @@ class SearchScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
-                    height: 200,
-                    width: 200,
+                  Expanded(
                     child: GoogleMap(
                       onMapCreated: _onMapCreated,
                       initialCameraPosition: CameraPosition(
