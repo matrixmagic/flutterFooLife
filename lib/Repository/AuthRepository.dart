@@ -50,6 +50,24 @@ class AuthRepository {
       // code for handling exception
     }
   }
+   Future<int> isEmailVerfied(String email) async {
+    try {
+      AuthDto log = new AuthDto();
+      log.email = email;
+      var response = await api.post('auth/IsEmailVerify', log.toJson());
+      var data = ApiResponse.fromJson(json.decode(response.body));
+      if (data.status == 200) {
+        return 200;
+      } else if(data.status==411)
+        return 411;
+         else if(data.status==400)
+        return 400;
+         else if(data.status==412)
+        return 412;
+    } catch (e) {
+      // code for handling exception
+    }
+  }
 
   Future<UserDto> register(
       String email, String password, String confrim, int role,String phoneNumber) async {

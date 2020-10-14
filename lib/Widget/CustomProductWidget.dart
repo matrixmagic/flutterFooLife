@@ -70,7 +70,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
       print('[VideoControllerService]: No video in cache');
 
       print('[VideoControllerService]: Saving video to cache');
-      unawaited(_cacheManager.downloadFile(videoUrl));
+    //  unawaited(_cacheManager.downloadFile(videoUrl));
 
       BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
         BetterPlayerDataSourceType.NETWORK,
@@ -161,7 +161,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
           Center(
               heightFactor: 2,
               child: Text(
-                widget.product.restaurantDto.name,
+                widget.product.restaurantDto.name+"xxxxxx",
                 style: TextStyle(
                     color: Colors.white, fontSize: 22, fontFamily: "calibril"),
               )),

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:foolife/Bloc/AuthBloc.dart';
@@ -18,6 +20,11 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     final AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
     return Scaffold(
+      appBar: AppBar(
+        centerTitle:true ,
+        title:Text('Registeration',style: TextStyle(color: Colors.purple),) ,
+        backgroundColor: Colors.white
+      ),
       resizeToAvoidBottomInset: true,
       resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.grey[100],
@@ -25,13 +32,13 @@ class _SignInScreenState extends State<SignInScreen> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.fromLTRB(12.0, 100, 35, 24),
-              child: Icon(
-                Icons.account_circle,
-                size: 125.0,
-                color: AppTheme.primaryColor,
+              padding: EdgeInsets.fromLTRB(12.0, 25, 35, 10),
+              child: Text(
+                'Restaurant',style: TextStyle(fontSize: 18)
               ),
             ),
+         
+           
             StreamBuilder(
               stream: authBloc.loginstream,
               builder: (context, snapshot2) {
@@ -57,11 +64,22 @@ class _SignInScreenState extends State<SignInScreen> {
             email(authBloc),
             password(authBloc),
             SizedBox(
-              height: 20,
+              height: 15,
             ),
             loginButton(authBloc),
-            register(context),
-            forgotPassword(context)
+             SizedBox(
+              height: 15,
+            ),
+           // register(context),
+            forgotPassword(context),
+            Container(height: 60,width: 60,
+            color: Colors.blue,),
+            Text('als user registeration',style: TextStyle(fontSize: 20,decoration: TextDecoration.underline,)),
+            SizedBox(height:20),
+            GestureDetector(child: Text('Register',style: TextStyle(fontSize: 24,decoration: TextDecoration.underline,),
+            ),onTap:(){ Navigator.of(context).pushNamed('/CheckVerrifyRest'); },),
+            SizedBox(height:25),
+            Text('jgjgjggj',style: TextStyle(fontSize: 22,decoration: TextDecoration.underline,))
           ],
         ),
       ),
@@ -76,7 +94,7 @@ class _SignInScreenState extends State<SignInScreen> {
       child: Text(
         "Forgot your password?",
         style: TextStyle(
-          color: AppTheme.primaryColor,
+         
           fontWeight: FontWeight.w400,
           fontSize: 20,
           letterSpacing: 0.2,
@@ -85,44 +103,44 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  Row register(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          "Don't have an account",
-          style: AppTheme.body1,
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.of(context).pushReplacementNamed('/usersignup');
-          },
-          child: Text(
-            'Register Now!',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: AppTheme.primaryColor,
-              fontWeight: FontWeight.w400,
-              fontSize: 20,
-              letterSpacing: 0.2,
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 60,
-        )
-      ],
-    );
-  }
+  // Row register(BuildContext context) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.center,
+  //     children: <Widget>[
+  //       Text(
+  //         "Don't have an account",
+  //         style: AppTheme.body1,
+  //       ),
+  //       SizedBox(
+  //         width: 10,
+  //       ),
+  //       GestureDetector(
+  //         onTap: () {
+  //           Navigator.of(context).pushReplacementNamed('/usersignup');
+  //         },
+  //         child: Text(
+  //           'Register Now!',
+  //           textAlign: TextAlign.center,
+  //           style: TextStyle(
+  //             color: AppTheme.primaryColor,
+  //             fontWeight: FontWeight.w400,
+  //             fontSize: 20,
+  //             letterSpacing: 0.2,
+  //           ),
+  //         ),
+  //       ),
+  //       SizedBox(
+  //         height: 60,
+  //       )
+  //     ],
+  //   );
+  // }
 
   Center loginButton(AuthBloc authBloc) {
     return Center(
       child: SizedBox(
-        width: 300,
-        height: 50,
+        width: 200,
+        height: 40,
         child: StreamBuilder(
             stream: authBloc.submitValid,
             builder: (context, snapshot) {
@@ -135,13 +153,13 @@ class _SignInScreenState extends State<SignInScreen> {
                   onPressed: () {
                     authBloc.loginpress(true);
                   },
-                  color: Colors.white,
+                  color: Colors.green,
                   textColor: Colors.grey[500],
                   child: Text(
                     AppLocalizations.of(context)
-                        .translate('login')
-                        .toUpperCase(),
-                    style: TextStyle(fontSize: 22),
+                        .translate('log in')
+                        ,
+                    style: TextStyle(fontSize: 18,color: Colors.white),
                   ),
                 ),
               );
@@ -152,7 +170,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Padding email(AuthBloc authBloc) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(10.0, 30, 30, 24),
+      padding: EdgeInsets.fromLTRB(35.0, 13, 35, 13),
       child: StreamBuilder(
           stream: authBloc.Emailstream,
           builder: (context, snapshot) {
@@ -160,10 +178,6 @@ class _SignInScreenState extends State<SignInScreen> {
               onChanged: authBloc.changeEmail,
               autocorrect: true,
               decoration: InputDecoration(
-                icon: Icon(Icons.verified_user,
-                    color: snapshot.hasError
-                        ? AppTheme.redText
-                        : AppTheme.primaryColor),
                 errorText: snapshot.error,
                 labelText: 'Email',
                 hintText: 'Email adress',
@@ -171,9 +185,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 filled: true,
                 fillColor: Colors.white70,
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(40.0)),
                   borderSide:
-                      BorderSide(color: AppTheme.primaryColor, width: 2),
+                      BorderSide(color:Colors.black, width: 2),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -189,7 +203,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Padding password(AuthBloc authBloc) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(10.0, 22, 30, 24),
+      padding: EdgeInsets.fromLTRB(35.0, 10, 35, 13),
       child: StreamBuilder(
           stream: authBloc.passstream,
           builder: (context, snapshot) {
@@ -199,20 +213,15 @@ class _SignInScreenState extends State<SignInScreen> {
               onChanged: authBloc.changepass,
               decoration: InputDecoration(
                 hintText: 'password',
-                icon: Icon(
-                  Icons.vpn_key,
-                  color: snapshot.hasError
-                      ? AppTheme.redText
-                      : AppTheme.primaryColor,
-                ),
+             
                 errorText: snapshot.error,
                 hintStyle: TextStyle(color: Colors.grey),
                 filled: true,
                 fillColor: Colors.white70,
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(40.0)),
                   borderSide:
-                      BorderSide(color: AppTheme.primaryColor, width: 2),
+                      BorderSide(color:Colors.black, width: 2),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(40.0)),

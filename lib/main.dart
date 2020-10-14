@@ -16,6 +16,7 @@ import 'Screens/Restaurant/ManageMenuScreen.dart';
 import 'Screens/Restaurant/RestaurantDetailPage.dart';
 import 'Screens/Splash/VideoSplashScreen1.dart';
 
+import 'Screens/Welcome/CheckVerrifyRest.dart';
 import 'Screens/Welcome/EntreyScreen.dart';
 import 'Screens/Welcome/RsetSignup.dart';
 import 'Screens/Welcome/SignInScreen.dart';
@@ -63,6 +64,9 @@ class MyApp extends StatelessWidget {
                   new ManageMenuScreen(),
                    '/restaurantDetail': (BuildContext context) =>
                   new RestaurantDetail(),
+                   '/CheckVerrifyRest': (BuildContext context) =>
+                  new CheckVerrifyRest(),
+                  
 
                   
 

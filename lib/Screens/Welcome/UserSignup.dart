@@ -19,6 +19,7 @@ class UserSignup extends StatelessWidget {
     registerBloc.changeRole(1);
 
     return Scaffold(
+      
       resizeToAvoidBottomInset: true,
       resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.grey[100],
