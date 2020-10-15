@@ -10,10 +10,14 @@ import 'package:foolife/Widget/custom_buttom_navigatior.dart';
 
 import '../../AppTheme.dart';
 
-class SearchScreen extends StatelessWidget {
-  Completer<GoogleMapController> _controller = Completer();
+class SearchScreen extends StatefulWidget {
+  @override
+  _SearchScreenState createState() => _SearchScreenState();
+}
 
+class _SearchScreenState extends State<SearchScreen> {
   static const LatLng _center = const LatLng(45.521563, -122.677433);
+  Completer<GoogleMapController> _controller = Completer();
 
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
@@ -25,6 +29,7 @@ class SearchScreen extends StatelessWidget {
 
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent ,statusBarBrightness:  Brightness.light));
   }
+
   @override
   Widget build(BuildContext context) {
     _context = context;
@@ -214,6 +219,7 @@ class SearchScreen extends StatelessWidget {
   }
 
   BuildContext _context;
+
   Future<void> _showSelectionDialog(BuildContext context) async {
     print('im clicked hiiiii');
     return showDialog(

@@ -11,20 +11,22 @@ import 'Bloc/AuthBloc.dart';
 import 'Bloc/auth/Register/RegisterBloc.dart';
 import 'Screens/Main/NotificationScreen.dart';
 import 'Screens/Main/SearchScreen.dart';
-
+import 'Screens/Welcome/PasswordSet.dart';
 import 'Screens/Restaurant/ManageMenuScreen.dart';
 import 'Screens/Restaurant/RestaurantDetailPage.dart';
 import 'Screens/Splash/VideoSplashScreen1.dart';
 
 import 'Screens/Welcome/CheckVerrifyRest.dart';
+import 'Screens/Welcome/EnterCode.dart';
 import 'Screens/Welcome/EntreyScreen.dart';
 import 'Screens/Welcome/RsetSignup.dart';
 import 'Screens/Welcome/SignInScreen.dart';
 import 'Screens/Welcome/UserSignup.dart';
 
 void main() async {
-  
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent ,statusBarBrightness:  Brightness.light));
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarBrightness: Brightness.light));
   // SharedPreferences prefs = await SharedPreferences.getInstance();
 
   runApp(MyApp());
@@ -62,13 +64,12 @@ class MyApp extends StatelessWidget {
                   new NotificationScreen(),
               '/mangemenuscreen': (BuildContext context) =>
                   new ManageMenuScreen(),
-                   '/restaurantDetail': (BuildContext context) =>
+              '/restaurantDetail': (BuildContext context) =>
                   new RestaurantDetail(),
-                   '/CheckVerrifyRest': (BuildContext context) =>
+              '/CheckVerrifyRest': (BuildContext context) =>
                   new CheckVerrifyRest(),
-                  
-
-                  
+              '/EnterCode': (BuildContext context) => new EnterCode(),
+              '/PasswordSet': (BuildContext context) => new PasswordSet(),
 
               /* '/root': (BuildContext context) => new RootScreen(),
             '/signin': (BuildContext context) => new SignInScreen(),

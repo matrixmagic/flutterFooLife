@@ -50,7 +50,8 @@ class AuthRepository {
       // code for handling exception
     }
   }
-   Future<int> isEmailVerfied(String email) async {
+
+  Future<int> isEmailVerfied(String email) async {
     try {
       AuthDto log = new AuthDto();
       log.email = email;
@@ -58,26 +59,41 @@ class AuthRepository {
       var data = ApiResponse.fromJson(json.decode(response.body));
       if (data.status == 200) {
         return 200;
-      } else if(data.status==411)
+      } else if (data.status == 411)
         return 411;
-         else if(data.status==400)
+      else if (data.status == 400)
         return 400;
-         else if(data.status==412)
-        return 412;
+      else if (data.status == 412) return 412;
     } catch (e) {
       // code for handling exception
     }
   }
 
-  Future<UserDto> register(
-      String email, String password, String confrim, int role,String phoneNumber) async {
+  Future<bool> verifyRestaurant(String email, String code) async {
+    try {
+      var body = {
+        "email": email,
+        "code": code,
+      };
+      var response = await api.post('auth/verifyRestaurant', body);
+      var data = ApiResponse.fromJson(json.decode(response.body));
+      if (data.status == 200) {
+        return true;
+      } else if (data.status == 400) return false;
+    } catch (e) {
+      // code for handling exception
+    }
+  }
+
+  Future<UserDto> register(String email, String password, String confrim,
+      int role, String phoneNumber) async {
     try {
       AuthDto register = new AuthDto();
       register.email = email;
       register.password = password;
       register.passwordConfirmation = confrim;
       register.roleId = role;
-      register.phoneNumber=phoneNumber;
+      register.phoneNumber = phoneNumber;
       var response = await api.post('auth/register', register.toJson());
       var data = ApiResponse.fromJson(json.decode(response.body));
       final storage = new FlutterSecureStorage();
