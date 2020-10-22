@@ -176,7 +176,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                           WidgetsBinding.instance.window.physicalSize.height /
                               9,
                     ),
-                    Container(
+                    /*Container(
                       height: iconContainerSpace + 5,
                       decoration: BoxDecoration(
                         boxShadow: [
@@ -299,7 +299,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                               fontFamily: "SpecialElite"),
                         ),
                       ),
-                    ),
+                    ),*/
                     SizedBox(
                       height: 65,
                     )

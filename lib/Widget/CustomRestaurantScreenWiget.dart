@@ -18,9 +18,9 @@ import 'qrcode1.dart';
 
 class CustomRestaurantScreenWiget extends StatefulWidget {
   @override
-   VideoBloc videoBloc;
+  VideoBloc videoBloc;
   State<StatefulWidget> createState() => _CustomRestaurantScreenWiget();
-  CustomRestaurantScreenWiget({this.restauranDto,this.videoBloc});
+  CustomRestaurantScreenWiget({this.restauranDto, this.videoBloc});
 
   RestaurantDto restauranDto;
 }
@@ -88,7 +88,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
       print('[VideoControllerService]: No video in cache');
 
       print('[VideoControllerService]: Saving video to cache');
-    //  unawaited(_cacheManager.downloadFile(videoUrl));
+      //  unawaited(_cacheManager.downloadFile(videoUrl));
 
       BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
         BetterPlayerDataSourceType.NETWORK,
@@ -132,25 +132,19 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
       return _betterPlayerController;
     }
   }
- @override
 
-
-  
+  @override
   bool isVideoBlocReady = false;
-  void initVideoBloc()
-  {
-    if(_betterPlayerController!=null)
-    {
- 
- widget.videoBloc.addVideo(_betterPlayerController);
- isVideoBlocReady = true;
+  void initVideoBloc() {
+    if (_betterPlayerController != null) {
+      widget.videoBloc.addVideo(_betterPlayerController);
+      isVideoBlocReady = true;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if(!isVideoBlocReady)
-     initVideoBloc();
+    if (!isVideoBlocReady) initVideoBloc();
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
@@ -210,7 +204,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                       .instance.window.physicalSize.height /
                                   30,
                             ),
-                            Container(
+                            /*Container(
                               height: iconContainerSpace + 5,
                               decoration: BoxDecoration(
                                 boxShadow: [
@@ -398,7 +392,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                       fontFamily: "SpecialElite"),
                                 ),
                               ),
-                            ),
+                            ),*/
                           ],
                         ),
                         Column(
@@ -503,9 +497,8 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                             width: WidgetsBinding
                                 .instance.window.physicalSize.width,
                             child: MenuBar(
-                              videoBloc:  widget.videoBloc,
+                              videoBloc: widget.videoBloc,
                               items: widget.restauranDto.categories,
-                              
                             ))
                         : Container(),
                   ]),

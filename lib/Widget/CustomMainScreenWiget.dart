@@ -204,7 +204,7 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
                 ],
               ),
             ),
-            Visibility(
+           /* Visibility(
               visible: mainScreenWidgetVisibility,
               child: Padding(
                 padding:
@@ -362,7 +362,7 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
                   ],
                 ),
               ),
-            ),
+            ),*/
             Positioned(
                 right: 5.0,
                 bottom: 90,

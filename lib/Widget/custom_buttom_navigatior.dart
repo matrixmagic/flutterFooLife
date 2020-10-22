@@ -8,7 +8,7 @@ import 'package:foolife/Repository/AuthRepository.dart';
 class CustomButtomNavigatior extends StatelessWidget {
   Function showDialog;
   VideoBloc videoBloc;
-  CustomButtomNavigatior({this.showDialog,this.videoBloc});
+  CustomButtomNavigatior({this.showDialog, this.videoBloc});
   @override
   FlutterSecureStorage storage = new FlutterSecureStorage();
   Widget build(BuildContext context) {
@@ -26,18 +26,17 @@ class CustomButtomNavigatior extends StatelessWidget {
               lastButtonPreesed = 1;
             }
             return Container(
-             
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   Container(
-                    decoration: BoxDecoration(boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.7),
-                        blurRadius: 40.0,
-                        spreadRadius: 1.0,
-                      ),
-                    ]),
+                      decoration: BoxDecoration(boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.7),
+                          blurRadius: 40.0,
+                          spreadRadius: 1.0,
+                        ),
+                      ]),
                       child: IconButton(
                           icon: Icon(
                             Icons.home,
@@ -47,101 +46,100 @@ class CustomButtomNavigatior extends StatelessWidget {
                           onPressed: () async {
                             await storage.write(
                                 key: "_lastButtonPreesed", value: "1");
-                    if(videoBloc!=null)
-                    videoBloc.disposeAllVideos();
+                            if (videoBloc != null) videoBloc.disposeAllVideos();
                             Navigator.of(context)
                                 .pushReplacementNamed('/mainscreen');
                           })),
                   Container(
-                    decoration: BoxDecoration(boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.7),
-                        blurRadius: 40.0,
-                        spreadRadius: 1.0,
-                      ),
-                    ]),
+                      decoration: BoxDecoration(boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.7),
+                          blurRadius: 40.0,
+                          spreadRadius: 1.0,
+                        ),
+                      ]),
                       child: IconButton(
-                    icon: Icon(Icons.search,
-                        color: AppTheme.notWhite
-                            .withOpacity(lastButtonPreesed == 2 ? 1 : 0.7)),
-                    onPressed: () async {
-                      await storage.write(
-                          key: "_lastButtonPreesed", value: "2");
-  if(videoBloc!=null)
-                    videoBloc.disposeAllVideos();
-                      Navigator.of(context)
-                          .pushReplacementNamed('/searchscreen');
-                    },
-                  )),
+                        icon: Icon(Icons.search,
+                            color: AppTheme.notWhite
+                                .withOpacity(lastButtonPreesed == 2 ? 1 : 0.7)),
+                        onPressed: () async {
+                          await storage.write(
+                              key: "_lastButtonPreesed", value: "2");
+                          if (videoBloc != null) videoBloc.disposeAllVideos();
+                          Navigator.of(context)
+                              .pushReplacementNamed('/searchscreen');
+                        },
+                      )),
                   Container(
-                    decoration: BoxDecoration(boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.7),
-                        blurRadius: 40.0,
-                        spreadRadius: 1.0,
-                      ),
-                    ]),
+                      decoration: BoxDecoration(boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.7),
+                          blurRadius: 40.0,
+                          spreadRadius: 1.0,
+                        ),
+                      ]),
                       child: IconButton(
-                    icon: Icon(Icons.create,
-                        color: AppTheme.notWhite
-                            .withOpacity(lastButtonPreesed == 3 ? 1 : 0.7)),
-                    onPressed: () async {
+                          icon: Icon(Icons.create,
+                              color: AppTheme.notWhite.withOpacity(
+                                  lastButtonPreesed == 3 ? 1 : 0.7)),
+                          onPressed:
+                              () {} /* async {
                       await storage.write(
                           key: "_lastButtonPreesed", value: "3");
   if(videoBloc!=null)
                     videoBloc.disposeAllVideos();
                       Navigator.of(context)
                           .pushReplacementNamed('/notificationscreen');
-                    },
-                  )),
+                    },*/
+                          )),
                   Container(
-                    decoration: BoxDecoration(boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.7),
-                        blurRadius: 40.0,
-                        spreadRadius: 1.0,
-                      ),
-                    ]),
+                      decoration: BoxDecoration(boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.7),
+                          blurRadius: 40.0,
+                          spreadRadius: 1.0,
+                        ),
+                      ]),
                       child: IconButton(
-                    icon: Icon(Icons.favorite,
-                        color: AppTheme.notWhite
-                            .withOpacity(lastButtonPreesed == 4 ? 1 : 0.7)),
-                    onPressed: () async {
+                          icon: Icon(Icons.favorite,
+                              color: AppTheme.notWhite.withOpacity(
+                                  lastButtonPreesed == 4 ? 1 : 0.7)),
+                          onPressed:
+                              () {} /*async {
                       await storage.write(
                           key: "_lastButtonPreesed", value: "4");
   if(videoBloc!=null)
                     videoBloc.disposeAllVideos();
                       Navigator.of(context)
                           .pushReplacementNamed('/notificationscreen');
-                    },
-                  )),
+                    },*/
+                          )),
                   Container(
-                    decoration: BoxDecoration(boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.7),
-                        blurRadius: 40.0,
-                        spreadRadius: 1.0,
-                      ),
-                    ]),
+                      decoration: BoxDecoration(boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.7),
+                          blurRadius: 40.0,
+                          spreadRadius: 1.0,
+                        ),
+                      ]),
                       child: IconButton(
-                    icon: Icon(
-                      Icons.person_outline,
-                      color: AppTheme.notWhite
-                          .withOpacity(lastButtonPreesed == 5 ? 1 : 0.7),
-                    ),
-                    onPressed: () async {
-                        if(videoBloc!=null)
-                    videoBloc.disposeAllVideos();
-                      await storage.write(
-                          key: "_lastButtonPreesed", value: "5");
-                      var validUser = await AuthRepository().CheckToken();
-                      if (validUser == true) {
-                        Navigator.of(context)
-                            .pushReplacementNamed('/restaurantDetail');
-                      } else
-                        showDialog();
-                    },
-                  ))
+                        icon: Icon(
+                          Icons.person_outline,
+                          color: AppTheme.notWhite
+                              .withOpacity(lastButtonPreesed == 5 ? 1 : 0.7),
+                        ),
+                        onPressed: () async {
+                          if (videoBloc != null) videoBloc.disposeAllVideos();
+                          await storage.write(
+                              key: "_lastButtonPreesed", value: "5");
+                          var validUser = await AuthRepository().CheckToken();
+                          if (validUser == true) {
+                            Navigator.of(context)
+                                .pushReplacementNamed('/restaurantDetail');
+                          } else
+                            showDialog();
+                        },
+                      ))
                 ],
               ),
             );

@@ -7,40 +7,36 @@ import 'package:foolife/Repository/AuthRepository.dart';
 import 'package:foolife/Widget/topBar.dart';
 
 class Top_channel_bar extends StatelessWidget {
-
   Function changeChannel;
   int selectedChannel;
   TopBarBloc topBarBloc;
 
-  Top_channel_bar({this.changeChannel, this.selectedChannel}){
-   topBarBloc = new TopBarBloc();
-    topBarBloc.changeFirst(false);
+  Top_channel_bar({this.changeChannel, this.selectedChannel}) {
+    topBarBloc = new TopBarBloc();
+    // topBarBloc.changeFirst(false);
     topBarBloc.changeSecond(false);
     topBarBloc.changeThird(false);
-    topBarBloc.changeFourth(false);
+    // topBarBloc.changeFourth(false);
 
-    if(selectedChannel == 1)
-      topBarBloc.changeFirst(true);
-    else if(selectedChannel == 2)
+    /*if(selectedChannel == 1)
+      topBarBloc.changeFirst(true);*/
+    if (selectedChannel == 2)
       topBarBloc.changeSecond(true);
-    else if(selectedChannel == 31 || selectedChannel == 32)
+    else if (selectedChannel == 31 || selectedChannel == 32)
       topBarBloc.changeThird(true);
-    else  if(selectedChannel == 4)
+    /* else  if(selectedChannel == 4)
       topBarBloc.changeFourth(true);
-
-
+*/
   }
 
   @override
   //FlutterSecureStorage storage = new FlutterSecureStorage();
   Widget build(BuildContext context) {
-  
-
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          Container(
+          /* Container(
             decoration: BoxDecoration(boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.7),
@@ -67,7 +63,7 @@ class Top_channel_bar extends StatelessWidget {
                     //  onPressed: openCreatePostScreen,
                   );
                 }),
-          ),
+          ),*/
           Container(
             decoration: BoxDecoration(boxShadow: [
               BoxShadow(
@@ -81,11 +77,11 @@ class Top_channel_bar extends StatelessWidget {
                 builder: (context, snapshot) {
                   return IconButton(
                     onPressed: () {
-                      topBarBloc.changeFirst(false);
+                      //  topBarBloc.changeFirst(false);
                       topBarBloc.changeSecond(true);
                       topBarBloc.changeThird(false);
-                      topBarBloc.changeFourth(false);
-                       changeChannel.call(2);
+                      //topBarBloc.changeFourth(false);
+                      changeChannel.call(2);
                     },
                     icon: Icon(TopBar.restaurant,
                         color: snapshot.hasData && snapshot.data
@@ -107,11 +103,11 @@ class Top_channel_bar extends StatelessWidget {
                 builder: (context, snapshot) {
                   return IconButton(
                     onPressed: () {
-                      topBarBloc.changeFirst(false);
+                      //topBarBloc.changeFirst(false);
                       topBarBloc.changeSecond(false);
                       topBarBloc.changeThird(true);
-                      topBarBloc.changeFourth(false);
-                        changeChannel.call(31);
+                      // topBarBloc.changeFourth(false);
+                      changeChannel.call(31);
                     },
                     icon: Icon(Icons.fastfood,
                         color: snapshot.hasData && snapshot.data
@@ -121,7 +117,7 @@ class Top_channel_bar extends StatelessWidget {
                   );
                 }),
           ),
-          Container(
+          /*  Container(
             decoration: BoxDecoration(boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.7),
@@ -153,7 +149,7 @@ class Top_channel_bar extends StatelessWidget {
                     ),
                   );
                 }),
-          ),
+          ),*/
         ],
       ),
     );

@@ -34,9 +34,9 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     _context = context;
     SearchBloc searchBloc = new SearchBloc();
-    searchBloc.changeAll(true);
+    searchBloc.changeAll(false);
     searchBloc.changeFavorite(false);
-    searchBloc.changeRestaurant(false);
+    searchBloc.changeRestaurant(true);
     return BlocProvider<SearchBloc>(
       bloc: searchBloc,
       child: SafeArea(
