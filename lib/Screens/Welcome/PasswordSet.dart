@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:foolife/Bloc/auth/Register/RegisterBloc.dart';
 import 'package:foolife/Bloc/provider.dart';
+import 'package:foolife/Repository/AuthRepository.dart';
 
 import '../../AppLocalizations.dart';
 import '../../AppTheme.dart';
@@ -11,6 +13,9 @@ class PasswordSet extends StatefulWidget {
 }
 
 class _PasswordSetState extends State<PasswordSet> {
+   var _contro1 = TextEditingController();
+    var _contro = TextEditingController();
+    int passwordlength=0;
   @override
   Widget build(BuildContext context) {
     final RegisterBloc registerBloc = BlocProvider.of<RegisterBloc>(context);
@@ -29,10 +34,18 @@ class _PasswordSetState extends State<PasswordSet> {
           Padding(
             padding: const EdgeInsets.only(top: 25.0),
             child: Container(
-              child: Text(
-                'cafe extraplet',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
+              child: FutureBuilder(
+                future: FlutterSecureStorage().read(key: "_restaurantName"),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState==ConnectionState.done){
+                  return Text(
+                  snapshot.data,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16),
+                  );
+                  }else
+                return  Container();
+                }
               ),
             ),
           ),
@@ -44,8 +57,13 @@ class _PasswordSetState extends State<PasswordSet> {
               style: TextStyle(fontSize: 25, color: Colors.grey),
             ),
           ),
-          password(registerBloc),
-          confrimPassword(registerBloc),
+          password(),
+          confrimPassword(),
+          passwordlength==1 ?
+          Text('password must be at least 8 charcter'):
+        passwordlength==2 ?
+  Text('confirm password did not matched')
+  : Container(),
           Padding(
             padding: const EdgeInsets.only(top: 50),
             child: Container(
@@ -55,7 +73,23 @@ class _PasswordSetState extends State<PasswordSet> {
                 shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(50.0),
                     side: BorderSide(color: Colors.black12)),
-                onPressed: () {
+                onPressed: () async {
+                 
+                 bool result=await AuthRepository().changeRestaurantPassword(_contro.value.text, _contro1.value.text);
+                 if(result)
+                  Navigator.of(context).pushNamed('/mainscreen');
+                  else{
+
+  if(_contro.value.text.length<8)
+setState(() {
+   passwordlength=1;
+}); 
+else setState(() {
+   passwordlength=1;
+}); 
+                  }
+
+
                   // Navigator.of(context).pushNamed('/PasswordSet');
                 },
                 color: Colors.white,
@@ -72,16 +106,16 @@ class _PasswordSetState extends State<PasswordSet> {
     );
   }
 
-  Padding password(RegisterBloc registerBloc) {
+  Padding password() {
     return Padding(
       padding: EdgeInsets.fromLTRB(10.0, 22, 30, 0),
       child: StreamBuilder(
-          stream: registerBloc.passwordStream,
+        
           builder: (context, snapshot) {
             return TextField(
               obscureText: true,
               autocorrect: true,
-              onChanged: registerBloc.changePassword,
+              controller: _contro ,
               decoration: InputDecoration(
                 hintText: 'password',
                 icon: Icon(
@@ -106,16 +140,16 @@ class _PasswordSetState extends State<PasswordSet> {
     );
   }
 
-  Padding confrimPassword(RegisterBloc registerBloc) {
+  Padding confrimPassword() {
     return Padding(
       padding: EdgeInsets.fromLTRB(10.0, 22, 30, 0),
       child: StreamBuilder(
-          stream: registerBloc.conforimPasswordStream,
+         
           builder: (context, snapshot) {
             return TextField(
               obscureText: true,
               autocorrect: true,
-              onChanged: registerBloc.changeConfirmPassword,
+         controller: _contro1,
               decoration: InputDecoration(
                 hintText: 'Confrim Password',
                 icon: Icon(

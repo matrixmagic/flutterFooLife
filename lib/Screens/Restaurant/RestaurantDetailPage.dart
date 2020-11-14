@@ -191,7 +191,7 @@ class _RestaurantDetailState extends State<RestaurantDetail> {
                             RepaintBoundary(
                               key: this.globalKey,
                               child: QrImage(
-                                data: widget.id.toString(),
+                                data: myRestaurant==null?(-1).toString() :myRestaurant.id.toString(),
                                 size: 40,
                                 backgroundColor: Colors.white24,
                                 foregroundColor: Colors.black,

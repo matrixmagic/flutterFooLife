@@ -34,7 +34,8 @@ Stream<int> get submitverfiedStream => _activePressed.stream.transform(StreamTra
            
            
             
-         int result =await  AuthRepository().isEmailVerfied(lastEmail);
+         int result ;
+         //=await  AuthRepository().isEmailVerfied(lastEmail);
             if(result!=null){
 
               print(result);

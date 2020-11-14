@@ -8,6 +8,8 @@ class ProductDto {
   dynamic id;
   dynamic restaurantId;
   dynamic categoryId;
+   dynamic likesCount;
+  dynamic liked;
   int fileId;
   int typeId;
   String name;
@@ -57,6 +59,8 @@ class ProductDto {
     updatedAt = json['updated_at'];
     details = json['details'];
     content = json['content'];
+    likesCount=json ["likes_count"];
+    liked=json ["liked"];
     file = json['file'] != null ? new FileDto.fromJson(json['file']) : null;
     restaurantDto = json['restaurant'] != null
         ? new RestaurantDto.fromJson(json['restaurant'])

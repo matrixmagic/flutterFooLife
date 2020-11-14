@@ -20,6 +20,8 @@ class RestaurantDto {
   String closeTime;
   dynamic longitude;
   dynamic latitude;
+  dynamic favourite;
+  dynamic favsCount;
   String createdAt;
   String updatedAt;
   RestaurantServicesDto services;
@@ -31,6 +33,7 @@ class RestaurantDto {
   List<int> games;
   FileDto file;
   List<CategoryDto>  categories;
+  List<CategoryDto>  mainCategories;
   List<PaymentsMethod> paymentsMethod;
 
   RestaurantDto(
@@ -64,6 +67,8 @@ class RestaurantDto {
     closeTime = json['closeTime'];
     longitude = json['longitude'];
     latitude = json['latitude'];
+     favourite = json['favourite'];
+      favsCount = json['favs_count'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     services = json['services'] != null
@@ -88,6 +93,12 @@ class RestaurantDto {
       categories = new List<CategoryDto>();
       json['categories'].forEach((v) {
         categories.add(new CategoryDto.fromJson(v));
+      });
+    }
+    if (json['main_categories'] != null) {
+      mainCategories = new List<CategoryDto>();
+      json['main_categories'].forEach((v) {
+        mainCategories.add(new CategoryDto.fromJson(v));
       });
     }
 

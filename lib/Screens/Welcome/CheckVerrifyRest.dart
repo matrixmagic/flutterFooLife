@@ -161,7 +161,13 @@ class _CheckVerrifyRestState extends State<CheckVerrifyRest> {
                         shape: new RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(50.0),
                             side: BorderSide(color: Colors.green)),
-                        onPressed: () {},
+                        onPressed: () {
+                          if(AGB && Datenschutzenerklarung)
+                            SchedulerBinding.instance.addPostFrameCallback((_) {
+                        Navigator.of(context)
+                            .pushReplacementNamed('/EnterCode');
+                      });
+                        },
                         color: AGB && Datenschutzenerklarung
                             ? Colors.green
                             : Colors.grey,
@@ -185,7 +191,7 @@ class _CheckVerrifyRestState extends State<CheckVerrifyRest> {
                           .isEmailVerfied(_contro.value.text);
                       print(_contro.value.text);
                       print(result);
-                      if (result == 200) {
+                      if (result == 412) {
                         var verficationEmail = await storage.write(
                             key: "_verficationEmail",
                             value: _contro.value.text);

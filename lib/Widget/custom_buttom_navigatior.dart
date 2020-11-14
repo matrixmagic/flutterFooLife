@@ -135,7 +135,11 @@ class CustomButtomNavigatior extends StatelessWidget {
                       await storage.write(
                           key: "_lastButtonPreesed", value: "5");
                       var validUser = await AuthRepository().CheckToken();
-                      if (validUser == true) {
+                      print("hiiiiiiiiiiiiiiiiiii " +validUser.toString());
+                    String role=  await storage.read(
+                          key: "_roleId");
+                           print("hiiiiiiiiiiiiiiiiiii " +role.toString());
+                      if (validUser == true && role=="2") {
                         Navigator.of(context)
                             .pushReplacementNamed('/restaurantDetail');
                       } else

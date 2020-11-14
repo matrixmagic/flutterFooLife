@@ -6,9 +6,11 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:foolife/AppTheme.dart';
 import 'package:foolife/Bloc/provider.dart';
 import 'package:foolife/Bloc/video/VideoBloc.dart';
+import 'package:foolife/Dto/LikeDto.dart';
 
 import 'package:foolife/Dto/ProductDto.dart';
 import 'package:foolife/Dto/ProductExtraDto.dart';
+import 'package:foolife/Repository/ReactionRepository.dart';
 
 import 'package:pedantic/pedantic.dart';
 
@@ -161,7 +163,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
           Center(
               heightFactor: 2,
               child: Text(
-                widget.product.restaurantDto.name+"xxxxxx",
+                widget.product.restaurantDto.name,
                 style: TextStyle(
                     color: Colors.white, fontSize: 22, fontFamily: "calibril"),
               )),
@@ -188,11 +190,28 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                         ],
                       ),
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () async {
+
+                       LikeDto like=  await ReactionRepository().like(widget.product.id);
+                       if(like!=null)
+                       if(like.like==1){
+                         //incrmante
+                        setState(() {
+                          widget.product.likesCount++;
+                          widget.product.liked=1;
+                        }); 
+                       }else{
+                         //decrment
+                         setState(() {
+                          widget.product.likesCount--;
+                          widget.product.liked=0;
+                        }); 
+                       }
+                        },
                         icon: Icon(
                           Icons.favorite,
                           size: iconSize,
-                          color: Colors.white.withOpacity(0.8),
+                          color: widget.product.liked==1?Colors.red.withOpacity(0.8):Colors.white.withOpacity(0.8),
                         ),
                       ),
                     ),
@@ -200,44 +219,14 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
                       width: 45,
                       child: Center(
                         child: Text(
-                          '22',
+                         widget.product.likesCount.toString(),
                           style: TextStyle(
                               color: Colors.white.withOpacity(0.8),
                               fontFamily: "SpecialElite"),
                         ),
                       ),
                     ),
-                    Container(
-                      height: iconContainerSpace,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.7),
-                            blurRadius: 40.0,
-                            spreadRadius: 1.0,
-                          ),
-                        ],
-                      ),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.person,
-                          size: iconSize,
-                          color: Colors.white.withOpacity(0.8),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: 45,
-                      child: Center(
-                        child: Text(
-                          '22',
-                          style: TextStyle(
-                              color: Colors.white.withOpacity(0.8),
-                              fontFamily: "SpecialElite"),
-                        ),
-                      ),
-                    ),
+                   
                     Container(
                       height: iconContainerSpace,
                       decoration: BoxDecoration(

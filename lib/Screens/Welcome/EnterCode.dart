@@ -6,6 +6,7 @@ import 'package:foolife/Bloc/AuthBloc.dart';
 import 'package:foolife/Bloc/auth/Register/CheckVerfiy/VerfiyBloc.dart';
 import 'package:foolife/Bloc/auth/Register/RegisterBloc.dart';
 import 'package:foolife/Bloc/provider.dart';
+import 'package:foolife/Repository/AuthRepository.dart';
 
 import '../../AppLocalizations.dart';
 import '../../AppTheme.dart';
@@ -19,6 +20,8 @@ class _EnterCodeState extends State<EnterCode> {
   @override
   bool firstTime = false;
   bool isvefied = false;
+   var _contro = TextEditingController();
+  
   Widget build(BuildContext context) {
     final VerfiyBloc verfiyBloc = new VerfiyBloc();
     return Scaffold(
@@ -57,16 +60,28 @@ class _EnterCodeState extends State<EnterCode> {
                 return Container();
               },
             ),*/
-            code(verfiyBloc),
+            code(),
             SizedBox(height: 60),
             RaisedButton(
               shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(50.0),
                   side: BorderSide(color: AppTheme.primaryColor)),
-              onPressed: () {
-                print('im pressed verfiy');
+            
+                 onPressed: () async {
+                      // _contro.value
+                      print('im pressed check');
+                      bool result = await AuthRepository().verifyRestaurant( _contro.value.text);
+                         
+                      
+                      print(result);
+                      if (result  ) {
+                        
+                         print('im pressed verfiy');
                 Navigator.of(context).pushNamed('/PasswordSet');
-              },
+                      }
+                    },
+              
+            
               color: Colors.green,
               textColor: Colors.grey[500],
               child: Text(
@@ -112,18 +127,19 @@ class _EnterCodeState extends State<EnterCode> {
     );
   }
 
-  Padding code(VerfiyBloc verfiyBloc) {
+  Padding code() {
     return Padding(
       padding: EdgeInsets.fromLTRB(35.0, 13, 35, 13),
       child: StreamBuilder(
-          stream: verfiyBloc.emailStream,
+         
           builder: (context, snapshot) {
             return TextField(
-              onChanged: verfiyBloc.changeEmail,
+              controller: _contro,
+            
               autocorrect: true,
               decoration: InputDecoration(
                 errorText: snapshot.error,
-                labelText: 'code',
+            
                 hintText: 'verfiy code',
                 hintStyle: TextStyle(color: Colors.grey),
                 filled: true,

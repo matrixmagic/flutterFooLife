@@ -2,11 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:foolife/Repository/RestaurantRepository.dart';
+import 'package:foolife/Repository/SearchRepository.dart';
+import 'package:foolife/Screens/Main/MainScreen.dart';
 import 'package:foolife/Widget/my_flutter_app_icons2.dart';
 import 'package:foolife/Bloc/provider.dart';
 import 'package:foolife/Bloc/searsch/SearchBloc.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:foolife/Widget/custom_buttom_navigatior.dart';
+import 'package:location/location.dart';
 
 import '../../AppTheme.dart';
 
@@ -16,8 +21,12 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  static const LatLng _center = const LatLng(45.521563, -122.677433);
+ int searchType;
+  LatLng _center;
+  BitmapDescriptor pinLocationIcon;
+   Set<Marker> _markers = {};
   Completer<GoogleMapController> _controller = Completer();
+  var _contro1 = TextEditingController();
 
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
@@ -25,18 +34,84 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void initState() {
+    searchType=1;
     // TODO: implement initState
 
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent ,statusBarBrightness:  Brightness.light));
+    getPos();
+
+
   }
 
+void  getPos() async
+{
+   Location location = new Location();
+
+bool _serviceEnabled;
+PermissionStatus _permissionGranted;
+LocationData _locationData;
+
+_serviceEnabled = await location.serviceEnabled();
+if (!_serviceEnabled) {
+  _serviceEnabled = await location.requestService();
+  if (!_serviceEnabled) {
+    return;
+  }
+}
+
+_permissionGranted = await location.hasPermission();
+if (_permissionGranted == PermissionStatus.denied) {
+  _permissionGranted = await location.requestPermission();
+  if (_permissionGranted != PermissionStatus.granted) {
+    return;
+  }
+}
+
+_locationData = await location.getLocation();
+
+pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(devicePixelRatio: 2.5),
+      'assets/images/map_marker.png');
+       var restaurants = await RestaurantRepository().gatAllResturants();
+      
+restaurants.forEach((element) {
+  if(element.latitude!=null && element.longitude!=null)
+  _markers.add(
+            Marker(
+               markerId: MarkerId(element.id.toString()),
+               position: LatLng(double.parse( element.latitude.toString()),double.parse( element.longitude.toString())),
+              icon: pinLocationIcon 
+              ,
+              onTap: (){
+                 Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainScreen(goToThisRestaurantId: element.id,),
+          ),);
+              }
+            ));
+            
+  setState(()  {
+    
+            
+  print("add markersssssssssssssssssssssssssssssssssssssssssssssssssssss");
+});
+   
+  _center =  LatLng(_locationData.latitude, _locationData.longitude);
+ 
+   
+
+  print("wakawakaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+});
+  }
+ 
   @override
   Widget build(BuildContext context) {
     _context = context;
     SearchBloc searchBloc = new SearchBloc();
-    searchBloc.changeAll(true);
-    searchBloc.changeFavorite(false);
-    searchBloc.changeRestaurant(false);
+   // searchBloc.changeAll(false);
+    //searchBloc.changeFavorite(false);
+    //searchBloc.changeRestaurant(true);
     return BlocProvider<SearchBloc>(
       bloc: searchBloc,
       child: SafeArea(
@@ -83,8 +158,9 @@ class _SearchScreenState extends State<SearchScreen> {
                             Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: TextField(
+
                                 autocorrect: true,
-                                onChanged: searchBloc.changeSearch,
+                                controller: _contro1,
                                 decoration: InputDecoration(
                                   // errorText: snapshot.error,
                                   labelText: 'Search',
@@ -117,7 +193,41 @@ class _SearchScreenState extends State<SearchScreen> {
                                     color: AppTheme.primaryColor,
                                     size: 50,
                                   ),
-                                  onPressed: () => searchBloc.changeClick(true),
+                                  onPressed: () async {
+                                    var result = await SearchRepository().serachRestaurants(_contro1.value.text, _center.latitude, _center.longitude);
+
+
+              _markers.clear();                            
+result.restaurants.forEach((element) {
+  if(element.latitude!=null && element.longitude!=null)
+  _markers.add(
+            Marker(
+               markerId: MarkerId(element.id.toString()),
+               position: LatLng(double.parse( element.latitude.toString()),double.parse( element.longitude.toString())),
+              icon: pinLocationIcon 
+              ,
+              onTap: (){
+                 Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainScreen(goToThisRestaurantId: element.id,),
+          ),);
+              }
+            ));
+            
+  setState(()  {
+    
+            
+  print("add markersssssssssssssssssssssssssssssssssssssssssssssssssssss");
+});
+  
+ 
+   
+
+  print("wakawakaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+});
+                                    
+                                  },
                                 ))
                           ],
                         ),
@@ -132,8 +242,12 @@ class _SearchScreenState extends State<SearchScreen> {
                                     return GestureDetector(
                                         onTap: () {
                                           searchBloc.changeAll(true);
+                                      
                                           searchBloc.changeFavorite(false);
                                           searchBloc.changeRestaurant(false);
+                                           setState(() {
+                                          searchType=1;
+                                        }); 
                                         },
                                         child: Container(
                                             child: Text(
@@ -156,6 +270,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                           searchBloc.changeFavorite(false);
                                           searchBloc.changeAll(false);
                                           searchBloc.changeRestaurant(true);
+                                          setState(() {
+                                          searchType=3;
+                                        }); 
                                         },
                                         icon: Icon(Icons.location_on,
                                             size: 40,
@@ -173,6 +290,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                           searchBloc.changeRestaurant(false);
                                           searchBloc.changeAll(false);
                                           searchBloc.changeFavorite(true);
+                                        setState(() {
+                                          searchType=2;
+                                        });  
                                         },
                                         icon: Icon(fav.favorite_like__2_,
                                             size: 50,
@@ -188,14 +308,30 @@ class _SearchScreenState extends State<SearchScreen> {
                       ],
                     ),
                   ),
+                 searchType==3?
                   Expanded(
-                    child: GoogleMap(
+                    child: _center==null?Container():
+                    GoogleMap(
+                      myLocationEnabled: true,
+                      markers: _markers,
                       onMapCreated: _onMapCreated,
                       initialCameraPosition: CameraPosition(
                         target: _center,
-                        zoom: 11.0,
+                        zoom: 17.0,
                       ),
                     ),
+                  ):Expanded(
+                                      child: Container(child: GridView.count(
+  crossAxisCount: 2 ,
+  children: List.generate(20,(index){
+    return Container(
+      child: Card(
+       
+        color: Colors.blue,
+      ),
+    );
+  }),
+),),
                   )
                 ],
               ),

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:better_player/better_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,10 +10,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foolife/Bloc/video/VideoBloc.dart';
 import 'package:foolife/Dto/CategoryDto.dart';
 import 'package:foolife/Dto/RestaurantDto.dart';
+import 'package:foolife/Repository/ReactionRepository.dart';
 import 'package:foolife/Screens/Restaurant/CreatePostScreen.dart';
 import 'package:foolife/Widget/MenuBar.dart';
 import 'package:foolife/Widget/my_flutter_app_icons.dart';
 import 'package:pedantic/pedantic.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 
 import '../AppTheme.dart';
 import 'my_flutter_app_icons3.dart';
@@ -19,8 +24,9 @@ import 'qrcode1.dart';
 class CustomRestaurantScreenWiget extends StatefulWidget {
   @override
    VideoBloc videoBloc;
+     Function goToRestaurent;
   State<StatefulWidget> createState() => _CustomRestaurantScreenWiget();
-  CustomRestaurantScreenWiget({this.restauranDto,this.videoBloc});
+  CustomRestaurantScreenWiget({this.restauranDto,this.videoBloc,this.goToRestaurent});
 
   RestaurantDto restauranDto;
 }
@@ -210,37 +216,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                       .instance.window.physicalSize.height /
                                   30,
                             ),
-                            Container(
-                              height: iconContainerSpace + 5,
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.7),
-                                    blurRadius: 40.0,
-                                    spreadRadius: 1.0,
-                                  ),
-                                ],
-                              ),
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.favorite,
-                                  size: iconSize,
-                                  color: Colors.white.withOpacity(0.8),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 45,
-                              child: Center(
-                                child: Text(
-                                  '22',
-                                  style: TextStyle(
-                                      color: Colors.white.withOpacity(0.8),
-                                      fontFamily: "SpecialElite"),
-                                ),
-                              ),
-                            ),
+                           
                             Container(
                               height: iconContainerSpace,
                               decoration: BoxDecoration(
@@ -254,11 +230,26 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                               ),
                               child: IconButton(
                                 padding: EdgeInsets.all(0),
-                                onPressed: () {},
+                                onPressed: ()async {
+                                 var fav = await ReactionRepository().favourite(widget.restauranDto.id);
+                                 if(fav.favourite==1)
+                                 {
+                                   setState(() {
+                                     widget.restauranDto.favsCount++;
+                                     widget.restauranDto.favourite = 1;
+                                   });
+                                 }
+                                 else{
+                                    setState(() {
+                                    widget.restauranDto.favsCount--;
+                                    widget.restauranDto.favourite = 0;
+                                    });
+                                 }
+                                },
                                 icon: Icon(
                                   Icons.star,
                                   size: iconSize,
-                                  color: Colors.white.withOpacity(0.8),
+                                  color: widget.restauranDto.favourite == 1?Colors.yellow.withOpacity(0.8):Colors.white.withOpacity(0.8),
                                 ),
                               ),
                             ),
@@ -266,7 +257,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                               width: 45,
                               child: Center(
                                 child: Text(
-                                  '22',
+                                   widget.restauranDto.favsCount.toString(),
                                   style: TextStyle(
                                       color: Colors.white.withOpacity(0.8),
                                       fontFamily: "SpecialElite"),
@@ -423,7 +414,12 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                                     ],
                                   ),
                                   child: IconButton(
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                    String cameraScanResult = await scanner.scan();
+                                      print(cameraScanResult);
+                                       widget.goToRestaurent
+                                        .call(int.parse( cameraScanResult));
+                                    },
                                     icon: Icon(
                                       qrcode1.ddd__1_,
                                       size: iconSize * 1.5,
@@ -496,15 +492,15 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height / 23,
                     ),
-                    widget.restauranDto.categories != null &&
-                            widget.restauranDto.categories.length > 0
+                    widget.restauranDto.mainCategories != null &&
+                            widget.restauranDto.mainCategories.length > 0
                         ? Container(
                             height: 45,
                             width: WidgetsBinding
                                 .instance.window.physicalSize.width,
                             child: MenuBar(
                               videoBloc:  widget.videoBloc,
-                              items: widget.restauranDto.categories,
+                              items: widget.restauranDto.mainCategories,
                               
                             ))
                         : Container(),

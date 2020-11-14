@@ -1,3 +1,6 @@
+import 'dart:io';
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
@@ -6,6 +9,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:foolife/Bloc/video/VideoBloc.dart';
 import 'package:foolife/Dto/ProductDto.dart';
 import 'package:foolife/Dto/RestaurantDto.dart';
+import 'package:foolife/Repository/AuthRepository.dart';
 import 'package:foolife/Repository/ProductRepository.dart';
 import 'package:foolife/Repository/RestaurantRepository.dart';
 import 'package:foolife/Widget/CustomMainScreenWiget.dart';
@@ -17,6 +21,8 @@ import 'package:foolife/Widget/top_channel_bar.dart';
 import '../../AppTheme.dart';
 
 class MainScreen extends StatefulWidget {
+  int goToThisRestaurantId;
+  MainScreen({this.goToThisRestaurantId});
   @override
   _MainScreenState createState() => _MainScreenState();
 }
@@ -38,7 +44,14 @@ class _MainScreenState extends State<MainScreen> {
 
     getAllDrinksPaging();
     swiperControl = new SwiperController();
+    if(widget.goToThisRestaurantId !=null)
+    goToRestaurent(widget.goToThisRestaurantId);
+
+    AuthRepository().loginByDeviceIdAsGuest();
   }
+
+  
+
 
   List<RestaurantDto> restaurents;
   List<ProductDto> foods;
@@ -172,6 +185,7 @@ class _MainScreenState extends State<MainScreen> {
                     return CustomRestaurantScreenWiget(
                       restauranDto: restaurents[index],
                       videoBloc: videoBloc,
+                      goToRestaurent: goToRestaurent,
                     );
                   }
                 },
@@ -194,6 +208,7 @@ class _MainScreenState extends State<MainScreen> {
                         return CustomRestaurantScreenWiget(
                           restauranDto: restaurents[index],
                             videoBloc: videoBloc,
+                            goToRestaurent: goToRestaurent,
                         );
                       }
                       if (lastSelectedChannel == 32) {

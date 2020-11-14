@@ -37,11 +37,7 @@ class _MenuBarState extends State<MenuBar> {
                 ),
               ),
             );
-          } else if (widget.items[index - 1].products == null) {
-            return Container();
-          } else if (widget.items[index - 1].products.length <= 0) {
-            return Container();
-          }
+          } 
 
           return GestureDetector(
             onTap: () async {

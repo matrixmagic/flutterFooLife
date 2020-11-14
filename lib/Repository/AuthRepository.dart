@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:device_info/device_info.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:foolife/Dto/AuthDto.dart';
+import 'package:foolife/Dto/RestaurantDto.dart';
 
 import 'package:foolife/Dto/UserDto.dart';
 
@@ -63,26 +66,54 @@ class AuthRepository {
         return 411;
       else if (data.status == 400)
         return 400;
-      else if (data.status == 412) return 412;
+      else if (data.status == 412){
+      RestaurantDto restaurant = RestaurantDto.fromJson(data.data);
+        print(restaurant);
+        final storage = new FlutterSecureStorage();
+          var RestaurantName = await storage.write(
+                            key: "_restaurantName",
+                            value: restaurant.name);
+
+        return 412;
+
+      } 
     } catch (e) {
       // code for handling exception
     }
   }
 
-  Future<bool> verifyRestaurant(String email, String code) async {
+  Future<bool> verifyRestaurant( String code) async {
     try {
+      final storage = new FlutterSecureStorage();
       var body = {
-        "email": email,
+        "email":await storage.read(key:"_verficationEmail" ),
         "code": code,
       };
       var response = await api.post('auth/verifyRestaurant', body);
       var data = ApiResponse.fromJson(json.decode(response.body));
       if (data.status == 200) {
+       await  storage.write(key: "_code", value: code);
         return true;
       } else if (data.status == 400) return false;
     } catch (e) {
       // code for handling exception
     }
+  }
+  Future<bool> changeRestaurantPassword(String password,String confPassword)async {
+     final storage = new FlutterSecureStorage();
+var body ={
+  "email" : await storage.read(key:"_verficationEmail" ),
+  "code" : await storage.read(key:"_code"),
+  "newpassword":password,
+  "newpassword_confirmation":confPassword
+}; var response = await api.post('auth/changeRestaurantPassword', body);
+      var data = ApiResponse.fromJson(json.decode(response.body));
+      if (data.success  ) {
+       
+        return true;
+      } else  return false;
+
+
   }
 
   Future<UserDto> register(String email, String password, String confrim,
@@ -114,6 +145,50 @@ class AuthRepository {
       print(e.toString());
     }
   }
+
+  Future<void> loginByDeviceIdAsGuest() async {
+  String result;
+  var deviceInfo = DeviceInfoPlugin();
+  final storage = new FlutterSecureStorage();
+  if (Platform.isIOS) { // import 'dart:io'
+    var iosDeviceInfo = await deviceInfo.iosInfo;
+    result = iosDeviceInfo.identifierForVendor; // unique ID on iOS
+  } else {
+    var androidDeviceInfo = await deviceInfo.androidInfo;
+    result = androidDeviceInfo.androidId; // unique ID on Android
+  }
+   var body = {
+        "deviceId": result,
+      };
+
+var vaild =await CheckToken();
+if(vaild){
+
+   var role =await storage.read(key: "_roleId");
+   if(role=="2")
+   return ;
+}
+   var response = await api.post('auth/loginByDeviceIdAsGuest', body);
+      var data = ApiResponse.fromJson(json.decode(response.body));
+      
+      if (data.success == true) {
+        UserDto user = UserDto.fromJson(data.data);
+        var roleId =
+            await storage.write(key: "_roleId", value: user.roleId.toString());
+        var token = await storage.write(key: "_token", value: user.token);
+        var userId =
+            await storage.write(key: "_userId", value: user.id.toString());
+        print('say yaaaaaaaaaaaaaa '+user.roleId.toString());
+        return true;
+      } else
+        await storage.delete(key: "_roleId");
+      await storage.delete(key: "_token");
+      await storage.delete(key: "_userId");
+      print('ohh nooooooh');
+      return false;
+  
+  print(result);
+}
 
   Future<bool> CheckToken() async {
     try {
