@@ -1,7 +1,12 @@
 import 'dart:async';
 
+import 'package:better_player/better_player.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:foolife/Dto/SerachRestaurantsDto.dart';
 import 'package:foolife/Repository/RestaurantRepository.dart';
 import 'package:foolife/Repository/SearchRepository.dart';
 import 'package:foolife/Screens/Main/MainScreen.dart';
@@ -13,6 +18,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:foolife/Widget/custom_buttom_navigatior.dart';
 import 'package:location/location.dart';
 
+
 import '../../AppTheme.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -23,10 +29,15 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
  int searchType;
   LatLng _center;
+  SerachRestaurantsDto searchResultDto;
   BitmapDescriptor pinLocationIcon;
    Set<Marker> _markers = {};
   Completer<GoogleMapController> _controller = Completer();
   var _contro1 = TextEditingController();
+  bool restaurantIsBigger;
+  int restaurantProductRatio;
+  int iRest=0;
+  int jProduct=0;
 
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
@@ -72,7 +83,19 @@ _locationData = await location.getLocation();
 pinLocationIcon = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(devicePixelRatio: 2.5),
       'assets/images/map_marker.png');
-       var restaurants = await RestaurantRepository().gatAllResturants();
+      _center =  LatLng(_locationData.latitude, _locationData.longitude);
+ searchResultDto     =await SearchRepository().serachRestaurants("", -11111.0,-11111.0);
+ if(searchResultDto.restaurants.length>searchResultDto.products.length){
+   restaurantProductRatio=(searchResultDto.restaurants.length/searchResultDto.products.length).round();
+   
+  restaurantIsBigger=true;}
+ else{
+ restaurantProductRatio=(searchResultDto.products.length/searchResultDto.restaurants.length).round();
+restaurantIsBigger=false;}
+
+ print('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeprinteeeeeeeeeee');
+  print(searchResultDto) ;
+      var restaurants = searchResultDto.restaurants;
       
 restaurants.forEach((element) {
   if(element.latitude!=null && element.longitude!=null)
@@ -97,7 +120,7 @@ restaurants.forEach((element) {
   print("add markersssssssssssssssssssssssssssssssssssssssssssssssssssss");
 });
    
-  _center =  LatLng(_locationData.latitude, _locationData.longitude);
+  
  
    
 
@@ -194,11 +217,34 @@ restaurants.forEach((element) {
                                     size: 50,
                                   ),
                                   onPressed: () async {
-                                    var result = await SearchRepository().serachRestaurants(_contro1.value.text, _center.latitude, _center.longitude);
 
+                                    print(_contro1.value.text);
+                                    searchResultDto = await SearchRepository().serachRestaurants(_contro1.value.text, _center.latitude, _center.longitude);
 
-              _markers.clear();                            
-result.restaurants.forEach((element) {
+ iRest=0;
+   jProduct=0;
+  
+  if(searchResultDto !=null){
+  if(searchResultDto.products==null)
+restaurantIsBigger=true;
+ else if(searchResultDto.restaurants==null)
+restaurantIsBigger=false;
+else if(searchResultDto.restaurants.length==0)
+restaurantIsBigger=false;
+else if(searchResultDto.products.length==0)
+restaurantIsBigger=true;
+
+  else if(searchResultDto.restaurants.length>searchResultDto.products.length){
+   restaurantProductRatio=(searchResultDto.restaurants.length/searchResultDto.products.length).round();
+   
+  restaurantIsBigger=true;}
+ else{
+ restaurantProductRatio=(searchResultDto.products.length/searchResultDto.restaurants.length).round();
+restaurantIsBigger=false;}
+  }
+              _markers.clear();
+              if(searchResultDto!= null && searchResultDto.restaurants != null && searchResultDto.restaurants.length >0)                            
+searchResultDto.restaurants.forEach((element) {
   if(element.latitude!=null && element.longitude!=null)
   _markers.add(
             Marker(
@@ -222,9 +268,12 @@ result.restaurants.forEach((element) {
 });
   
  
-   
-
   print("wakawakaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+});
+ setState(()  {
+    
+            
+  print("empty");
 });
                                     
                                   },
@@ -321,16 +370,77 @@ result.restaurants.forEach((element) {
                       ),
                     ),
                   ):Expanded(
-                                      child: Container(child: GridView.count(
-  crossAxisCount: 2 ,
-  children: List.generate(20,(index){
-    return Container(
-      child: Card(
-       
-        color: Colors.blue,
-      ),
-    );
-  }),
+                                      child: searchResultDto==null?Container():Container(child:new StaggeredGridView.countBuilder(
+  crossAxisCount: 4,
+  itemCount: searchResultDto==null?0:(((searchResultDto.products==null)?0: searchResultDto.products.length)+ (searchResultDto.restaurants==null ?0:searchResultDto.restaurants.length)),
+  itemBuilder: (BuildContext context, int index) {
+    
+
+if( restaurantIsBigger){
+print("restaurantIsBigger");
+
+ if( (index+1)%restaurantProductRatio==0){ 
+   if(((index+1)/restaurantProductRatio).round()< searchResultDto.products.length)
+   jProduct=((index+1)/restaurantProductRatio).round();
+   print('llllllllllllllllllllllllllllllllllllllllll    '+jProduct.toString());
+    }else{
+   if(iRest+1< searchResultDto.restaurants.length)
+   iRest++;
+ }
+}
+else{
+  print("not is restaurantIsBigger");
+   if( (index+1)%restaurantProductRatio==0){
+      if(((index+1)/restaurantProductRatio).round()< searchResultDto.restaurants.length)
+   iRest=((index+1)/restaurantProductRatio).round();
+   print('222222222222222222222222222222222222    '+iRest.toString());
+   
+ }else{
+   print("restaurantIsaaaaaaBigger   "+ searchResultDto.products.length.toString());
+   if(jProduct+1< searchResultDto.products.length)
+   jProduct++;
+ }
+
+}
+bool restaurantTurn;
+      if((index+1)%restaurantProductRatio==0){
+        if(restaurantIsBigger){
+          restaurantTurn=false;
+        }else{
+          restaurantTurn=true;
+        }
+
+      }else{
+
+ if(restaurantIsBigger){
+          restaurantTurn=true;
+        }else{
+          restaurantTurn=false;
+        }
+
+      }
+    bool isVideo= ( (restaurantTurn?searchResultDto.restaurants[iRest].file.extension:searchResultDto.products[jProduct].file.extension)=="mp4"||(restaurantTurn?searchResultDto.restaurants[iRest].file.extension:searchResultDto.products[jProduct].file.extension)=="m3u8")?true:false;
+
+
+    return  Container(
+
+      
+
+child:isVideo?SearchVideo(url: restaurantTurn?searchResultDto.restaurants[iRest].file.path :searchResultDto.products[jProduct].file.path,): CachedNetworkImage(
+                      imageUrl: restaurantTurn?searchResultDto.restaurants[iRest].file.path :searchResultDto.products[jProduct].file.path,
+                      
+            
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) => Center(
+                              child: CircularProgressIndicator(
+                                  value: downloadProgress.progress)),
+                      fit: BoxFit.cover,
+                    )
+  );},
+  staggeredTileBuilder: (int index) =>
+      new StaggeredTile.count(2, index.isEven ? 2 : 1),
+  mainAxisSpacing: 4.0,
+  crossAxisSpacing: 4.0,
 ),),
                   )
                 ],
@@ -392,5 +502,149 @@ result.restaurants.forEach((element) {
             ),
           ));
         });
+  }
+}
+class SearchVideo extends StatefulWidget {
+String url;
+int restaurantId;
+ 
+SearchVideo({
+
+this.url ,
+this.restaurantId
+});
+
+  @override
+
+  _SearchVideoState createState() => _SearchVideoState();
+}
+
+
+class _SearchVideoState extends State<SearchVideo> {
+   BetterPlayerController _betterPlayerController;
+   int state=0;
+  
+  @override
+  void initState() {
+    
+      
+
+    
+    // TODO: implement initState
+    super.initState();
+
+setState(() {
+  state=0;
+});
+    
+
+  }
+  void getVideoController() async {
+    double _screenWidth = WidgetsBinding.instance.window.physicalSize.width;
+    double _screenHeight = WidgetsBinding.instance.window.physicalSize.height;
+    var x = await getControllerForVideo(
+        widget.url, _screenWidth, _screenHeight);
+        
+    setState(() {
+      _betterPlayerController = x;
+    });
+  }
+  Future<BetterPlayerController> getControllerForVideo(
+      String videoUrl, double _screenWidth, double _screenHeight) async {
+    
+
+    
+
+      BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
+        BetterPlayerDataSourceType.NETWORK,
+        videoUrl,
+        liveStream: true,
+      );
+      _betterPlayerController = BetterPlayerController(
+        BetterPlayerConfiguration(
+          autoPlay: true ,
+          looping: false,
+       
+          
+        
+
+         aspectRatio: _screenWidth / _screenHeight,
+          controlsConfiguration: BetterPlayerControlsConfiguration(
+              showControls: false),
+        ),
+        betterPlayerDataSource: betterPlayerDataSource,
+      );
+
+      _betterPlayerController.setVolume(0.0);
+      _betterPlayerController.seekTo(Duration( seconds: 1));
+      return _betterPlayerController;
+    
+  }
+  @override
+  Widget build(BuildContext context) {
+
+    if(state==0){
+
+       return GestureDetector(
+         onTap: () async {
+          await getVideoController();
+          setState(() {
+            state =2;
+          });
+
+         },
+         child: CachedNetworkImage(
+                        imageUrl: widget.url.substring(0,widget.url.indexOf(".m3u8"))+".jpg" ,
+                        
+              
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) => Center(
+                                child: CircularProgressIndicator(
+                                    value: downloadProgress.progress)),
+                        fit: BoxFit.cover,
+                      ),
+       )
+  
+        ;
+    }else
+    return 
+    Stack(children: <Widget>[
+      
+
+    Container( child:   _betterPlayerController !=null 
+                      ? GestureDetector(
+                        child: Container(
+                            child: BetterPlayer(
+                              controller: _betterPlayerController,
+                              
+                            ),
+                          ),
+                          onTap: (){
+                            _betterPlayerController.isPlaying()==true?_betterPlayerController.pause():_betterPlayerController.play();
+                          },
+                      )
+                      : Container(
+                       color: Colors.black,
+                       child:  Center(child: CircularProgressIndicator(
+                              value: null,
+                              strokeWidth: 7.0,
+
+                            ),)
+                      ),
+            
+             ),
+             Positioned(top:  5, right:  5, child:  IconButton( icon: Icon( Icons.transit_enterexit ) ,color: Colors.white, onPressed: (){
+               
+                   Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainScreen(goToThisRestaurantId: widget.restaurantId),
+          ),);
+
+
+             },),)
+             
+             
+             ]);
   }
 }

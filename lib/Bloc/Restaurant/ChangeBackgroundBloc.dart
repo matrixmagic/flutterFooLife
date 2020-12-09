@@ -48,12 +48,14 @@ Stream<bool> get submitStream => _submit.stream.transform(StreamTransformer<bool
           
        File lastFile= await _file.first;
      //  String lastName= await _name.first;
-        
+          print ("finis begin file ");
             
          var file =await  FileRepository().UploadFile2(lastFile,1);
+
+         print ("finis uploadd file ");
             if(file!=null){
 await RestaurantRepository().changeBackground(file.id);
-              print('file sucessfuly');
+              print('file add to database ');
           sink.add(true);
           sink.close();
         

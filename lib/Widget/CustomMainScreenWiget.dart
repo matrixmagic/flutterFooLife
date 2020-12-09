@@ -95,7 +95,7 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
           looping: true,
           aspectRatio: _screenWidth / _screenHeight,
           controlsConfiguration: BetterPlayerControlsConfiguration(
-              liveText: "", showControls: false),
+              showControls: false),
         ),
         betterPlayerDataSource: betterPlayerDataSource,
       );
@@ -117,7 +117,7 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
           looping: true,
           aspectRatio: _screenWidth / _screenHeight,
           controlsConfiguration: BetterPlayerControlsConfiguration(
-              liveText: "", showControls: false),
+              showControls: false),
         ),
         betterPlayerDataSource: betterPlayerDataSource,
       );

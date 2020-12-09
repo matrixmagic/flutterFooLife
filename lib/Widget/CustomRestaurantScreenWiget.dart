@@ -55,7 +55,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
     super.initState();
 
     _cacheManager = DefaultCacheManager();
-    if (widget.restauranDto.file.extension == "mp4") {
+    if (widget.restauranDto.file.extension == "m3u8") {
       print(widget.restauranDto.file.path);
 
       getVideoController();
@@ -90,7 +90,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
       String videoUrl, double _screenWidth, double _screenHeight) async {
     final fileInfo = await _cacheManager.getFileFromCache(videoUrl);
 
-    if (fileInfo == null || fileInfo.file == null) {
+   // if (fileInfo == null || fileInfo.file == null) {
       print('[VideoControllerService]: No video in cache');
 
       print('[VideoControllerService]: Saving video to cache');
@@ -99,7 +99,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
       BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
         BetterPlayerDataSourceType.NETWORK,
         videoUrl,
-        liveStream: true,
+       // liveStream: true,
       );
       _betterPlayerController = BetterPlayerController(
         BetterPlayerConfiguration(
@@ -107,7 +107,8 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
           looping: true,
           aspectRatio: _screenWidth / _screenHeight,
           controlsConfiguration: BetterPlayerControlsConfiguration(
-              liveText: "", showControls: false),
+            enableProgressBar: true ,
+             showControls: false),
         ),
         betterPlayerDataSource: betterPlayerDataSource,
       );
@@ -115,7 +116,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
       _betterPlayerController.setVolume(100);
 
       return _betterPlayerController;
-    } else {
+    /*} else {
       print('[VideoControllerService]: Loading video from cache');
 
       BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
@@ -129,7 +130,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
           looping: true,
           aspectRatio: _screenWidth / _screenHeight,
           controlsConfiguration: BetterPlayerControlsConfiguration(
-              liveText: "", showControls: false),
+             showControls: false),
         ),
         betterPlayerDataSource: betterPlayerDataSource,
       );
@@ -137,6 +138,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
       _betterPlayerController.setVolume(100);
       return _betterPlayerController;
     }
+    */
   }
  @override
 
@@ -166,7 +168,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
           backgroundColor: Colors.grey,
           body: Stack(children: <Widget>[
             Container(
-              child: widget.restauranDto.file.extension != "mp4"
+              child: widget.restauranDto.file.extension != "m3u8"
                   ? CachedNetworkImage(
                       imageUrl: (widget.restauranDto == null ||
                               widget.restauranDto.file == null ||
@@ -197,12 +199,15 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
                   children: <Widget>[
                     Center(
                       heightFactor: 2,
-                      child: Text(
-                        widget.restauranDto.name,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontFamily: "calibril"),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Text(
+                          widget.restauranDto.name,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontFamily: "calibril"),
+                        ),
                       ),
                     ),
                     Row(

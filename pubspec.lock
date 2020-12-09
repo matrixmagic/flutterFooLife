@@ -35,7 +35,7 @@ packages:
       name: better_player
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.13"
+    version: "0.0.33"
   boolean_selector:
     dependency: transitive
     description:
@@ -265,6 +265,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.10"
+  flutter_hls_parser:
+    dependency: transitive
+    description:
+      name: flutter_hls_parser
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   flutter_icons:
     dependency: "direct main"
     description:
@@ -319,6 +326,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.2+1"
+  flutter_staggered_grid_view:
+    dependency: "direct main"
+    description:
+      name: flutter_staggered_grid_view
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.2"
   flutter_swiper:
     dependency: "direct main"
     description:
@@ -356,14 +370,7 @@ packages:
       name: flutter_widget_from_html_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.3"
-  flutter_widgets:
-    dependency: transitive
-    description:
-      name: flutter_widgets
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.12"
+    version: "0.5.1+4"
   font_awesome_flutter:
     dependency: "direct main"
     description:
@@ -427,6 +434,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  import_js_library:
+    dependency: transitive
+    description:
+      name: import_js_library
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   intl:
     dependency: "direct main"
     description:
@@ -873,13 +887,34 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.7"
+  visibility_detector:
+    dependency: transitive
+    description:
+      name: visibility_detector
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.5"
   wakelock:
     dependency: transitive
     description:
       name: wakelock
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.4+2"
+    version: "0.2.1+1"
+  wakelock_platform_interface:
+    dependency: transitive
+    description:
+      name: wakelock_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0+1"
+  wakelock_web:
+    dependency: transitive
+    description:
+      name: wakelock_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0+3"
   xdg_directories:
     dependency: transitive
     description:
@@ -896,4 +931,4 @@ packages:
     version: "3.6.1"
 sdks:
   dart: ">=2.10.0-110 <=2.11.0-161.0.dev"
-  flutter: ">=1.16.3 <2.0.0"
+  flutter: ">=1.20.0 <2.0.0"

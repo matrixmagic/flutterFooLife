@@ -49,7 +49,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
     super.initState();
     print(widget.product.name);
     _cacheManager = DefaultCacheManager();
-    if (widget.product.file.extension == "mp4") {
+    if (widget.product.file.extension == "m3u8") {
       getVideoController();
     }
   }
@@ -78,6 +78,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
         BetterPlayerDataSourceType.NETWORK,
         videoUrl,
         liveStream: true,
+ 
       );
       _betterPlayerController = BetterPlayerController(
         BetterPlayerConfiguration(
@@ -85,7 +86,8 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
           looping: true,
           aspectRatio: _screenWidth / _screenHeight,
           controlsConfiguration: BetterPlayerControlsConfiguration(
-              liveText: "", showControls: false),
+            enableProgressBar: true ,
+             showControls: false),
         ),
         betterPlayerDataSource: betterPlayerDataSource,
       );
@@ -99,7 +101,8 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
       BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
         BetterPlayerDataSourceType.FILE,
         fileInfo.file.path,
-        liveStream: true,
+        liveStream: true,cacheConfiguration: BetterPlayerCacheConfiguration(useCache: true)
+
       );
       _betterPlayerController = BetterPlayerController(
         BetterPlayerConfiguration(
@@ -107,7 +110,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
           looping: true,
           aspectRatio: _screenWidth / _screenHeight,
           controlsConfiguration: BetterPlayerControlsConfiguration(
-              liveText: "", showControls: false),
+              showControls: false),
         ),
         betterPlayerDataSource: betterPlayerDataSource,
       );
@@ -128,7 +131,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
       child: Scaffold(
         body: Stack(children: <Widget>[
           Container(
-            child: widget.product.file.extension != "mp4"
+            child: widget.product.file.extension != "m3u8"
                 ? CachedNetworkImage(
                     imageUrl: widget.product.file.path,
                     height: MediaQuery.of(context).size.height,
