@@ -9,7 +9,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:foolife/Dto/SerachRestaurantsDto.dart';
 import 'package:foolife/Repository/RestaurantRepository.dart';
 import 'package:foolife/Repository/SearchRepository.dart';
-import 'package:foolife/Screens/Main/MainScreen.dart';
+
 import 'package:foolife/Widget/my_flutter_app_icons2.dart';
 import 'package:foolife/Bloc/provider.dart';
 import 'package:foolife/Bloc/searsch/SearchBloc.dart';
@@ -20,6 +20,7 @@ import 'package:location/location.dart';
 
 
 import '../../AppTheme.dart';
+import 'MainScreen.dart';
 
 class SearchScreen extends StatefulWidget {
   @override

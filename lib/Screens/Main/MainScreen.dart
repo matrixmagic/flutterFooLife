@@ -1,319 +1,253 @@
-import 'dart:io';
-
-
+import 'package:better_player/better_player.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:foolife/Bloc/video/VideoBloc.dart';
-import 'package:foolife/Dto/ProductDto.dart';
 import 'package:foolife/Dto/RestaurantDto.dart';
-import 'package:foolife/Repository/AuthRepository.dart';
-import 'package:foolife/Repository/ProductRepository.dart';
 import 'package:foolife/Repository/RestaurantRepository.dart';
-import 'package:foolife/Widget/CustomMainScreenWiget.dart';
-import 'package:foolife/Widget/CustomProductWidget.dart';
-import 'package:foolife/Widget/CustomRestaurantScreenWiget.dart';
-import 'package:foolife/Widget/custom_buttom_navigatior.dart';
-import 'package:foolife/Widget/top_channel_bar.dart';
-
-import '../../AppTheme.dart';
 
 class MainScreen extends StatefulWidget {
-  int goToThisRestaurantId;
-  MainScreen({this.goToThisRestaurantId});
   @override
+  int goToThisRestaurantId;
+
+  MainScreen({this.goToThisRestaurantId});
+
   _MainScreenState createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
+  int lastindex;
+  List<BetterPlayerController> myRestVedio;
+  List<RestaurantDto> myRest;
   @override
+  void initState() {
+    lastindex = 0;
+    // TODO: implement initState
+    super.initState();
+    getRest();
+    myRestVedio = new List<BetterPlayerController>();
+  }
+
+  getRest() {
+    print("start get resturant");
+    getRest2();
+  }
+
+  int currentVideoToInt = 0;
+  int lastVideoTOInt = 5;
+  int currentPlayVedio = 0;
+
+   BetterPlayerController intVideo(int idVideo, bool down, bool re) {
+    print("stat inint ver n " + idVideo.toString());
+    BetterPlayerController _betterPlayerController;
+    var file = myRest[idVideo].file;
+    bool isVideo = file.extension == "m3u8";
+    double _screenWidth = WidgetsBinding.instance.window.physicalSize.width;
+    double _screenHeight = WidgetsBinding.instance.window.physicalSize.height;
+
+    if (isVideo) {
+      BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
+          BetterPlayerDataSourceType.NETWORK, file.path,
+          cacheConfiguration: BetterPlayerCacheConfiguration(useCache: true)
+          // liveStream: true,
+          );
+       _betterPlayerController = BetterPlayerController(
+        BetterPlayerConfiguration(
+          autoPlay: true,
+          looping: true,
+          aspectRatio: _screenWidth / _screenHeight,
+          controlsConfiguration: BetterPlayerControlsConfiguration(
+            enableProgressBar: true,
+            showControls: false,
+          ),
+        ),
+        betterPlayerDataSource: betterPlayerDataSource,
+      );
+
+      _betterPlayerController.setVolume(100);
+      print(
+          " tryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy,yyyyyyyy Listnerrr is calllllllllllllllllllllllllllllllll ");
+      _betterPlayerController.addListener(() {
+        print("Listnerrr is calllllllllllllllllllllllllllllllll ");
+        if (_betterPlayerController.isVideoInitialized()) {
+          print("enteeeeeeeeeeeeeeeer isVideoInilializeddddddddddd");
+          _betterPlayerController.pause();
+          if (re == true){
+           return _betterPlayerController;
+          
+          }
+          else {
+            if (down) {
+              myRestVedio.add(_betterPlayerController);
+              newVedio();
+            } else {
+              myRestVedio.insert(0, _betterPlayerController);
+              newVedio();
+            }
+          }
+        }
+      });
+    } else {
+      myRestVedio.add(null);
+      newVedio();
+    }
+
+    return _betterPlayerController;
+  }
+
+  newVedio() {
+    setState(() {
+      currentVideoToInt++;
+      print("new state ");
+    });
+    if (currentVideoToInt <= lastVideoTOInt)
+      intVideo(currentVideoToInt, true, false);
+  }
+
+  getRest2() async {
+    var x = await RestaurantRepository().getAllResturantPaging2([], 10);
+
+    print("finish get resturant");
+    myRest = x;
+
+    intVideo(currentVideoToInt, true, false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return myRest == null
+        ? Container(
+            color: Colors.blue,
+          )
+        : Swiper(
+            loop: false,
+            itemCount: myRest.length,
+            scrollDirection: Axis.vertical,
+            onIndexChanged: (index) {
+         
+
+              
+
+              if (lastindex < index) {
+                if(currentPlayVedio>=0)
+                myRestVedio[currentPlayVedio] = intVideo(index-1, true, true);
+                setState(() {
+                  currentPlayVedio++;
+                  
+                });
+              }
+              else {
+                if(currentPlayVedio<myRestVedio.length)
+                myRestVedio[currentPlayVedio] = intVideo(index+1, true, true);
+                setState(() {
+                  currentPlayVedio--;
+                });
+
+              }
+              lastindex = index;
+            },
+            itemBuilder: (BuildContext context, int index) {
+              var isVedio = myRest[index].file.extension == "m3u8" ||
+                  myRest[index].file.extension == "mp4";
+
+              if (!isVedio) {
+                return CachedNetworkImage(
+                  imageUrl: myRest[index].file.path,
+                  height: WidgetsBinding.instance.window.physicalSize.height,
+                  width: WidgetsBinding.instance.window.physicalSize.width,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      Center(
+                          child: CircularProgressIndicator(
+                              value: downloadProgress.progress)),
+                  fit: BoxFit.cover,
+                );
+              } else if (index >= myRestVedio.length)
+                return Container(
+                  color: Colors.green,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              else if (isVedio && myRestVedio == null)
+                return Container(
+                  color: Colors.purple,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              else if (myRestVedio[index] == null)
+                return Container(
+                  color: Colors.brown,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              //     else if(   !myRestVedio[index].isVideoInitialized()){
+              //   return Container(color: Colors.grey,
+              //   child: Center(child: CircularProgressIndicator()),);
+
+              // }
+              else if (isVedio &&
+                  myRestVedio != null &&
+                  myRestVedio[index] != null &&
+                  myRestVedio[index].isVideoInitialized()) {
+                return videoBika(
+                  index: index,
+                  videoController: myRestVedio[index],
+                );
+              } else {
+                return CachedNetworkImage(
+                  imageUrl: myRest[index].file.path,
+                  height: WidgetsBinding.instance.window.physicalSize.height,
+                  width: WidgetsBinding.instance.window.physicalSize.width,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      Center(
+                          child: CircularProgressIndicator(
+                              value: downloadProgress.progress)),
+                  fit: BoxFit.cover,
+                );
+              }
+            },
+          );
+  }
+}
+
+class videoBika extends StatefulWidget {
+  @override
+  int index;
+  BetterPlayerController videoController;
+  videoBika({this.index, this.videoController});
+
+  _videoBikaState createState() => _videoBikaState();
+}
+
+class _videoBikaState extends State<videoBika> {
   @override
   void initState() {
     // TODO: implement initState
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-    restaurents = new List<RestaurantDto>();
-    foods = new List<ProductDto>();
-    drinks = new List<ProductDto>();
-
-    getAllResturants();
-
-    getAllFoodsPaging();
-
-    getAllDrinksPaging();
-    swiperControl = new SwiperController();
-    if(widget.goToThisRestaurantId !=null)
-    goToRestaurent(widget.goToThisRestaurantId);
-
-    AuthRepository().loginByDeviceIdAsGuest();
+    super.initState();
+    playVideo();
+    f = false;
   }
 
-  
-
-
-  List<RestaurantDto> restaurents;
-  List<ProductDto> foods;
-  List<ProductDto> drinks;
-  SwiperController swiperControl;
-
-  int restaurentsPageIndex = 0;
-  int foodsPageIndex = 0;
-  int drinksPageIndex = 0;
-  int pageSize = 10;
-  int lastSelectedChannel = 2;
-  VideoBloc videoBloc = new VideoBloc();
-
-  Future<void> getAllResturants() async {
-    var data = await RestaurantRepository().getAllResturantPaging2(
-        restaurents.map((e) => e.id).toList(), pageSize);
-
+  bool f;
+  Future<void> playVideo() async {
+    await widget.videoController.play();
+    print('plaaaaaaaaaaaaaaaaaaaaaaaaaaaayyyyy');
     setState(() {
-      restaurents.addAll(data);
+      f = true;
     });
   }
 
-  Future<void> getAllFoodsPaging() async {
-    var data = await ProductRepository()
-        .getAllFoodsPagingRand(foods.map((e) => e.id).toList(), pageSize);
-
-    setState(() {
-      foods.addAll(data);
-    });
-  }
-
-  Future<void> getAllDrinksPaging() async {
-    var data = await ProductRepository()
-        .getAllDrinksPagingRand(drinks.map((e) => e.id).toList(), pageSize);
-
-    setState(() {
-      drinks.addAll(data);
-    });
-  }
-
-  BuildContext _context;
-
-  goToRestaurent(int restId) async {
-    lastSelectedChannel = 2;
-
-    var index = restaurents.map((e) => e.id).toList().indexOf(restId);
-    print("fuuuucking index = " + index.toString());
-    if (index == -1) {
-      restaurents.add(await RestaurantRepository().getRestaurantById(restId));
-      setState(() {
-        lastSelectedChannel = 2;
-      });
-      swiperControl.move(restaurents.length - 1);
-    } else {
-      setState(() {
-        lastSelectedChannel = 2;
-      });
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        swiperControl.move(index);
-      });
-    }
-  }
-
-  getMore() async {
-    var data;
-
-    if (lastSelectedChannel == 2) {
-      restaurentsPageIndex++;
-      data = await RestaurantRepository().getAllResturantPaging2(
-          restaurents == null || restaurents.length == 0
-              ? []
-              : restaurents.map((e) => e.id).toList(),
-          pageSize);
-      if (data != null)
-        setState(() {
-          restaurents.addAll(data);
-        });
-    } else if (lastSelectedChannel == 31) {
-      foodsPageIndex++;
-      data = await ProductRepository()
-          .getAllFoodsPagingRand(foods.map((e) => e.id).toList(), pageSize);
-      if (data != null)
-        setState(() {
-          foods.addAll(data);
-        });
-    } else if (lastSelectedChannel == 32) {
-      drinksPageIndex++;
-      data = await ProductRepository()
-          .getAllDrinksPagingRand(drinks.map((e) => e.id).toList(), pageSize);
-      if (data != null)
-        setState(() {
-          drinks.addAll(data);
-        });
-    }
-  }
-
-  void selectChannel(int channel) {
-    print("chaneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeel " +
-        lastSelectedChannel.toString() +
-        " to " +
-        channel.toString());
-    setState(() {
-      lastSelectedChannel = channel;
-
-      //swiperControl.move(0);
-    });
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      swiperControl.move(0);
-    });
-  }
-
+  @override
   Widget build(BuildContext context) {
-    print(lastSelectedChannel);
-    _context = context;
-    return Scaffold(
-        body: Stack(
-      children: <Widget>[
-        lastSelectedChannel == 2 && restaurents.length > 0
-            ? Swiper(
-                controller: swiperControl,
-                onIndexChanged: (int index) async {
-                  if (lastSelectedChannel == 2 &&
-                      index >= restaurents.length - 5) {
-                    getMore();
-                      
-                  }
-                  await  videoBloc.disposeAllVideosleave();
-                },
-                itemBuilder: (BuildContext context, int index) {
-                  if (lastSelectedChannel == 2) {
-                    return CustomRestaurantScreenWiget(
-                      restauranDto: restaurents[index],
-                      videoBloc: videoBloc,
-                      goToRestaurent: goToRestaurent,
-                    );
-                  }
-                },
-                itemCount: restaurents.length,
-                scrollDirection: Axis.vertical,
-              )
-            : lastSelectedChannel == 32 && drinks.length > 0
-                ? Swiper(
-                    controller: swiperControl,
-                    onIndexChanged: (int index) async {
-                      if (lastSelectedChannel == 32 &&
-                          index >= drinks.length - 5) {
-                        getMore();
-                          
-                      }
-                      await  videoBloc.disposeAllVideosleave();
-                    },
-                    itemBuilder: (BuildContext context, int index) {
-                      if (lastSelectedChannel == 2) {
-                        return CustomRestaurantScreenWiget(
-                          restauranDto: restaurents[index],
-                            videoBloc: videoBloc,
-                            goToRestaurent: goToRestaurent,
-                        );
-                      }
-                      if (lastSelectedChannel == 32) {
-                        return CustomProductWidget(
-                          goToRestaurent: goToRestaurent,
-                          forChannel: true,
-                          product: drinks[index],
-                          changeChannel: selectChannel,
-                          isDrink: true,
-                          videoBloc: videoBloc,
-                        );
-                      }
-                    },
-                    itemCount: drinks.length,
-                    scrollDirection: Axis.vertical,
-                  )
-                : lastSelectedChannel == 31 && foods.length > 0
-                    ? Swiper(
-                      
-                        controller: swiperControl,
-                        onIndexChanged: (int index) async {
-                          if (lastSelectedChannel == 31 &&
-                              index >= foods.length - 5) {
-                            getMore();
-                          }
-                            await  videoBloc.disposeAllVideosleave();
-                        },
-                        itemBuilder: (BuildContext context, int index) {
-                          if (lastSelectedChannel == 31) {
-                            return CustomProductWidget(
-                              goToRestaurent: goToRestaurent,
-                              forChannel: true,
-                              product: foods[index],
-                              changeChannel: selectChannel,
-                              isDrink: false,
-                              videoBloc: videoBloc,
-                            );
-                          }
-                        },
-                        itemCount: foods.length,
-                        scrollDirection: Axis.vertical,
-                      )
-                    : Container(),
-        Positioned(
-          bottom: 0,
-          left: 5.0,
-          right: 5.0,
-          child: CustomButtomNavigatior(
-            showDialog: _ParentFunction,
-            videoBloc: videoBloc,
-          ),
-        ),
-        Positioned(
-            top: 50,
-            left: 5.0,
-            right: 5.0,
-            child: Top_channel_bar(
-              changeChannel: selectChannel,
-              selectedChannel: lastSelectedChannel,
-            )),
-      ],
-    ));
+    return BetterPlayer(
+      controller: widget.videoController,
+    );
   }
 
-  _ParentFunction() async {
-    print('im clickedxxxx hiiiii');
+  @override
+  Future<void> dispose() async {
+    // TODO: implement dispose
 
-    await _showSelectionDialog(_context);
-  }
+    print('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
+    await widget.videoController.pause();
 
-  Future<void> _showSelectionDialog(BuildContext context) async {
-    print('im clicked hiiiii');
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                ListTile(
-                  leading: Icon(
-                    Icons.image,
-                    color: AppTheme.primaryColor,
-                  ),
-                  title: Text("Sign up"),
-                  onTap: () {
-                    Navigator.of(context).pushNamed('/usersignup');
-                  },
-                ),
-                Divider(
-                  height: 1.0,
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.camera_alt,
-                    color: AppTheme.primaryColor,
-                  ),
-                  title: Text("Log in"),
-                  onTap: () {
-                    Navigator.of(context).pushNamed('/signin');
-                  },
-                )
-              ],
-            ),
-          ));
-        });
+    widget.videoController = null;
+    print('sssssssssssssssssssssssssssssssssss');
+    super.dispose();
   }
 }
