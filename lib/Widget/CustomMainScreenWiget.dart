@@ -85,7 +85,7 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
       unawaited(_cacheManager.downloadFile(videoUrl));
 
       BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
-        BetterPlayerDataSourceType.NETWORK,
+        BetterPlayerDataSourceType.network,
         videoUrl,
         liveStream: true,
       );
@@ -95,7 +95,7 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
           looping: true,
           aspectRatio: _screenWidth / _screenHeight,
           controlsConfiguration: BetterPlayerControlsConfiguration(
-              liveText: "", showControls: false),
+               showControls: false),
         ),
         betterPlayerDataSource: betterPlayerDataSource,
       );
@@ -107,7 +107,7 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
       print('[VideoControllerService]: Loading video from cache');
 
       BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
-        BetterPlayerDataSourceType.FILE,
+        BetterPlayerDataSourceType.file,
         fileInfo.file.path,
         liveStream: true,
       );
@@ -117,7 +117,7 @@ class _CustomMainScreenWiget extends State<CustomMainScreenWiget> {
           looping: true,
           aspectRatio: _screenWidth / _screenHeight,
           controlsConfiguration: BetterPlayerControlsConfiguration(
-              liveText: "", showControls: false),
+             showControls: false),
         ),
         betterPlayerDataSource: betterPlayerDataSource,
       );

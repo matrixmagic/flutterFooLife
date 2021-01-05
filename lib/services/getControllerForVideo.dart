@@ -17,7 +17,7 @@ class GetControllerForVideo {
       unawaited(_cacheManager.downloadFile(videoUrl));
 
       BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
-        BetterPlayerDataSourceType.NETWORK,
+        BetterPlayerDataSourceType.network,
         videoUrl,
         liveStream: true,
       );
@@ -27,7 +27,7 @@ class GetControllerForVideo {
           looping: true,
           aspectRatio: _screenWidth / _screenHeight,
           controlsConfiguration: BetterPlayerControlsConfiguration(
-              liveText: "", showControls: false),
+             showControls: false),
         ),
         betterPlayerDataSource: betterPlayerDataSource,
       );
@@ -39,7 +39,7 @@ class GetControllerForVideo {
       print('[VideoControllerService]: Loading video from cache');
 
       BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
-        BetterPlayerDataSourceType.FILE,
+        BetterPlayerDataSourceType.file,
         fileInfo.file.path,
         liveStream: true,
       );
@@ -49,7 +49,7 @@ class GetControllerForVideo {
           looping: true,
           aspectRatio: _screenWidth / _screenHeight,
           controlsConfiguration: BetterPlayerControlsConfiguration(
-              liveText: "", showControls: false),
+               showControls: false),
         ),
         betterPlayerDataSource: betterPlayerDataSource,
       );

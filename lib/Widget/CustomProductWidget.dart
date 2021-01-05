@@ -75,7 +75,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
     //  unawaited(_cacheManager.downloadFile(videoUrl));
 
       BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
-        BetterPlayerDataSourceType.NETWORK,
+        BetterPlayerDataSourceType.network,
         videoUrl,
         liveStream: true,
       );
@@ -85,7 +85,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
           looping: true,
           aspectRatio: _screenWidth / _screenHeight,
           controlsConfiguration: BetterPlayerControlsConfiguration(
-              liveText: "", showControls: false),
+               showControls: false),
         ),
         betterPlayerDataSource: betterPlayerDataSource,
       );
@@ -97,7 +97,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
       print('[VideoControllerService]: Loading video from cache');
 
       BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
-        BetterPlayerDataSourceType.FILE,
+        BetterPlayerDataSourceType.file,
         fileInfo.file.path,
         liveStream: true,
       );
@@ -107,7 +107,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
           looping: true,
           aspectRatio: _screenWidth / _screenHeight,
           controlsConfiguration: BetterPlayerControlsConfiguration(
-              liveText: "", showControls: false),
+           showControls: false),
         ),
         betterPlayerDataSource: betterPlayerDataSource,
       );
@@ -128,7 +128,7 @@ class _CustomProductWidgetState extends State<CustomProductWidget> {
       child: Scaffold(
         body: Stack(children: <Widget>[
           Container(
-            child: widget.product.file.extension != "mp4"
+            child: widget.product.file.extension != "m3u8"
                 ? CachedNetworkImage(
                     imageUrl: widget.product.file.path,
                     height: MediaQuery.of(context).size.height,

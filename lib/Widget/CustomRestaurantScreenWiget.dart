@@ -97,7 +97,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
     //  unawaited(_cacheManager.downloadFile(videoUrl));
 
       BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
-        BetterPlayerDataSourceType.NETWORK,
+         BetterPlayerDataSourceType.network,
         videoUrl,
         liveStream: true,
       );
@@ -107,7 +107,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
           looping: true,
           aspectRatio: _screenWidth / _screenHeight,
           controlsConfiguration: BetterPlayerControlsConfiguration(
-              liveText: "", showControls: false),
+               showControls: false),
         ),
         betterPlayerDataSource: betterPlayerDataSource,
       );
@@ -119,7 +119,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
       print('[VideoControllerService]: Loading video from cache');
 
       BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
-        BetterPlayerDataSourceType.FILE,
+        BetterPlayerDataSourceType.file,
         fileInfo.file.path,
         liveStream: true,
       );
@@ -129,7 +129,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
           looping: true,
           aspectRatio: _screenWidth / _screenHeight,
           controlsConfiguration: BetterPlayerControlsConfiguration(
-              liveText: "", showControls: false),
+               showControls: false),
         ),
         betterPlayerDataSource: betterPlayerDataSource,
       );
@@ -166,7 +166,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
           backgroundColor: Colors.grey,
           body: Stack(children: <Widget>[
             Container(
-              child: widget.restauranDto.file.extension != "mp4"
+              child: widget.restauranDto.file.extension != "m3u8"
                   ? CachedNetworkImage(
                       imageUrl: (widget.restauranDto == null ||
                               widget.restauranDto.file == null ||
