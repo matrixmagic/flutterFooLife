@@ -55,7 +55,7 @@ class _CustomRestaurantScreenWiget extends State<CustomRestaurantScreenWiget> {
     super.initState();
 
     _cacheManager = DefaultCacheManager();
-    if (widget.restauranDto.file.extension == "mp4") {
+    if (widget.restauranDto.file.extension == "m3u8") {
       print(widget.restauranDto.file.path);
 
       getVideoController();
